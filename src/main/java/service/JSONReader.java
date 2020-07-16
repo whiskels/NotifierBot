@@ -1,10 +1,8 @@
 package service;
 
 
-import bot.Bot;
-import com.fasterxml.jackson.core.json.JsonReadContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.*;
+import data.Customer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,9 +32,8 @@ public class JSONReader {
      * Reads JSON data from URL and creates Customer list
      */
     public void update() {
-        JSONObject json = null;
         try {
-            json = readJsonFromUrl(URL);
+            JSONObject json = readJsonFromUrl(URL);
             createCustomerList(json);
         } catch (IOException e) {
             e.printStackTrace();

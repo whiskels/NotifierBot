@@ -6,8 +6,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import security.User;
-import service.Customer;
+import data.User;
+import data.Customer;
+import security.Users;
 import service.JSONReader;
 
 import java.util.*;
@@ -29,7 +30,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public final Queue<Object> receiveQueue = new ConcurrentLinkedQueue<>();
     public final Queue<Object> sendQueue = new ConcurrentLinkedQueue<>();
-    public final String ADMIN_ID = "87971601";                              // Bot admin ID
+    public final String ADMIN_ID;                              // Bot admin ID
 
 
     /*
@@ -96,6 +97,7 @@ public class Bot extends TelegramLongPollingBot {
     public Bot(String botName, String token) {
         this.botName = botName;
         this.token = token;
+        ADMIN_ID = Users.getAdminId();
         userMap = new HashMap<>();
     }
 

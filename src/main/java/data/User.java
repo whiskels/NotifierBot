@@ -1,4 +1,6 @@
-package security;
+package data;
+
+import security.Users;
 
 import java.util.HashMap;
 import java.util.Map;

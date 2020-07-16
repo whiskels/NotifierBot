@@ -11,7 +11,7 @@ import handler.SystemHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import security.User;
+import data.User;
 import security.Users;
 
 import java.time.DayOfWeek;
