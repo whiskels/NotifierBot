@@ -80,14 +80,12 @@ public class MessageReceiver implements Runnable {
         if (ldt.getDayOfWeek() != DayOfWeek.SUNDAY && ldt.getDayOfWeek() != DayOfWeek.SATURDAY) {
             log.debug("Checking for scheduled messages");
             for (User user : bot.getUserList()) {
-                if (user.getSchedule().size() != 0) {
-                    if (user.getSchedule().getOrDefault(ldt.getHour(), -1) == ldt.getMinute()) {
+                if (user.getSchedule().size() != 0 && user.getSchedule().getOrDefault(ldt.getHour(), -1) == ldt.getMinute()) {
                         log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
                         ParsedCommand command = new ParsedCommand();
                         command.setCommand(Command.GET);
                         new SystemHandler(bot).operate(user.getChatId(), command, null);
                         isAnyMessageSent = true;
-                    }
                 }
             }
         }

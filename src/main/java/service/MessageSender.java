@@ -42,14 +42,12 @@ public class MessageSender implements Runnable {
     private void send(Object object) {
         try {
             MessageType messageType = messageType(object);
-            switch (messageType) {
-                case EXECUTE:
-                    BotApiMethod<Message> message = (BotApiMethod<Message>) object;
-                    log.debug("Use Execute for " + object);
-                    bot.execute(message);
-                    break;
-                default:
-                    log.warn("Cant detect type of object. " + object);
+            if (messageType == MessageType.EXECUTE) {
+                BotApiMethod<Message> message = (BotApiMethod<Message>) object;
+                log.debug("Use Execute for " + object);
+                bot.execute(message);
+            } else {
+                log.warn("Cant detect type of object. " + object);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
