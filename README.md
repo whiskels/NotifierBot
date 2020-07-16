@@ -1,6 +1,5 @@
 # Telegram bot for internal use inside company.
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/56978004ea584a49ad75e387e9c8223e)](https://www.codacy.com/manual/whiskels/TelegramNotifierBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/31c586b264204eef98c12a700563b089)](https://www.codacy.com/manual/whiskels/TelegramNotifierBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
 ## PLEASE NOTE THAT THIS PROJECT WON'T COMPILE
 Due to security restrictions this repository doesn't contain pom.xml, tokens and user config.
 
