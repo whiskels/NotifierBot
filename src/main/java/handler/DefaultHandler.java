@@ -2,8 +2,6 @@ package handler;
 
 import bot.Bot;
 import command.ParsedCommand;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class DefaultHandler extends AbstractHandler {

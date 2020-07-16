@@ -38,9 +38,6 @@ public class Customer {
     private String debtorDelayCurrent;
     private double totalDebt;
 
-    public Customer() {
-    }
-
     /*
      * Calculates overall customer debt with delay more than 0 days
      */
