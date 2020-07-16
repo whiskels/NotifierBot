@@ -70,8 +70,8 @@ public class ScheduleHandler extends AbstractHandler {
                 .append(END_LINE)
                 .append("[/schedule help](/schedule help) - show help message")
                 .append(END_LINE);
-
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -93,8 +93,8 @@ public class ScheduleHandler extends AbstractHandler {
                     .map(e -> String.format("%02d:%02d", e.getKey(), e.getValue()))
                     .collect(Collectors.joining(",")));
         }
-
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -110,10 +110,9 @@ public class ScheduleHandler extends AbstractHandler {
         final int currentSchedule = user.getSchedule().size();
         user.clearSchedule();
 
-        text.append("Your schedule (")
-                .append(currentSchedule)
-                .append(") was cleared");
+        text.append(String.format("Your schedule (%d) was cleared", currentSchedule));
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -122,8 +121,8 @@ public class ScheduleHandler extends AbstractHandler {
      */
     private SendMessage getMessageScheduled(String chatId, String message) {
         SendMessage sendMessage = createMessageTemplate(chatId);
-        StringBuilder text = new StringBuilder();
 
+        StringBuilder text = new StringBuilder();
         try {
             int hours = 0;
             int minutes = 0;
@@ -161,6 +160,7 @@ public class ScheduleHandler extends AbstractHandler {
             log.debug("Incorrect schedule time {}", message);
         }
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 }

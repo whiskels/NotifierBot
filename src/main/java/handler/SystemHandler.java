@@ -3,11 +3,11 @@ package handler;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
+import data.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import data.Customer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,8 +69,8 @@ public class SystemHandler extends AbstractHandler {
                 .append(END_LINE)
                 .append("[/help](/help) - show help message")
                 .append(END_LINE);
-
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -79,16 +79,16 @@ public class SystemHandler extends AbstractHandler {
      */
     private SendMessage getMessageStart(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
+
         StringBuilder text = new StringBuilder();
-        text.append("Hello. I'm  *")
-                .append(bot.getBotUsername())
-                .append("*")
+        text.append(String.format("Hello. I'm  *%s*", bot.getBotUsername()))
                 .append(END_LINE)
                 .append("I can show overdue debts")
                 .append(END_LINE)
                 .append("with [/get] command");
         sendMessage.setText(text.toString());
         sendStatusMessageToAdmin(chatId, Command.START);
+
         return sendMessage;
     }
 
@@ -97,12 +97,11 @@ public class SystemHandler extends AbstractHandler {
      */
     private SendMessage getMessageToken(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
+
         StringBuilder text = new StringBuilder();
-        text.append("Your token is *")
-                .append(chatId)
-                .append("*")
-                .append(END_LINE);
+        text.append(String.format("Your token is *%s*", chatId));
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -111,6 +110,7 @@ public class SystemHandler extends AbstractHandler {
      */
     public SendMessage getMessageGet(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
+
         StringBuilder text = new StringBuilder();
         text.append("Overdue debts on ")
                 .append(dtf.format(LocalDateTime.now()))
@@ -127,9 +127,10 @@ public class SystemHandler extends AbstractHandler {
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Exception while creating message GET: {}", e.getMessage());
         }
         sendMessage.setText(text.toString());
+
         return sendMessage;
     }
 
@@ -139,14 +140,14 @@ public class SystemHandler extends AbstractHandler {
      */
     private SendMessage getMessageUnauthorized(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
+
         StringBuilder text = new StringBuilder();
-        text.append("Your token is *")
-                .append(chatId)
-                .append("*")
-                .append(END_LINE);
-        text.append("Please contact your supervisor to gain access");
+        text.append(String.format("Your token is *%s*", chatId))
+                .append(END_LINE)
+                .append("Please contact your supervisor to gain access");
         sendMessage.setText(text.toString());
         sendStatusMessageToAdmin(chatId, Command.UNAUTHORIZED);
+
         return sendMessage;
     }
 }

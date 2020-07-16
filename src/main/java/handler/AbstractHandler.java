@@ -5,7 +5,6 @@ import command.Command;
 import command.ParsedCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import security.Users;
 
 public abstract class AbstractHandler {
     private final String END_LINE = "\n";
@@ -13,7 +12,7 @@ public abstract class AbstractHandler {
     protected Bot bot;
 
     AbstractHandler(Bot bot) {
-                this.bot = bot;
+        this.bot = bot;
     }
 
     public abstract String operate(String chatId, ParsedCommand parsedCommand, Update update);
@@ -23,26 +22,26 @@ public abstract class AbstractHandler {
      * Used when unauthorized users try to gain access to the bot
      */
     protected void sendStatusMessageToAdmin(String chatId, Command command) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(bot.ADMIN_ID);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(bot.ADMIN_ID);
+
         StringBuilder text = new StringBuilder();
-        text.append("User *")
-                .append(chatId)
-                .append("* ")
-                .append(command)
+        text.append(String.format("User *%s* %s", chatId, command))
                 .append(END_LINE)
-                .append("Permissions to use bot: *")
-                .append(Users.isValidUser(chatId))
-                .append("*");
+                .append(String.format("Permissions to use bot: *%s*",
+                        bot.getUser(chatId).isValid()));
         sendMessage.setText(text.toString());
+
         bot.sendQueue.add(sendMessage);
     }
 
+    /*
+     * Creates SendMessage template with markdown enabled for user with chatId
+     */
     protected SendMessage createMessageTemplate(String chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
+
         return sendMessage;
     }
 }
