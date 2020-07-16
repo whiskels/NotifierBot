@@ -24,13 +24,13 @@ public class Bot extends TelegramLongPollingBot {
     private final int RECONNECT_PAUSE = 10_000;                             // Reconnect delay
 
     private final Map<String, User> userMap;                                // Stores all users
-    private final String botName;                                           // Bot name
-    private final String token;                                             // Bot token
+    private final String BOT_NAME;                                          // Bot name
+    private final String TOKEN;                                             // Bot token
     private List<Customer> customerList;                                    // Cached customer list
 
     public final Queue<Object> receiveQueue = new ConcurrentLinkedQueue<>();
     public final Queue<Object> sendQueue = new ConcurrentLinkedQueue<>();
-    public final String ADMIN_ID;                              // Bot admin ID
+    public final String ADMIN_ID;                                           // Bot admin ID
 
 
     /*
@@ -86,17 +86,17 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return botName;
+        return BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
-        return token;
+        return TOKEN;
     }
 
-    public Bot(String botName, String token) {
-        this.botName = botName;
-        this.token = token;
+    public Bot(String BOT_NAME, String TOKEN) {
+        this.BOT_NAME = BOT_NAME;
+        this.TOKEN = TOKEN;
         ADMIN_ID = Users.getAdminId();
         userMap = new HashMap<>();
     }
@@ -111,10 +111,6 @@ public class Bot extends TelegramLongPollingBot {
 
     public boolean containsUser(String chatId) {
         return userMap.containsKey(chatId);
-    }
-
-    public void updateUsers() {
-        userMap.entrySet().removeIf(e -> !e.getValue().isValid());
     }
 
     public User getUser(String chatId) {

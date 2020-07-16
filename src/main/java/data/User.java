@@ -14,8 +14,8 @@ public class User {
 
     public User(String chatId) {
         this.chatId = chatId;
-        isValid = Users.isValidUser(chatId);
-        isAdmin = Users.isAdmin(chatId);
+        isValid = isValid();
+        isAdmin = isAdmin();
         schedule = new HashMap<>();
         if (isValid) {
             name = Users.getValidUser(chatId);

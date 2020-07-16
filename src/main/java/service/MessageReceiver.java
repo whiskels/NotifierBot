@@ -2,8 +2,9 @@ package service;
 
 import bot.Bot;
 import command.Command;
-import command.ParsedCommand;
 import command.CommandParser;
+import command.ParsedCommand;
+import data.User;
 import handler.AbstractHandler;
 import handler.DefaultHandler;
 import handler.ScheduleHandler;
@@ -11,8 +12,6 @@ import handler.SystemHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import data.User;
-import security.Users;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -20,8 +19,8 @@ import java.time.LocalDateTime;
 public class MessageReceiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
-    private int counter = 59;
     private final int COUNTER_DEFAULT_VALUE = 59;
+    private int counter = 59;
     private Bot bot;
     private CommandParser commandParser;
 
@@ -78,10 +77,10 @@ public class MessageReceiver implements Runnable {
             log.debug("Checking for scheduled messages");
             for (User user : bot.getUserList()) {
                 if (user.getSchedule().size() != 0 && user.getSchedule().getOrDefault(ldt.getHour(), -1) == ldt.getMinute()) {
-                        log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
-                        ParsedCommand command = new ParsedCommand();
-                        command.setCommand(Command.GET);
-                        new SystemHandler(bot).operate(user.getChatId(), command, null);
+                    log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
+                    ParsedCommand command = new ParsedCommand();
+                    command.setCommand(Command.GET);
+                    new SystemHandler(bot).operate(user.getChatId(), command, null);
                 }
             }
         }
@@ -100,14 +99,11 @@ public class MessageReceiver implements Runnable {
         String inputText = update.getMessage().getText();
         ParsedCommand parsedCommand = commandParser.getParsedCommand(inputText);
 
-        if (Users.isValidUser(chatId)) {
-            if (!bot.containsUser(chatId)) {
-                bot.addUser(chatId);
-            }
-        } else {
-            if (bot.containsUser(chatId)) {
-                bot.updateUsers();
-            }
+        if (!bot.containsUser(chatId)) {
+            bot.addUser(chatId);
+        }
+
+        if (!bot.getUser(chatId).isValid()) {
             parsedCommand.setCommand(Command.UNAUTHORIZED);
         }
 
