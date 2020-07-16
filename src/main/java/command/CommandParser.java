@@ -43,8 +43,8 @@ public class CommandParser {
                         case "CLEAR":
                             result.setCommand(Command.SCHEDULE_CLEAR);
                             break;
-                        case "INFO":
-                            result.setCommand(Command.SCHEDULE_INFO);
+                        case "GET":
+                            result.setCommand(Command.SCHEDULE_GET);
                             break;
                         default:
                             result.setCommand(Command.SCHEDULE_ADD);
@@ -58,8 +58,8 @@ public class CommandParser {
                 case "SCHEDULE_CLEAR":
                     result.setCommand(Command.SCHEDULE_CLEAR);
                     break;
-                case "SCHEDULE_INFO":
-                    result.setCommand(Command.SCHEDULE_INFO);
+                case "SCHEDULE_GET":
+                    result.setCommand(Command.SCHEDULE_GET);
                     break;
                 default:
                     result.setCommand(Command.NONE);

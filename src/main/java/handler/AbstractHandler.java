@@ -10,7 +10,7 @@ import security.Users;
 public abstract class AbstractHandler {
     private final String END_LINE = "\n";
 
-    Bot bot;
+    protected Bot bot;
 
     AbstractHandler(Bot bot) {
                 this.bot = bot;

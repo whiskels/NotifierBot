@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class DefaultHandler extends AbstractHandler {
-    private static final Logger log = LoggerFactory.getLogger(DefaultHandler.class);
-    private final String END_LINE = "\n";
-
     public DefaultHandler(Bot bot) {
         super(bot);
     }

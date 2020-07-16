@@ -1,23 +1,24 @@
 package service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import data.Customer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import security.Token;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class JSONReader {
+    private static final Logger log = LoggerFactory.getLogger(JSONReader.class);
     private final String URL;
     private List<Customer> customerList;
 
@@ -29,61 +30,66 @@ public class JSONReader {
     }
 
     /*
-     * Reads JSON data from URL and creates Customer list
-     */
-    public void update() {
-        try {
-            JSONObject json = readJsonFromUrl(URL);
-            createCustomerList(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
      * Reads all data from reader
      */
-    private static String readAll(Reader rd) throws IOException {
+    private static String readAll(Reader rd) {
         StringBuilder sb = new StringBuilder();
         int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
+        try {
+            while ((cp = rd.read()) != -1) {
+                sb.append((char) cp);
+            }
+        } catch (IOException e) {
+            log.error("Exception while trying to read data - {}", e.getMessage());
         }
         return sb.toString();
     }
 
     /*
+     * Reads JSON data from URL and creates Customer list
+     */
+    public void update() {
+        JSONObject json = readJsonFromUrl(URL);
+        if (json != null) {
+            createCustomerList(json);
+        }
+    }
+
+    /*
      * Reads JSONObject from given URL
      */
-    private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+    private JSONObject readJsonFromUrl(String url) {
+        try (InputStream is = new URL(url).openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
+            return new JSONObject(jsonText);
+        } catch (IOException | JSONException e) {
+            log.error("Exception while trying to get JSON data from URL - {}", e.getMessage());
+            return null;
         }
     }
 
     /*
      * Creates customer list based on JSONArray of objects
      */
-    private void createCustomerList(JSONObject json) throws IOException {
+    private void createCustomerList(JSONObject json) {
         customerList = new ArrayList<>();
         JSONArray content = (JSONArray) json.get("content");
 
-        Iterator<Object> it = content.iterator();
-        while (it.hasNext()) {
-            StringReader reader = new StringReader(it.next().toString());
+        try {
 
-            ObjectMapper mapper = new ObjectMapper();
+            for (Object o : content) {
+                StringReader reader = new StringReader(o.toString());
 
-            Customer customer = mapper.readValue(reader, Customer.class);
-            customer.calculateOverallDebt();
+                ObjectMapper mapper = new ObjectMapper();
 
-            customerList.add(customer);
+                Customer customer = mapper.readValue(reader, Customer.class);
+                customer.calculateOverallDebt();
+
+                customerList.add(customer);
+            }
+        } catch (IOException e) {
+            log.error("Exception while reading value from reader - {}", e.getMessage());
         }
 
         customerList = customerList.stream()

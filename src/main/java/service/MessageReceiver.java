@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 public class MessageReceiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
-    private final int WAIT_ONE_MINUTE = 60_000;
     private int counter = 59;
     private final int COUNTER_DEFAULT_VALUE = 59;
     private Bot bot;
@@ -44,7 +43,7 @@ public class MessageReceiver implements Runnable {
             }
 
             if (counter <= 0) {
-                sendScheduledMessages();
+                processScheduledTasks();
                 counter = COUNTER_DEFAULT_VALUE;
             } else {
                 counter--;
@@ -73,9 +72,7 @@ public class MessageReceiver implements Runnable {
     /*
      * Used to send scheduled messages
      */
-    private boolean sendScheduledMessages() {
-        boolean isAnyMessageSent = false;
-
+    private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(3);
         if (ldt.getDayOfWeek() != DayOfWeek.SUNDAY && ldt.getDayOfWeek() != DayOfWeek.SATURDAY) {
             log.debug("Checking for scheduled messages");
@@ -85,7 +82,6 @@ public class MessageReceiver implements Runnable {
                         ParsedCommand command = new ParsedCommand();
                         command.setCommand(Command.GET);
                         new SystemHandler(bot).operate(user.getChatId(), command, null);
-                        isAnyMessageSent = true;
                 }
             }
         }
@@ -93,7 +89,6 @@ public class MessageReceiver implements Runnable {
         if (ldt.getHour() == 2 && ldt.getMinute() == 0) {
             bot.updateCustomers();
         }
-        return isAnyMessageSent;
     }
 
     /*
@@ -141,7 +136,7 @@ public class MessageReceiver implements Runnable {
             case SCHEDULE_ADD:
             case SCHEDULE_HELP:
             case SCHEDULE_CLEAR:
-            case SCHEDULE_INFO:
+            case SCHEDULE_GET:
                 ScheduleHandler scheduleHandler = new ScheduleHandler(bot);
                 log.info("Handler for command [" + command.toString() + "] is: " + scheduleHandler);
                 return scheduleHandler;

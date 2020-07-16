@@ -35,7 +35,7 @@ public class ScheduleHandler extends AbstractHandler {
             case SCHEDULE_CLEAR:
                 bot.sendQueue.add(getMessageClear(chatId));
                 break;
-            case SCHEDULE_INFO:
+            case SCHEDULE_GET:
                 bot.sendQueue.add(getMessageInfo(chatId));
                 break;
             default:
@@ -62,11 +62,11 @@ public class ScheduleHandler extends AbstractHandler {
                 .append(END_LINE)
                 .append("   /schedule 10 - 10:00")
                 .append(END_LINE)
-                .append("   /schedule 12:30 - 12:30")
+                .append("   /schedule 1230 - 12:30")
                 .append(END_LINE)
                 .append("Please note that daily messages are not sent on *sundays and saturdays*!")
                 .append(END_LINE)
-                .append("[/schedule info](/schedule info) - show current schedule state")
+                .append("[/schedule get](/schedule get) - show current schedule state")
                 .append(END_LINE)
                 .append("[/schedule clear](/schedule clear) - clear schedule")
                 .append(END_LINE)
@@ -165,6 +165,7 @@ public class ScheduleHandler extends AbstractHandler {
             text.append("You've entered invalid time")
                     .append(END_LINE);
             text.append("Please try again");
+            log.debug("Incorrect schedule time {}", message);
         }
         sendMessage.setText(text.toString());
         return sendMessage;

@@ -12,11 +12,16 @@ public class App {
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
+        logger.info("Api Context initialized");
 
         Bot bot = new Bot(Token.getBotName(), Token.getBotToken());
+        logger.info("Bot created");
 
         MessageReceiver messageReceiver = new MessageReceiver(bot);
+        logger.info("MessageReceiver created");
         MessageSender messageSender = new MessageSender(bot);
+        logger.info("MessageSender created");
+
 
         bot.botConnect();
 
@@ -43,6 +48,7 @@ public class App {
         sendMessage.setChatId(bot.ADMIN_ID);
         sendMessage.setText("Bot start up is successful");
         bot.sendQueue.add(sendMessage);
+        logger.info("Start report sent to Admin");
     }
 }
 

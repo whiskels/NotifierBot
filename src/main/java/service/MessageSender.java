@@ -5,9 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import data.User;
-
-import java.time.LocalDateTime;
 
 public class MessageSender implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(MessageSender.class);
@@ -27,12 +24,11 @@ public class MessageSender implements Runnable {
                     log.debug("Get new msg to send " + object);
                     send(object);
                 }
-                for (User user : bot.getUserList())
-                    try {
-                        Thread.sleep(SENDER_SLEEP_TIME);
-                    } catch (InterruptedException e) {
-                        log.error("Take interrupt while operate msg list", e);
-                    }
+                try {
+                    Thread.sleep(SENDER_SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    log.error("Take interrupt while operate msg list", e);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage());
