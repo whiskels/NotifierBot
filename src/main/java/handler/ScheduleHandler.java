@@ -48,9 +48,7 @@ public class ScheduleHandler extends AbstractHandler {
      * Sends help message
      */
     private SendMessage getMessageHelp(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();
         text.append("*Help message for /schedule command*")
@@ -81,9 +79,7 @@ public class ScheduleHandler extends AbstractHandler {
      * Sends schedule status message
      */
     private SendMessage getMessageInfo(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();
         text.append("*Your current schedule:*").append(END_LINE);
@@ -106,9 +102,8 @@ public class ScheduleHandler extends AbstractHandler {
      * Sends message that schedule is cleared
      */
     private SendMessage getMessageClear(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
+
         StringBuilder text = new StringBuilder();
 
         final User user = bot.getUser(chatId);
@@ -126,9 +121,7 @@ public class ScheduleHandler extends AbstractHandler {
      * Sets up schedule
      */
     private SendMessage getMessageScheduled(String chatId, String message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
         StringBuilder text = new StringBuilder();
 
         try {

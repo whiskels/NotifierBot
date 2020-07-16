@@ -24,7 +24,6 @@ public class User {
 
     public boolean isValid() {
         isValid = Users.isValidUser(chatId);
-
         return isValid;
     }
 

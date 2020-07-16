@@ -38,4 +38,11 @@ public abstract class AbstractHandler {
         sendMessage.setText(text.toString());
         bot.sendQueue.add(sendMessage);
     }
+
+    protected SendMessage createMessageTemplate(String chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.enableMarkdown(true);
+        return sendMessage;
+    }
 }

@@ -54,9 +54,7 @@ public class SystemHandler extends AbstractHandler {
      * Sends help message
      */
     private SendMessage getMessageHelp(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();
         text.append("*This is help message*")
@@ -80,9 +78,7 @@ public class SystemHandler extends AbstractHandler {
      * Sends start message
      */
     private SendMessage getMessageStart(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
         StringBuilder text = new StringBuilder();
         text.append("Hello. I'm  *")
                 .append(bot.getBotUsername())
@@ -100,9 +96,7 @@ public class SystemHandler extends AbstractHandler {
      * Sends user's token
      */
     private SendMessage getMessageToken(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
         StringBuilder text = new StringBuilder();
         text.append("Your token is *")
                 .append(chatId)
@@ -116,9 +110,7 @@ public class SystemHandler extends AbstractHandler {
      * Sends overdue status message
      */
     public SendMessage getMessageGet(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
         StringBuilder text = new StringBuilder();
         text.append("Overdue debts on ")
                 .append(dtf.format(LocalDateTime.now()))
@@ -146,9 +138,7 @@ public class SystemHandler extends AbstractHandler {
      * Sends message to unauthorized users
      */
     private SendMessage getMessageUnauthorized(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
+        SendMessage sendMessage = createMessageTemplate(chatId);
         StringBuilder text = new StringBuilder();
         text.append("Your token is *")
                 .append(chatId)
