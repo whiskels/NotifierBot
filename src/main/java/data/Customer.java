@@ -53,8 +53,8 @@ public class Customer {
     }
 
     public String getAccountManager() {
-        return getAccountManager();
-    }
+        return accountManager;
+}
 
     /*
      * Formats total debt to easy-to-read format
