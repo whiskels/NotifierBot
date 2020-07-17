@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 public class SystemHandler extends AbstractHandler {
     private static final Logger log = LoggerFactory.getLogger(SystemHandler.class);
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final String END_LINE = "\n";
 
     public SystemHandler(Bot bot) {
@@ -61,7 +61,7 @@ public class SystemHandler extends AbstractHandler {
                 .append(END_LINE).append(END_LINE)
                 .append("[/start](/start) - show start message")
                 .append(END_LINE)
-                .append("[/get](/get) - get your customer overdue debts info")
+                .append("[/get](/get) - get your customer overdue debts info (updated daily)")
                 .append(END_LINE)
                 .append("[/token](/token) - get your token and user info")
                 .append(END_LINE)
@@ -112,26 +112,35 @@ public class SystemHandler extends AbstractHandler {
         SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();
-        text.append("Overdue debts on ")
-                .append(dtf.format(LocalDateTime.now()))
+        text.append(String.format("Overdue debts on %s", dtf.format(LocalDateTime.now().plusHours(3))))
                 .append(END_LINE).append(END_LINE);
         try {
+            StringBuilder list = new StringBuilder();
+
             for (Customer customer : bot.getCustomerList()) {
-                if (bot.getUser(chatId).isAdmin()
-                        || bot.getUser(chatId).isValid()
-                        && customer.getAccountManager().equals(bot.getUser(chatId).getName())) {
-                    text.append(customer.toString())
+                if (bot.getUser(chatId).isHead() || isAccountManager(chatId, customer)) {
+                    list.append(customer.toString())
                             .append(END_LINE)
                             .append("---------------------------")
                             .append(END_LINE);
                 }
             }
+
+            if (list.length() == 0) {
+                list.append("No overdue debts");
+            }
+            text.append(list.toString());
+
         } catch (Exception e) {
             log.error("Exception while creating message GET: {}", e.getMessage());
         }
         sendMessage.setText(text.toString());
 
         return sendMessage;
+    }
+
+    private boolean isAccountManager(String chatId, Customer customer) {
+        return bot.getUser(chatId).isManager() && bot.getUser(chatId).getName().equals(customer.getAccountManager());
     }
 
 

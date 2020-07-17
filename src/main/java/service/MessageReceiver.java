@@ -103,7 +103,7 @@ public class MessageReceiver implements Runnable {
             bot.addUser(chatId);
         }
 
-        if (!bot.getUser(chatId).isValid()) {
+        if (!bot.getUser(chatId).isManager()) {
             parsedCommand.setCommand(Command.UNAUTHORIZED);
         }
 

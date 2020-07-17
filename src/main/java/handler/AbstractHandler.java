@@ -28,7 +28,7 @@ public abstract class AbstractHandler {
         text.append(String.format("User *%s* %s", chatId, command))
                 .append(END_LINE)
                 .append(String.format("Permissions to use bot: *%s*",
-                        bot.getUser(chatId).isValid()));
+                        bot.getUser(chatId).isManager()));
         sendMessage.setText(text.toString());
 
         bot.sendQueue.add(sendMessage);

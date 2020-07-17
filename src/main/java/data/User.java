@@ -8,28 +8,28 @@ import java.util.Map;
 public class User {
     private final String chatId;
     private String name;
-    private boolean isValid;
-    private boolean isAdmin;
+    private boolean isManager;
+    private boolean isHead;
     private Map<Integer, Integer> schedule;
 
     public User(String chatId) {
         this.chatId = chatId;
-        isValid = isValid();
-        isAdmin = isAdmin();
+        isManager = isManager();
+        isHead = isHead();
         schedule = new HashMap<>();
-        if (isValid) {
+        if (isManager) {
             name = Users.getValidUser(chatId);
         }
     }
 
-    public boolean isValid() {
-        isValid = Users.isValidUser(chatId);
-        return isValid;
+    public boolean isManager() {
+        isManager = Users.isManager(chatId);
+        return isManager;
     }
 
-    public boolean isAdmin() {
-        isAdmin = Users.isAdmin(chatId);
-        return isAdmin;
+    public boolean isHead() {
+        isHead = Users.isHead(chatId);
+        return isHead;
     }
 
     public void addSchedule(int hours, int minutes) {
