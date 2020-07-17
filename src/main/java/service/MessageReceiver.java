@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 public class MessageReceiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
-    private final int COUNTER_DEFAULT_VALUE = 59;
-    private int counter = 59;
     private Bot bot;
     private CommandParser commandParser;
 
@@ -41,13 +39,6 @@ public class MessageReceiver implements Runnable {
                 analyze(object);
             }
 
-            if (counter <= 0) {
-                processScheduledTasks();
-                counter = COUNTER_DEFAULT_VALUE;
-            } else {
-                counter--;
-            }
-
             try {
                 Thread.sleep(WAIT_FOR_NEW_MESSAGE_DELAY);
             } catch (InterruptedException e) {
@@ -66,28 +57,6 @@ public class MessageReceiver implements Runnable {
             log.debug("Update received: " + update.toString());
             analyzeForUpdateType(update);
         } else log.warn("Cant operate type of object: " + object.toString());
-    }
-
-    /*
-     * Used to send scheduled messages
-     */
-    private void processScheduledTasks() {
-        final LocalDateTime ldt = LocalDateTime.now().plusHours(3);
-        if (ldt.getDayOfWeek() != DayOfWeek.SUNDAY && ldt.getDayOfWeek() != DayOfWeek.SATURDAY) {
-            log.debug("Checking for scheduled messages");
-            for (User user : bot.getUserList()) {
-                if (user.getSchedule().size() != 0 && user.getSchedule().getOrDefault(ldt.getHour(), -1) == ldt.getMinute()) {
-                    log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
-                    ParsedCommand command = new ParsedCommand();
-                    command.setCommand(Command.GET);
-                    new SystemHandler(bot).operate(user.getChatId(), command, null);
-                }
-            }
-        }
-
-        if (ldt.getHour() == 2 && ldt.getMinute() == 0) {
-            bot.updateCustomers();
-        }
     }
 
     /*

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import security.Token;
 import service.MessageReceiver;
 import service.MessageSender;
+import service.TaskScheduler;
 
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
@@ -21,23 +22,31 @@ public class App {
         logger.info("MessageReceiver created");
         MessageSender messageSender = new MessageSender(bot);
         logger.info("MessageSender created");
+        TaskScheduler taskScheduler = new TaskScheduler(bot);
+        logger.info("TaskScheduler created");
 
 
         bot.botConnect();
 
-        Thread receiver = new Thread(messageReceiver);
-        receiver.setDaemon(true);
-        receiver.setName("MsgReceiver");
-        receiver.setPriority(3);
+        Thread receiver = getThread(messageReceiver, "MsgReceiver", 3);
         receiver.start();
 
-        Thread sender = new Thread(messageSender);
-        sender.setDaemon(true);
-        sender.setName("MsgSender");
-        sender.setPriority(1);
+        Thread sender = getThread(messageSender, "MsgSender", 1);
         sender.start();
 
+        Thread scheduler = getThread(taskScheduler, "TskScheduler", 3);
+        scheduler.start();
+
         sendStartReport(bot);
+    }
+
+    private static Thread getThread(Runnable runnable, String name, int priority) {
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        thread.setName(name);
+        thread.setPriority(priority);
+
+        return thread;
     }
 
     /*

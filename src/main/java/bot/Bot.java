@@ -23,9 +23,9 @@ public class Bot extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(Bot.class);   // Logging
     private final int RECONNECT_PAUSE = 10_000;                             // Reconnect delay
 
+    private final String BOT_NAME = System.getenv("BOT_NAME");        // Bot name
+    private final String TOKEN = System.getenv("BOT_TOKEN");          // Bot token
     private final Map<String, User> userMap;                                // Stores all users
-    private final String BOT_NAME;                                          // Bot name
-    private final String TOKEN;                                             // Bot token
     private List<Customer> customerList;                                    // Cached customer list
 
     public final Queue<Object> receiveQueue = new ConcurrentLinkedQueue<>();
@@ -94,9 +94,7 @@ public class Bot extends TelegramLongPollingBot {
         return TOKEN;
     }
 
-    public Bot(String BOT_NAME, String TOKEN) {
-        this.BOT_NAME = BOT_NAME;
-        this.TOKEN = TOKEN;
+    public Bot() {
         ADMIN_ID = Users.getAdminId();
         userMap = new HashMap<>();
     }
