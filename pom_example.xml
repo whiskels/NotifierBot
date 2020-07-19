@@ -22,6 +22,9 @@
         <!--    Tests  -->
         <junit.version>4.13</junit.version>
         <assertj.version>3.16.1</assertj.version>
+
+        <!--DB-->
+        <postgresql.version>42.2.14</postgresql.version>
     </properties>
 
     <build>
@@ -50,37 +53,37 @@
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>3.0.3</version>
-                    <configuration>
-                        <appName>YOUR_APP_NAME_HERE</appName>
-                        <processTypes>
-                            <worker>
-                                java $JAVA_OPTS -cp target/classes:target/dependency/* App
-                            </worker>
-                        </processTypes>
-                    </configuration>
+                <configuration>
+                    <appName>YOUR_APP_NAME</appName>
+                    <processTypes>
+                        <worker>
+                            java $JAVA_OPTS -cp target/classes:target/dependency/* App
+                        </worker>
+                    </processTypes>
+                </configuration>
             </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>appassembler-maven-plugin</artifactId>
-                    <version>1.1.1</version>
-                    <configuration>
-                        <assembleDirectory>target</assembleDirectory>
-                        <programs>
-                            <program>
-                                <mainClass>App</mainClass>
-                                <name>TelegramNotifierBot</name>
-                            </program>
-                        </programs>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>assemble</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>App</mainClass>
+                            <name>TelegramNotifierBot</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -117,6 +120,13 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambotsextensions</artifactId>
             <version>LATEST</version>
+        </dependency>
+
+        <!--DataBase-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <!--Test-->

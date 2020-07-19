@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import data.User;
+import model.User;
 
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -84,14 +86,15 @@ public class ScheduleHandler extends AbstractHandler {
         StringBuilder text = new StringBuilder();
         text.append("*Your current schedule:*").append(END_LINE);
 
-        final User user = bot.getUser(chatId);
-        final Map<Integer, Integer> schedule = user.getSchedule();
+        final Map<Integer, List<Integer>> schedule = bot.getSchedule(chatId);
         if (schedule.size() == 0) {
             text.append("No messages scheduled");
         } else {
             text.append(schedule.entrySet().stream()
+                    .flatMap(e -> e.getValue().stream()
+                            .map(s -> new AbstractMap.SimpleImmutableEntry(e.getKey(), s)))
                     .map(e -> String.format("%02d:%02d", e.getKey(), e.getValue()))
-                    .collect(Collectors.joining(",")));
+                    .collect(Collectors.joining(", ")));
         }
         sendMessage.setText(text.toString());
 
@@ -104,13 +107,11 @@ public class ScheduleHandler extends AbstractHandler {
     private SendMessage getMessageClear(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
 
+        bot.clearSchedule(chatId);
+
         StringBuilder text = new StringBuilder();
 
-        final User user = bot.getUser(chatId);
-        final int currentSchedule = user.getSchedule().size();
-        user.clearSchedule();
-
-        text.append(String.format("Your schedule (%d) was cleared", currentSchedule));
+        text.append("Your schedule was cleared");
         sendMessage.setText(text.toString());
 
         return sendMessage;
@@ -138,7 +139,7 @@ public class ScheduleHandler extends AbstractHandler {
             } else if (len == 2) {
                 hours = Integer.parseInt(message);
             } else if (len == 4) {
-                hours = Integer.parseInt(message.substring(0,2));
+                hours = Integer.parseInt(message.substring(0, 2));
                 minutes = Integer.parseInt(message.substring(2));
             }
 
@@ -146,7 +147,7 @@ public class ScheduleHandler extends AbstractHandler {
                 throw new IllegalArgumentException();
             }
 
-            bot.getUser(chatId).addSchedule(hours, minutes);
+            bot.addSchedule(chatId, hours, minutes);
             text.append("Scheduled status messages to")
                     .append(END_LINE)
                     .append("be sent daily at ")

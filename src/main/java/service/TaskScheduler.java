@@ -3,13 +3,14 @@ package service;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import data.User;
+import model.User;
 import handler.SystemHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TaskScheduler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
@@ -45,12 +46,14 @@ public class TaskScheduler implements Runnable {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(3);
         if (ldt.getDayOfWeek() != DayOfWeek.SUNDAY && ldt.getDayOfWeek() != DayOfWeek.SATURDAY) {
             log.debug("Checking for scheduled messages");
-            for (User user : bot.getUserList()) {
-                if (user.getSchedule().size() != 0 && user.getSchedule().getOrDefault(ldt.getHour(), -1) == ldt.getMinute()) {
-                    log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
+
+            List<String> scheduledUsers = bot.isAnyScheduled(ldt);
+            if (scheduledUsers.size() != 0) {
+                for (String chatId : scheduledUsers) {
+                    log.debug("Scheduled message for {} sent at {}:{}", chatId, ldt.getHour(), ldt.getMinute());
                     ParsedCommand command = new ParsedCommand();
                     command.setCommand(Command.GET);
-                    new SystemHandler(bot).operate(user.getChatId(), command, null);
+                    new SystemHandler(bot).operate(chatId, command, null);
                 }
             }
         }

@@ -15,7 +15,7 @@ public class App {
         ApiContextInitializer.init();
         logger.info("Api Context initialized");
 
-        Bot bot = new Bot(Token.getBotName(), Token.getBotToken());
+        Bot bot = new Bot();
         logger.info("Bot created");
 
         MessageReceiver messageReceiver = new MessageReceiver(bot);
@@ -50,14 +50,16 @@ public class App {
     }
 
     /*
-     * Send bot admin message about successful initialization
+     * Send bot admins message about successful initialization
      */
     private static void sendStartReport(Bot bot) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(bot.ADMIN_ID);
-        sendMessage.setText("Bot start up is successful");
-        bot.sendQueue.add(sendMessage);
-        logger.info("Start report sent to Admin");
+        for (String chatId : bot.getAdmins()) {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Bot start up is successful");
+            bot.sendQueue.add(sendMessage);
+            logger.info("Start report sent to Admin");
+        }
     }
 }
 

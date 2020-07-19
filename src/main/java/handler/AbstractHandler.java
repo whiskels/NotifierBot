@@ -18,20 +18,22 @@ public abstract class AbstractHandler {
     public abstract String operate(String chatId, ParsedCommand parsedCommand, Update update);
 
     /*
-     * Sends status message to admin
+     * Sends status message to admins
      * Used when unauthorized users try to gain access to the bot
      */
     protected void sendStatusMessageToAdmin(String chatId, Command command) {
-        SendMessage sendMessage = createMessageTemplate(bot.ADMIN_ID);
+        for (String adminId : bot.getAdmins()) {
+            SendMessage sendMessage = createMessageTemplate(adminId);
 
-        StringBuilder text = new StringBuilder();
-        text.append(String.format("User *%s* %s", chatId, command))
-                .append(END_LINE)
-                .append(String.format("Permissions to use bot: *%s*",
-                        bot.getUser(chatId).isManager()));
-        sendMessage.setText(text.toString());
+            StringBuilder text = new StringBuilder();
+            text.append(String.format("User *%s* %s", chatId, command))
+                    .append(END_LINE)
+                    .append(String.format("Permissions to use bot: *%s*",
+                            bot.getUser(chatId).isManager()));
+            sendMessage.setText(text.toString());
 
-        bot.sendQueue.add(sendMessage);
+            bot.sendQueue.add(sendMessage);
+        }
     }
 
     /*

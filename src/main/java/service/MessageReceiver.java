@@ -4,7 +4,6 @@ import bot.Bot;
 import command.Command;
 import command.CommandParser;
 import command.ParsedCommand;
-import data.User;
 import handler.AbstractHandler;
 import handler.DefaultHandler;
 import handler.ScheduleHandler;
@@ -12,9 +11,6 @@ import handler.SystemHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 
 public class MessageReceiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
@@ -69,10 +65,6 @@ public class MessageReceiver implements Runnable {
         ParsedCommand parsedCommand = commandParser.getParsedCommand(inputText);
 
         if (!bot.containsUser(chatId)) {
-            bot.addUser(chatId);
-        }
-
-        if (!bot.getUser(chatId).isManager()) {
             parsedCommand.setCommand(Command.UNAUTHORIZED);
         }
 

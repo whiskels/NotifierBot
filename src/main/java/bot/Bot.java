@@ -6,11 +6,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import data.User;
-import data.Customer;
+import model.User;
+import model.Customer;
+import repository.ScheduleRepository;
+import repository.UserRepository;
+import security.Token;
 import security.Users;
 import service.JSONReader;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -25,13 +29,13 @@ public class Bot extends TelegramLongPollingBot {
 
     private final String BOT_NAME = System.getenv("BOT_NAME");        // Bot name
     private final String TOKEN = System.getenv("BOT_TOKEN");          // Bot token
-    private final Map<String, User> userMap;                                // Stores all users
     private List<Customer> customerList;                                    // Cached customer list
+
+    private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     public final Queue<Object> receiveQueue = new ConcurrentLinkedQueue<>();
     public final Queue<Object> sendQueue = new ConcurrentLinkedQueue<>();
-    public final String ADMIN_ID;                                           // Bot admin ID
-
 
     /*
      * Actions done on each update received
@@ -51,7 +55,8 @@ public class Bot extends TelegramLongPollingBot {
         try {
             telegramBotsApi.registerBot(this);
             log.info("TelegramAPI started. Looking for messages");
-            updateCustomers();
+
+
             log.info("Initial customer information loaded");
         } catch (TelegramApiRequestException e) {
             log.error("Unable to connect. Pause " + RECONNECT_PAUSE / 1000
@@ -95,23 +100,37 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public Bot() {
-        ADMIN_ID = Users.getAdminId();
-        userMap = new HashMap<>();
+        userRepository = new UserRepository();
+        scheduleRepository = new ScheduleRepository();
+        updateCustomers();
     }
 
-    public void addUser(String chatId) {
-        userMap.put(chatId, new User(chatId));
-    }
-
-    public List<User> getUserList() {
-        return new ArrayList<>(userMap.values());
-    }
 
     public boolean containsUser(String chatId) {
-        return userMap.containsKey(chatId);
+        return userRepository.containsUser(chatId);
     }
 
     public User getUser(String chatId) {
-        return userMap.getOrDefault(chatId, null);
+        return userRepository.getUser(chatId);
+    }
+
+    public List<String> isAnyScheduled(LocalDateTime ldt) {
+        return scheduleRepository.checkSchedule(ldt);
+    }
+
+    public void clearSchedule(String chatId) {
+        scheduleRepository.clearSchedule(chatId);
+    }
+
+    public Map<Integer, List<Integer>> getSchedule(String chatId) {
+        return scheduleRepository.getSchedule(chatId);
+    }
+
+    public void addSchedule(String chatId, int hour, int minutes) {
+        scheduleRepository.addSchedule(chatId, hour, minutes);
+    }
+
+    public List<String> getAdmins() {
+        return userRepository.getAdmins();
     }
 }

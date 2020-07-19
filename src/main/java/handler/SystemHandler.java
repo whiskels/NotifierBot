@@ -3,7 +3,8 @@ package handler;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import data.Customer;
+import model.Customer;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -117,8 +118,9 @@ public class SystemHandler extends AbstractHandler {
         try {
             StringBuilder list = new StringBuilder();
 
+            final User user = bot.getUser(chatId);
             for (Customer customer : bot.getCustomerList()) {
-                if (bot.getUser(chatId).isHead() || isAccountManager(chatId, customer)) {
+                if (isValid(user, customer)) {
                     list.append(customer.toString())
                             .append(END_LINE)
                             .append("---------------------------")
@@ -139,8 +141,8 @@ public class SystemHandler extends AbstractHandler {
         return sendMessage;
     }
 
-    private boolean isAccountManager(String chatId, Customer customer) {
-        return bot.getUser(chatId).isManager() && bot.getUser(chatId).getName().equals(customer.getAccountManager());
+    private boolean isValid(User user, Customer customer) {
+        return user.isHead() || user.isManager() && user.getName().equals(customer.getAccountManager());
     }
 
 

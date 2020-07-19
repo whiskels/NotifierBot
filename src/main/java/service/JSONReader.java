@@ -1,7 +1,7 @@
 package service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import data.Customer;
+import model.Customer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ public class JSONReader {
      * Constructor initializes URL
      */
     public JSONReader() {
-        this.URL = Token.getUrl();
+        this.URL = System.getenv("JSON_URL");
     }
 
     /*
