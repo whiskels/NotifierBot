@@ -3,7 +3,7 @@ package repository;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import security.IllegalUserException;
+import exception.IllegalUserException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,8 +49,6 @@ public class UserRepository extends AbstractRepository {
              PreparedStatement stmt = connection.prepareStatement(getAdminsSQL)) {
 
             ResultSet rs = stmt.executeQuery();
-
-
             while (rs.next()) {
                 result.add(rs.getString("user_id"));
             }

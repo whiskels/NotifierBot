@@ -10,9 +10,7 @@ import java.sql.DriverManager;
 
 public abstract class AbstractRepository {
     private static final Logger log = LoggerFactory.getLogger(AbstractRepository.class);
-
     private static final String DB_URL = System.getenv("DATABASE_URL");
-
 
     protected Connection getConnection() {
         Connection connection = null;

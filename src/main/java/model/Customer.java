@@ -70,5 +70,4 @@ public class Customer {
                 contractor, financeSubject, wayOfPayment, accountManager,
                 formatValue(totalDebt), currency, debtComment);
     }
-
 }

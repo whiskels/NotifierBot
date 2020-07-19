@@ -10,8 +10,6 @@ import model.User;
 import model.Customer;
 import repository.ScheduleRepository;
 import repository.UserRepository;
-import security.Token;
-import security.Users;
 import service.JSONReader;
 
 import java.time.LocalDateTime;

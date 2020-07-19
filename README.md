@@ -1,7 +1,7 @@
 # Telegram bot for internal use inside company.
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/31c586b264204eef98c12a700563b089)](https://www.codacy.com/manual/whiskels/TelegramNotifierBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
 ## PLEASE NOTE THAT THIS PROJECT WON'T COMPILE
-Due to security restrictions this repository doesn't contain pom.xml, tokens and user config.
+Due to exception restrictions this repository doesn't contain pom.xml, tokens and user config.
 In order to run this bot:
 - pom_example.xml - Change YOUR_APP_NAME to your app name on Heroku and rename file to pom.xml
 - Set up BOT_NAME, BOT_TOKEN, DATABASE_URL and JSON_URL environment variables on Heroku;

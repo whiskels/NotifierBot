@@ -1,10 +1,5 @@
 package model;
 
-import security.Users;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class User {
     private final String chatId;
     private String name;
@@ -25,7 +20,6 @@ public class User {
     public boolean isHead() {
         return isHead;
     }
-
 
     public String getChatId() {
         return chatId;
