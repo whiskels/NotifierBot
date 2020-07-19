@@ -3,7 +3,6 @@ package service;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import model.User;
 import handler.SystemHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
