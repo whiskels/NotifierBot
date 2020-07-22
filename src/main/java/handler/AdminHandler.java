@@ -3,8 +3,6 @@ package handler;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import model.Customer;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
