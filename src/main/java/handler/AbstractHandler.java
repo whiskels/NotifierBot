@@ -6,8 +6,13 @@ import command.ParsedCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.format.DateTimeFormatter;
+
 public abstract class AbstractHandler {
-    private final String END_LINE = "\n";
+    protected final String END_LINE = "\n";
+    protected final String EMPTY_LINE = "---------------------------";
+    protected static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     protected Bot bot;
 
@@ -43,6 +48,22 @@ public abstract class AbstractHandler {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
+
+        return sendMessage;
+    }
+
+    /*
+     * Sends message to unauthorized users
+     */
+    protected SendMessage getMessageUnauthorized(String chatId) {
+        SendMessage sendMessage = createMessageTemplate(chatId);
+
+        StringBuilder text = new StringBuilder();
+        text.append(String.format("Your token is *%s*", chatId))
+                .append(END_LINE)
+                .append("Please contact your supervisor to gain access");
+        sendMessage.setText(text.toString());
+        sendStatusMessageToAdmin(chatId, Command.UNAUTHORIZED);
 
         return sendMessage;
     }

@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class ScheduleHandler extends AbstractHandler {
     private static final Logger log = LoggerFactory.getLogger(SystemHandler.class);
 
-    private final String END_LINE = "\n";
-
     public ScheduleHandler(Bot bot) {
         super(bot);
     }

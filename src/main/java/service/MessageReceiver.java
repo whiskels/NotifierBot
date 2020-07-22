@@ -4,10 +4,7 @@ import bot.Bot;
 import command.Command;
 import command.CommandParser;
 import command.ParsedCommand;
-import handler.AbstractHandler;
-import handler.DefaultHandler;
-import handler.ScheduleHandler;
-import handler.SystemHandler;
+import handler.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -63,12 +60,13 @@ public class MessageReceiver implements Runnable {
 
         String inputText = update.getMessage().getText();
         ParsedCommand parsedCommand = commandParser.getParsedCommand(inputText);
+        AbstractHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
 
-        if (!bot.containsUser(chatId)) {
+        if (!bot.containsUser(chatId) ||
+                handlerForCommand.getClass().equals(AdminHandler.class) && !bot.getAdmins().contains(chatId)) {
             parsedCommand.setCommand(Command.UNAUTHORIZED);
         }
 
-        AbstractHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
         handlerForCommand.operate(chatId, parsedCommand, update);
     }
 
@@ -97,6 +95,10 @@ public class MessageReceiver implements Runnable {
                 ScheduleHandler scheduleHandler = new ScheduleHandler(bot);
                 log.info("Handler for command [" + command.toString() + "] is: " + scheduleHandler);
                 return scheduleHandler;
+            case ADMIN_MESSAGE:
+                AdminHandler adminHandler = new AdminHandler(bot);
+                log.info("Handler for command [" + command.toString() + "] is: " + adminHandler);
+                return adminHandler;
             default:
                 log.info("Handler for command [" + command.toString() + "] not Set. Return DefaultHandler");
                 return new DefaultHandler(bot);

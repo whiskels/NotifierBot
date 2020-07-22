@@ -128,7 +128,13 @@ public class Bot extends TelegramLongPollingBot {
         scheduleRepository.addSchedule(chatId, hour, minutes);
     }
 
+    public int getScheduleSize(String chatId) {
+        return scheduleRepository.getScheduleSize(chatId);
+    }
+
     public List<String> getAdmins() {
         return userRepository.getAdmins();
     }
+
+    public List<String> getUsers() {return userRepository.getUsers(); }
 }

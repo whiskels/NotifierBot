@@ -22,7 +22,20 @@ public class ScheduleRepository extends AbstractRepository {
 
     public void addSchedule(String chatId, int hour, int minutes) {
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(addSQL)) {
+             PreparedStatement stmt = connection.prepareStatement(addSQL);
+             PreparedStatement stmtCheck = connection.prepareStatement(checkSQL)) {
+
+            stmtCheck.setInt(1, hour);
+            stmtCheck.setInt(2, minutes);
+
+            ResultSet rs = stmtCheck.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getString("user_id").equals(chatId)) {
+                    throw new IllegalArgumentException("This time already exists");
+                }
+            }
+
             stmt.setString(1, chatId);
             stmt.setInt(2, hour);
             stmt.setInt(3, minutes);

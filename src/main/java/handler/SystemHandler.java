@@ -11,12 +11,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 public class SystemHandler extends AbstractHandler {
     private static final Logger log = LoggerFactory.getLogger(SystemHandler.class);
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private final String END_LINE = "\n";
 
     public SystemHandler(Bot bot) {
         super(bot);
@@ -119,14 +117,11 @@ public class SystemHandler extends AbstractHandler {
             StringBuilder list = new StringBuilder();
 
             final User user = bot.getUser(chatId);
-            for (Customer customer : bot.getCustomerList()) {
-                if (isValid(user, customer)) {
-                    list.append(customer.toString())
-                            .append(END_LINE)
-                            .append("---------------------------")
-                            .append(END_LINE);
-                }
-            }
+            list.append(bot.getCustomerList().stream()
+                    .filter(customer -> isValid(user, customer))
+                    .map(Customer::toString)
+                    .collect(Collectors.joining(String.format(
+                            "%s%s%s", END_LINE, EMPTY_LINE, END_LINE))));
 
             if (list.length() == 0) {
                 list.append("No overdue debts");
@@ -143,22 +138,5 @@ public class SystemHandler extends AbstractHandler {
 
     private boolean isValid(User user, Customer customer) {
         return user.isHead() || user.isManager() && user.getName().equals(customer.getAccountManager());
-    }
-
-
-    /*
-     * Sends message to unauthorized users
-     */
-    private SendMessage getMessageUnauthorized(String chatId) {
-        SendMessage sendMessage = createMessageTemplate(chatId);
-
-        StringBuilder text = new StringBuilder();
-        text.append(String.format("Your token is *%s*", chatId))
-                .append(END_LINE)
-                .append("Please contact your supervisor to gain access");
-        sendMessage.setText(text.toString());
-        sendStatusMessageToAdmin(chatId, Command.UNAUTHORIZED);
-
-        return sendMessage;
     }
 }

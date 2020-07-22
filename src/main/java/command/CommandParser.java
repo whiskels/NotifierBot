@@ -61,6 +61,10 @@ public class CommandParser {
                 case "SCHEDULE_GET":
                     result.setCommand(Command.SCHEDULE_GET);
                     break;
+                case "ADMIN_MESSAGE":
+                    result.setCommand(Command.ADMIN_MESSAGE);
+                    result.setText(text.substring(text.indexOf(" ")));
+                    break;
                 default:
                     result.setCommand(Command.NONE);
             }
