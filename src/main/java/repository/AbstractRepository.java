@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public abstract class AbstractRepository {
-    private static final Logger log = LoggerFactory.getLogger(AbstractRepository.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
     private static final String DB_URL = System.getenv("DATABASE_URL");
 
     protected Connection getConnection() {

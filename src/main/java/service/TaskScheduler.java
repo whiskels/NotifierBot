@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TaskScheduler implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
+    private final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
     private final int UPDATE_DELAY = 60_000;
     private Bot bot;
 

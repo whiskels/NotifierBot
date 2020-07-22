@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class MessageReceiver implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
+    private final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
     private Bot bot;
     private CommandParser commandParser;

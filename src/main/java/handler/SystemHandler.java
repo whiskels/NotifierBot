@@ -5,8 +5,6 @@ import command.Command;
 import command.ParsedCommand;
 import model.Customer;
 import model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -14,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class SystemHandler extends AbstractHandler {
-    private static final Logger log = LoggerFactory.getLogger(SystemHandler.class);
 
     public SystemHandler(Bot bot) {
         super(bot);

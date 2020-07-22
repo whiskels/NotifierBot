@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ScheduleRepository extends AbstractRepository {
-    private static final Logger log = LoggerFactory.getLogger(ScheduleRepository.class);
     private static final String getSQL = "SELECT * FROM SCHEDULE WHERE USER_ID = ?";
     private static final String checkSQL = "SELECT * FROM SCHEDULE WHERE HOUR = ? AND MINUTES = ?";
     private static final String clearSQL = "DELETE FROM SCHEDULE WHERE USER_ID = ?";

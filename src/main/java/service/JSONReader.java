@@ -31,7 +31,7 @@ public class JSONReader {
     /*
      * Reads all data from reader
      */
-    private static String readAll(Reader rd) {
+    private String readAll(Reader rd) {
         StringBuilder sb = new StringBuilder();
         int cp;
         try {

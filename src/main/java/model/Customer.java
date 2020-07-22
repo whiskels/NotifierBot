@@ -51,7 +51,7 @@ public class Customer {
 
     public String getAccountManager() {
         return accountManager;
-}
+    }
 
     /*
      * Formats total debt to easy-to-read format

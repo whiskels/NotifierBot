@@ -3,8 +3,6 @@ package handler;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminHandler extends AbstractHandler {
-    private static final Logger log = LoggerFactory.getLogger(AdminHandler.class);
 
     public AdminHandler(Bot bot) {
         super(bot);

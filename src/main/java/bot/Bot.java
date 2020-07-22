@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author whiskels
  */
 public class Bot extends TelegramLongPollingBot {
-    private static final Logger log = LoggerFactory.getLogger(Bot.class);   // Logging
+    private final Logger log = LoggerFactory.getLogger(getClass());   // Logging
     private final int RECONNECT_PAUSE = 10_000;                             // Reconnect delay
 
     private final String BOT_NAME = System.getenv("BOT_NAME");        // Bot name

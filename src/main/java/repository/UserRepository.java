@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository extends AbstractRepository {
-    private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
     private static final String getSQL = "SELECT * FROM USERS WHERE USER_ID = ?";
     private static final String getAdminsSQL = "SELECT * FROM USERS WHERE ADMIN = TRUE";
     private static final String getUsersSQL = "SELECT * FROM USERS WHERE MANAGER = TRUE";

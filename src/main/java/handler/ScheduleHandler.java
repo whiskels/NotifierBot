@@ -3,8 +3,6 @@ package handler;
 import bot.Bot;
 import command.Command;
 import command.ParsedCommand;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -14,8 +12,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ScheduleHandler extends AbstractHandler {
-    private static final Logger log = LoggerFactory.getLogger(SystemHandler.class);
-
     public ScheduleHandler(Bot bot) {
         super(bot);
     }

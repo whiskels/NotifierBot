@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class MessageSender implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(MessageSender.class);
+    private final Logger log = LoggerFactory.getLogger(MessageSender.class);
     private final int SENDER_SLEEP_TIME = 1000;
     private Bot bot;
 
