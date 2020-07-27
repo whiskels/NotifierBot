@@ -108,7 +108,7 @@ public class SystemHandler extends AbstractHandler {
         SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();
-        text.append(String.format("Overdue debts on %s", dtf.format(LocalDateTime.now().plusHours(3))))
+        text.append(String.format("Overdue debts on %s", DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(3))))
                 .append(END_LINE).append(END_LINE);
         try {
             StringBuilder list = new StringBuilder();

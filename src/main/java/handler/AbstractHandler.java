@@ -12,11 +12,10 @@ import java.time.format.DateTimeFormatter;
 
 public abstract class AbstractHandler {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    protected final String END_LINE = "\n";
-    protected final String EMPTY_LINE = "---------------------------";
-    protected static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-    protected Bot bot;
+    protected static final String END_LINE = "\n";
+    protected static final String EMPTY_LINE = "---------------------------";
+    protected static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    protected final Bot bot;
 
     AbstractHandler(Bot bot) {
         this.bot = bot;
@@ -28,7 +27,7 @@ public abstract class AbstractHandler {
      * Sends status message to admins
      * Used when unauthorized users try to gain access to the bot
      */
-    protected void sendStatusMessageToAdmin(String chatId, Command command) {
+    protected final void sendStatusMessageToAdmin(String chatId, Command command) {
         for (String adminId : bot.getAdmins()) {
             SendMessage sendMessage = createMessageTemplate(adminId);
 
@@ -46,7 +45,7 @@ public abstract class AbstractHandler {
     /*
      * Creates SendMessage template with markdown enabled for user with chatId
      */
-    protected SendMessage createMessageTemplate(String chatId) {
+    protected final SendMessage createMessageTemplate(String chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
@@ -57,7 +56,7 @@ public abstract class AbstractHandler {
     /*
      * Sends message to unauthorized users
      */
-    protected SendMessage getMessageUnauthorized(String chatId) {
+    protected final SendMessage getMessageUnauthorized(String chatId) {
         SendMessage sendMessage = createMessageTemplate(chatId);
 
         StringBuilder text = new StringBuilder();

@@ -66,7 +66,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return String.format("*%s*\n  %s\n  %s\n  %s\n  *%s %s*\n%s",
+        return String.format("*%s*%n  %s%n  %s%n  %s%n  *%s %s*%n%s",
                 contractor, financeSubject, wayOfPayment, accountManager,
                 formatValue(totalDebt), currency, debtComment);
     }

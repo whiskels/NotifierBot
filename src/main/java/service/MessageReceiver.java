@@ -10,10 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class MessageReceiver implements Runnable {
+    private static final String HELPER_LOG = "Handler for command [%s] is: %s";
+    private static final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
     private final Logger log = LoggerFactory.getLogger(MessageReceiver.class);
-    private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1_000;
-    private Bot bot;
-    private CommandParser commandParser;
+    private final Bot bot;
+    private final CommandParser commandParser;
 
     public MessageReceiver(Bot bot) {
         this.bot = bot;
@@ -25,10 +26,10 @@ public class MessageReceiver implements Runnable {
      */
     @Override
     public void run() {
-        log.info("[STARTED] MsgReceiver.  Bot class: " + bot);
+        log.info(String.format("[STARTED] MsgReceiver.  Bot class: %s", bot));
         while (true) {
             for (Object object = bot.receiveQueue.poll(); object != null; object = bot.receiveQueue.poll()) {
-                log.debug("New object for analyze in queue " + object.toString());
+                log.debug(String.format("New object for analyze in queue %s", object.toString()));
                 analyze(object);
             }
 
@@ -47,9 +48,9 @@ public class MessageReceiver implements Runnable {
     private void analyze(Object object) {
         if (object instanceof Update) {
             Update update = (Update) object;
-            log.debug("Update received: " + update.toString());
+            log.debug(String.format("Update received: %s", update.toString()));
             analyzeForUpdateType(update);
-        } else log.warn("Cant operate type of object: " + object.toString());
+        } else log.warn(String.format("Cant operate type of object: %s", object.toString()));
     }
 
     /*
@@ -86,21 +87,21 @@ public class MessageReceiver implements Runnable {
             case GET:
             case UNAUTHORIZED:
                 SystemHandler systemHandler = new SystemHandler(bot);
-                log.info("Handler for command [" + command.toString() + "] is: " + systemHandler);
+                log.info(String.format("Handler for command [%s] is: %s", command.toString(), systemHandler));
                 return systemHandler;
             case SCHEDULE_ADD:
             case SCHEDULE_HELP:
             case SCHEDULE_CLEAR:
             case SCHEDULE_GET:
                 ScheduleHandler scheduleHandler = new ScheduleHandler(bot);
-                log.info("Handler for command [" + command.toString() + "] is: " + scheduleHandler);
+                log.info(String.format("Handler for command [%s] is: %s", command.toString(), scheduleHandler));
                 return scheduleHandler;
             case ADMIN_MESSAGE:
                 AdminHandler adminHandler = new AdminHandler(bot);
-                log.info("Handler for command [" + command.toString() + "] is: " + adminHandler);
+                log.info(String.format("Handler for command [%s] is: %s", command.toString(), adminHandler));
                 return adminHandler;
             default:
-                log.info("Handler for command [" + command.toString() + "] not Set. Return DefaultHandler");
+                log.info(String.format("Handler for command [%s] not Set. Return DefaultHandler", command.toString()));
                 return new DefaultHandler(bot);
         }
     }

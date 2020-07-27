@@ -23,10 +23,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Bot extends TelegramLongPollingBot {
     private final Logger log = LoggerFactory.getLogger(getClass());   // Logging
-    private final int RECONNECT_PAUSE = 10_000;                             // Reconnect delay
+    private static final int RECONNECT_PAUSE = 10_000;                             // Reconnect delay
 
-    private final String BOT_NAME = System.getenv("BOT_NAME");        // Bot name
-    private final String TOKEN = System.getenv("BOT_TOKEN");          // Bot token
+    private static final String BOT_NAME = System.getenv("BOT_NAME");        // Bot name
+    private static final String TOKEN = System.getenv("BOT_TOKEN");          // Bot token
     private List<Customer> customerList;                                    // Cached customer list
 
     private final ScheduleRepository scheduleRepository;
@@ -57,8 +57,8 @@ public class Bot extends TelegramLongPollingBot {
 
             log.info("Initial customer information loaded");
         } catch (TelegramApiRequestException e) {
-            log.error("Unable to connect. Pause " + RECONNECT_PAUSE / 1000
-                    + "sec and try again. Error: " + e.getMessage());
+            log.error(String.format("Unable to connect. Pause %dsec and try again. Error: %s",
+                    RECONNECT_PAUSE / 1000, e.getMessage()));
             try {
                 Thread.sleep(RECONNECT_PAUSE);
             } catch (InterruptedException e1) {

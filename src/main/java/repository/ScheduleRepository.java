@@ -1,9 +1,6 @@
 package repository;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,15 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ScheduleRepository extends AbstractRepository {
-    private static final String getSQL = "SELECT * FROM SCHEDULE WHERE USER_ID = ?";
-    private static final String checkSQL = "SELECT * FROM SCHEDULE WHERE HOUR = ? AND MINUTES = ?";
-    private static final String clearSQL = "DELETE FROM SCHEDULE WHERE USER_ID = ?";
-    private static final String addSQL = "INSERT INTO SCHEDULE (USER_ID, HOUR, MINUTES) VALUES (?, ?, ?)";
+    private static final String GET = "SELECT * FROM SCHEDULE WHERE USER_ID = ?";
+    private static final String CHECK = "SELECT * FROM SCHEDULE WHERE HOUR = ? AND MINUTES = ?";
+    private static final String CLEAR = "DELETE FROM SCHEDULE WHERE USER_ID = ?";
+    private static final String ADD = "INSERT INTO SCHEDULE (USER_ID, HOUR, MINUTES) VALUES (?, ?, ?)";
 
     public void addSchedule(String chatId, int hour, int minutes) {
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(addSQL);
-             PreparedStatement stmtCheck = connection.prepareStatement(checkSQL)) {
+             PreparedStatement stmt = connection.prepareStatement(ADD);
+             PreparedStatement stmtCheck = connection.prepareStatement(CHECK)) {
 
             stmtCheck.setInt(1, hour);
             stmtCheck.setInt(2, minutes);
@@ -34,6 +31,8 @@ public class ScheduleRepository extends AbstractRepository {
                     throw new IllegalArgumentException("This time already exists");
                 }
             }
+
+            rs.close();
 
             stmt.setString(1, chatId);
             stmt.setInt(2, hour);
@@ -48,7 +47,7 @@ public class ScheduleRepository extends AbstractRepository {
 
     public Map<Integer, List<Integer>> getSchedule(String chatId) {
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(getSQL,
+             PreparedStatement stmt = connection.prepareStatement(GET,
                      ResultSet.TYPE_SCROLL_SENSITIVE,
                      ResultSet.CONCUR_UPDATABLE)) {
             stmt.setString(1, chatId);
@@ -63,6 +62,8 @@ public class ScheduleRepository extends AbstractRepository {
                 result.computeIfAbsent(hour, k -> new ArrayList<>()).add(minute);
             }
 
+            rs.close();
+
             return result;
         } catch (Exception e) {
             log.error("Exception while trying to get schedule of user {}: {}",
@@ -75,7 +76,7 @@ public class ScheduleRepository extends AbstractRepository {
         int rowcount = 0;
 
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(getSQL,
+             PreparedStatement stmt = connection.prepareStatement(GET,
                      ResultSet.TYPE_SCROLL_SENSITIVE,
                      ResultSet.CONCUR_UPDATABLE)) {
             stmt.setString(1, chatId);
@@ -87,6 +88,8 @@ public class ScheduleRepository extends AbstractRepository {
                 rs.beforeFirst();
             }
 
+            rs.close();
+
         } catch (Exception e) {
             log.error("Exception while trying to get schedule of user {}: {}",
                     chatId, e.getMessage());
@@ -96,7 +99,7 @@ public class ScheduleRepository extends AbstractRepository {
 
     public void clearSchedule(String chatId) {
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(clearSQL)) {
+             PreparedStatement stmt = connection.prepareStatement(CLEAR)) {
             stmt.setString(1, chatId);
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -108,7 +111,7 @@ public class ScheduleRepository extends AbstractRepository {
     public List<String> checkSchedule(LocalDateTime ldt) {
         List<String> result = new ArrayList<>();
         try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(checkSQL)) {
+             PreparedStatement stmt = connection.prepareStatement(CHECK)) {
             stmt.setInt(1, ldt.getHour());
             stmt.setInt(2, ldt.getMinute());
 
@@ -117,6 +120,8 @@ public class ScheduleRepository extends AbstractRepository {
             while (rs.next()) {
                 result.add(rs.getString("user_id"));
             }
+
+            rs.close();
         } catch (Exception e) {
             log.error("Exception while trying to check schedule: {}",
                     e.getMessage());

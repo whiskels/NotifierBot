@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TaskScheduler implements Runnable {
+    private static final int UPDATE_DELAY = 60_000;
     private final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
-    private final int UPDATE_DELAY = 60_000;
-    private Bot bot;
+    private final Bot bot;
 
     public TaskScheduler(Bot bot) {
         this.bot = bot;
@@ -25,7 +25,7 @@ public class TaskScheduler implements Runnable {
      */
     @Override
     public void run() {
-        log.info("[STARTED] TaskScheduler.  Bot class: " + bot);
+        log.info(String.format("[STARTED] TaskScheduler.  Bot class: %s", bot));
         while (true) {
             processScheduledTasks();
 
@@ -47,7 +47,7 @@ public class TaskScheduler implements Runnable {
             log.debug("Checking for scheduled messages");
 
             List<String> scheduledUsers = bot.isAnyScheduled(ldt);
-            if (scheduledUsers.size() != 0) {
+            if (!scheduledUsers.isEmpty()) {
                 for (String chatId : scheduledUsers) {
                     log.debug("Scheduled message for {} sent at {}:{}", chatId, ldt.getHour(), ldt.getMinute());
                     ParsedCommand command = new ParsedCommand();
@@ -58,7 +58,7 @@ public class TaskScheduler implements Runnable {
         }
 
         // Update Customer info daily
-        if (ldt.getHour() == 2 && ldt.getMinute() == 0) {
+        if (ldt.getHour() == 11 && ldt.getMinute() == 30) {
             bot.updateCustomers();
         }
     }

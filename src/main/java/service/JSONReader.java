@@ -17,16 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JSONReader {
-    private static final Logger log = LoggerFactory.getLogger(JSONReader.class);
-    private final String URL;
+    private final Logger log = LoggerFactory.getLogger(JSONReader.class);
+    private static final String URL = System.getenv("JSON_URL");;
     private List<Customer> customerList;
-
-    /*
-     * Constructor initializes URL
-     */
-    public JSONReader() {
-        this.URL = System.getenv("JSON_URL");
-    }
 
     /*
      * Reads all data from reader

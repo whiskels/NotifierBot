@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class CommandParser {
     private static final Logger log = LoggerFactory.getLogger(CommandParser.class);
 
-    private final String PREFIX = "/";
+    private static final String PREFIX = "/";
     private String botName;
 
     public CommandParser(String botName) {
