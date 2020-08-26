@@ -29,7 +29,7 @@ public class MessageReceiver implements Runnable {
         log.info(String.format("[STARTED] MsgReceiver.  Bot class: %s", bot));
         while (true) {
             for (Object object = bot.receiveQueue.poll(); object != null; object = bot.receiveQueue.poll()) {
-                log.debug(String.format("New object for analyze in queue %s", object.toString()));
+                log.debug(String.format("New object to analyze in queue %s", object.toString()));
                 analyze(object);
             }
 
@@ -63,8 +63,13 @@ public class MessageReceiver implements Runnable {
         ParsedCommand parsedCommand = commandParser.getParsedCommand(inputText);
         AbstractHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
 
-        if (!bot.containsUser(chatId) ||
-                handlerForCommand.getClass().equals(AdminHandler.class) && !bot.getAdmins().contains(chatId)) {
+        if (!bot.containsUser(chatId)) {
+            bot.addUser(chatId);
+        }
+
+        if (!bot.getUser(chatId).isManager() ||
+                handlerForCommand.getClass().equals(AdminHandler.class) &&
+                        !bot.getAdmins().contains(chatId)) {
             parsedCommand.setCommand(Command.UNAUTHORIZED);
         }
 
@@ -87,21 +92,21 @@ public class MessageReceiver implements Runnable {
             case GET:
             case UNAUTHORIZED:
                 SystemHandler systemHandler = new SystemHandler(bot);
-                log.info(String.format("Handler for command [%s] is: %s", command.toString(), systemHandler));
+                log.info(String.format(HELPER_LOG, command.toString(), systemHandler));
                 return systemHandler;
             case SCHEDULE_ADD:
             case SCHEDULE_HELP:
             case SCHEDULE_CLEAR:
             case SCHEDULE_GET:
                 ScheduleHandler scheduleHandler = new ScheduleHandler(bot);
-                log.info(String.format("Handler for command [%s] is: %s", command.toString(), scheduleHandler));
+                log.info(String.format(HELPER_LOG, command.toString(), scheduleHandler));
                 return scheduleHandler;
             case ADMIN_MESSAGE:
                 AdminHandler adminHandler = new AdminHandler(bot);
-                log.info(String.format("Handler for command [%s] is: %s", command.toString(), adminHandler));
+                log.info(String.format(HELPER_LOG, command.toString(), adminHandler));
                 return adminHandler;
             default:
-                log.info(String.format("Handler for command [%s] not Set. Return DefaultHandler", command.toString()));
+                log.info(String.format(HELPER_LOG, command.toString(), "default handler"));
                 return new DefaultHandler(bot);
         }
     }
