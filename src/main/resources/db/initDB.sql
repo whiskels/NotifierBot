@@ -11,6 +11,7 @@ CREATE TABLE users
     admin   BOOL                DEFAULT FALSE NOT NULL,
     head    BOOL                DEFAULT FALSE NOT NULL
 );
+CREATE UNIQUE INDEX users_unique_userid_idx ON users (user_id);
 
 CREATE TABLE schedule
 (
@@ -19,4 +20,5 @@ CREATE TABLE schedule
     hour    INTEGER                       NOT NULL,
     minutes INTEGER             DEFAULT 0 NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
-)
+);
+CREATE UNIQUE INDEX schedule_unique_user_time_idx ON schedule (user_id, hour, minutes);
