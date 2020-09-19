@@ -46,13 +46,16 @@
     <context:component-scan base-package="com.whiskels.**.repository"/>
     <jpa:repositories base-package="com.whiskels.**.repository"/>
 
-    <!-- HSQLDB -->
-    <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
+    <bean class="org.springframework.beans.factory.config.MethodInvokingBean">
+        <property name="staticMethod" value="org.slf4j.bridge.SLF4JBridgeHandler.install"/>
+    </bean>
+
+    <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
     <!--no pooling-->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-          p:driverClassName="org.hsqldb.jdbcDriver"
+          p:driverClassName="org.postgresql.Driver"
           p:url="${database.url}"
           p:username="${database.username}"
           p:password="${database.password}"/>
