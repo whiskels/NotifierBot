@@ -23,7 +23,7 @@ public class Schedule extends AbstractBaseEntity {
 
     @Column(name = "hour", nullable = false)
     @Range(min = 0, max = 23)
-    private int hours;
+    private int hour;
 
     @Column(name = "minutes", nullable = false, columnDefinition = "integer default 0")
     @Range(min = 0, max = 59)
