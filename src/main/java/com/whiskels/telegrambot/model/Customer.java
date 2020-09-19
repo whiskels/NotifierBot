@@ -1,4 +1,4 @@
-package model;
+package com.whiskels.telegrambot.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

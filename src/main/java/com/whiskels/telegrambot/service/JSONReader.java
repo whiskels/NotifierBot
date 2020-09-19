@@ -1,12 +1,15 @@
-package service;
+package com.whiskels.telegrambot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.Customer;
+import com.whiskels.telegrambot.model.Customer;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.URL;
@@ -16,9 +19,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@PropertySource("classpath:external/json.properties")
+@Slf4j
 public class JSONReader {
-    private final Logger log = LoggerFactory.getLogger(JSONReader.class);
-    private static final String URL = System.getenv("JSON_URL");;
+    @Value("${json.url}")
+    private String URL;
+
+    @Getter
     private List<Customer> customerList;
 
     /*
@@ -88,9 +96,5 @@ public class JSONReader {
                 .filter(customer -> customer.getOverallDebt() > 10)
                 .sorted(Comparator.comparingDouble(Customer::getOverallDebt).reversed())
                 .collect(Collectors.toList());
-    }
-
-    public List<Customer> getCustomerList() {
-        return customerList;
     }
 }
