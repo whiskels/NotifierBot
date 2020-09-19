@@ -1,4 +1,4 @@
-package command;
+package com.whiskels.telegrambot.bot.command;
 
 public enum Command {
     NONE,
@@ -7,7 +7,7 @@ public enum Command {
     GET,
     TOKEN,
     UNAUTHORIZED,
-    SCHEDULE_ADD,
+    SCHEDULE,
     SCHEDULE_CLEAR,
     SCHEDULE_HELP,
     SCHEDULE_GET,
