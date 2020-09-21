@@ -2,6 +2,7 @@ package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.Bot;
 import com.whiskels.telegrambot.bot.command.Command;
+import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,21 +20,19 @@ import static com.whiskels.telegrambot.bot.command.Command.UNAUTHORIZED;
 
 @Component
 @Slf4j
-public class UnauthorizedHandler extends AbstractHandler {
+public class UnauthorizedBaseHandler extends AbstractBaseHandler {
     private final UserService userService;
-    private final Bot bot;
 
-    public UnauthorizedHandler(UserService userService, Bot bot) {
+    public UnauthorizedBaseHandler(UserService userService) {
         this.userService = userService;
-        this.bot = bot;
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(String chatId, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = new ArrayList<>();
-        messagesToSend.add(createMessageTemplate(chatId).setText(
-                String.format("Your token is *%s*%nPlease contact your supervisor to gain access", chatId)));
-        messagesToSend.addAll(prepareStatusMessageToAdmins(chatId));
+        messagesToSend.add(createMessageTemplate(user).setText(
+                String.format("Your token is *%s*%nPlease contact your supervisor to gain access", user.getChatId())));
+        messagesToSend.addAll(prepareStatusMessageToAdmins(user.getChatId()));
         return messagesToSend;
     }
 
@@ -42,7 +41,7 @@ public class UnauthorizedHandler extends AbstractHandler {
      */
     protected List<SendMessage> prepareStatusMessageToAdmins(String chatId) {
         return userService.getAdmins().stream()
-                .map(a -> createMessageTemplate(a.getChatId())
+                .map(admin -> createMessageTemplate(admin)
                         .setText(String.format("Unauthorized user *%s*", chatId)))
                 .collect(Collectors.toList());
     }

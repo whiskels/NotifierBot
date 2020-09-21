@@ -1,4 +1,5 @@
-import com.whiskels.telegrambot.bot.Bot;
+package com.whiskels.telegrambot;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -8,7 +9,7 @@ public class App {
     public static void main(String[] args) {
         ApiContextInitializer.init();
 
-        SpringApplication.run(Bot.class, args);
+        SpringApplication.run(App.class, args);
     }
 }
 

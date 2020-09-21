@@ -36,11 +36,11 @@ import static com.whiskels.telegrambot.util.ThreadUtil.getThread;
 @PropertySource("classpath:bot/bot.properties")
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name}")
+    @Value("${bot.name.test}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.token}")
+    @Value("${bot.token.test}")
     @Getter
     private String botToken;
 
@@ -48,45 +48,32 @@ public class Bot extends TelegramLongPollingBot {
     private String botAdmin;
 
     private final UpdateReceiver updateReceiver;
+//    private Thread messageScheduler;
 
-    public final Queue<Object> receiveQueue = new ConcurrentLinkedQueue<>();
 
-    public final Queue<Object> sendQueue = new ConcurrentLinkedQueue<>();
-
-    private final Thread messageScheduler;
-    private JSONReader jsonReader;
-
-    @Getter
-    private List<Customer> customerList;
-
-    public Bot(UpdateReceiver updateReceiver,
-               MessageScheduler messageScheduler,
-               JSONReader jsonReader) {
+    public Bot(UpdateReceiver updateReceiver) {
         this.updateReceiver = updateReceiver;
-        this.messageScheduler = getThread(messageScheduler, "MessageScheduler", 3);
-        this.jsonReader = jsonReader;
     }
 
+    /**
+     * After initialization schedule thread starts running and bot sends start up report to bot admin
+     */
     @PostConstruct
     public void startBot() {
-        messageScheduler.start();
+//        messageScheduler.start();
         sendStartReport();
     }
 
-    public void updateCustomers() {
-        try {
-            jsonReader.update();
-            customerList = jsonReader.getCustomerList();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
+    /**
+     * Main bot method. Delegated update handling to update receiver and executes resulting messages
+     *
+     * @param update received by bot from users
+     */
     @Override
     public void onUpdateReceived(Update update) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = updateReceiver.handle(update);
 
-        if (messagesToSend != null) {
+        if (messagesToSend != null || !messagesToSend.isEmpty()) {
             messagesToSend.forEach(response -> {
                 if (response instanceof SendMessage) {
                     executeWithExceptionCheck((SendMessage) response);
@@ -95,6 +82,9 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Exception check for message sending
+     */
     public void executeWithExceptionCheck(SendMessage sendMessage) {
         try {
             execute(sendMessage);
@@ -104,12 +94,13 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-
+    /**
+     * Creates message to notify admin that bot successfully started
+     */
     public void sendStartReport() {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(botAdmin);
-        sendMessage.setText("Bot start up is successful");
-        executeWithExceptionCheck(sendMessage);
+        executeWithExceptionCheck(new SendMessage()
+                .setChatId(botAdmin)
+                .setText("Bot start up is successful"));
         log.info("Start report sent to Admin");
     }
 }
