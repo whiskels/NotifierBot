@@ -2,7 +2,7 @@ package com.whiskels.telegrambot.util;
 
 import com.whiskels.telegrambot.model.AbstractBaseEntity;
 import com.whiskels.telegrambot.util.exception.NotFoundException;
-import org.telegram.abilitybots.api.objects.MessageContext;
+import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import javax.validation.*;
 import java.util.Set;
@@ -11,10 +11,11 @@ public class ValidationUtil {
     private static final Validator validator;
 
     static {
-        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        //  From Javadoc: implementations of this interface must be thread-safe
-        validator = factory.getValidator();
+        validator = Validation.byDefaultProvider()
+                .configure()
+                .messageInterpolator(new ParameterMessageInterpolator())
+                .buildValidatorFactory()
+                .getValidator();
     }
 
     private ValidationUtil() {
