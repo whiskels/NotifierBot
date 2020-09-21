@@ -20,10 +20,10 @@ import static com.whiskels.telegrambot.bot.command.Command.UNAUTHORIZED;
 
 @Component
 @Slf4j
-public class UnauthorizedBaseHandler extends AbstractBaseHandler {
+public class UnauthorizedHandler extends AbstractBaseHandler {
     private final UserService userService;
 
-    public UnauthorizedBaseHandler(UserService userService) {
+    public UnauthorizedHandler(UserService userService) {
         this.userService = userService;
     }
 
@@ -39,7 +39,7 @@ public class UnauthorizedBaseHandler extends AbstractBaseHandler {
     /*
      * Sends status message about unauthorized user to admins
      */
-    protected List<SendMessage> prepareStatusMessageToAdmins(String chatId) {
+    protected List<SendMessage> prepareStatusMessageToAdmins(int chatId) {
         return userService.getAdmins().stream()
                 .map(admin -> createMessageTemplate(admin)
                         .setText(String.format("Unauthorized user *%s*", chatId)))

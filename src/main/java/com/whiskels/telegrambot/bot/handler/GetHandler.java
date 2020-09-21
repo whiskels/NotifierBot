@@ -22,12 +22,12 @@ import static com.whiskels.telegrambot.bot.command.Command.GET;
 
 @Component
 @Slf4j
-public class GetBaseHandler extends AbstractBaseHandler {
+public class GetHandler extends AbstractBaseHandler {
     private final JSONReader jsonReader;
 
     private List<Customer> customerList;
 
-    public GetBaseHandler(JSONReader jsonReader) {
+    public GetHandler(JSONReader jsonReader) {
         this.jsonReader = jsonReader;
     }
 

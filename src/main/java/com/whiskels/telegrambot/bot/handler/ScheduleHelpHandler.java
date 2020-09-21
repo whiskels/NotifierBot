@@ -16,7 +16,7 @@ import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE_HELP;
 
 @Component
 @Slf4j
-public class ScheduleHelpBaseHandler extends AbstractBaseHandler {
+public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
     public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {

@@ -11,24 +11,19 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.telegrambot.bot.command.Command.HELP;
+import static com.whiskels.telegrambot.bot.command.Command.TOKEN;
 
 @Component
 @Slf4j
-public class HelpBaseHandler extends AbstractBaseHandler {
+public class TokenHandler extends AbstractBaseHandler {
     @Override
     public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
         return Collections.singletonList(createMessageTemplate(user)
-                .setText(String.format("*Help message for bot commands*%n%n" +
-                        "[/start](/start) - show start message%n" +
-                        "[/get](/get) - get your customer overdue debts info (updated daily)%n" +
-                        "[/token](/token) - get your token and user info%n" +
-                        "[/schedule help](/schedule help) - show schedule help message%n" +
-                        "[/help](/help) - show help message%n")));
+                .setText(String.format("Your token is *%s*", user.getChatId())));
     }
 
     @Override
     public Command supportedCommand() {
-        return HELP;
+        return TOKEN;
     }
 }

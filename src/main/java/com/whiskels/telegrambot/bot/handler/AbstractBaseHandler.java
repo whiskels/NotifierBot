@@ -24,7 +24,7 @@ public abstract class AbstractBaseHandler {
      */
     protected final SendMessage createMessageTemplate(User user) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(user.getChatId());
+        sendMessage.setChatId(String.valueOf(user.getChatId()));
         sendMessage.enableMarkdown(true);
 
         return sendMessage;
