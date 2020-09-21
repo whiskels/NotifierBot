@@ -12,4 +12,5 @@ public enum Command {
     SCHEDULE_HELP,
     SCHEDULE_GET,
     ADMIN_MESSAGE,
+    ADMIN_TIME,
 }
