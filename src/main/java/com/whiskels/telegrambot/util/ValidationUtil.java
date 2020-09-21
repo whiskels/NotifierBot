@@ -29,12 +29,12 @@ public class ValidationUtil {
         }
     }
 
-    public static <T> T checkNotFoundWithId(T object, String id) {
+    public static <T> T checkNotFoundWithId(T object, int id) {
         checkNotFoundWithId(object != null, id);
         return object;
     }
 
-    public static void checkNotFoundWithId(boolean found, String id) {
+    public static void checkNotFoundWithId(boolean found, int id) {
         checkNotFound(found, "id=" + id);
     }
 
