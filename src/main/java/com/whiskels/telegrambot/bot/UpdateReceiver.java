@@ -68,13 +68,15 @@ public class UpdateReceiver {
                     return user.isManager() ? SCHEDULE_GET : UNAUTHORIZED;
                 case "ADMIN_MESSAGE":
                     return user.isAdmin() ? ADMIN_MESSAGE : UNAUTHORIZED;
+                case "ADMIN_TIME":
+                    return user.isAdmin() ? ADMIN_TIME : UNAUTHORIZED;
             }
         }
         return NONE;
     }
 
     private User getUser(Message message) {
-        final String chatId = message.getFrom().getId().toString();
+        final int chatId = message.getFrom().getId();
         try {
             final User user = userService.get(chatId);
             log.debug("Logged user: {}", user.toString());

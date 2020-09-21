@@ -48,11 +48,12 @@ public class Bot extends TelegramLongPollingBot {
     private String botAdmin;
 
     private final UpdateReceiver updateReceiver;
-//    private Thread messageScheduler;
+    private Thread messageScheduler;
 
 
-    public Bot(UpdateReceiver updateReceiver) {
+    public Bot(UpdateReceiver updateReceiver, MessageScheduler messageScheduler) {
         this.updateReceiver = updateReceiver;
+        this.messageScheduler = getThread(messageScheduler, "MsgScheduler", 3);
     }
 
     /**
@@ -60,7 +61,7 @@ public class Bot extends TelegramLongPollingBot {
      */
     @PostConstruct
     public void startBot() {
-//        messageScheduler.start();
+        messageScheduler.start();
         sendStartReport();
     }
 
