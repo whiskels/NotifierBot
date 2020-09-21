@@ -12,16 +12,14 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "user_id", name = "users_unique_userid_idx")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "chat_id", name = "users_unique_chatid_idx")})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends AbstractBaseEntity {
-
-    @Column(name = "user_id", unique = true, nullable = false)
-    @NotBlank
-    private String chatId;
+    @Column(name = "chat_id", unique = true, nullable = false)
+    private int chatId;
 
     @Column(name = "name", unique = true, nullable = false)
     @NotBlank
@@ -37,11 +35,11 @@ public class User extends AbstractBaseEntity {
     private boolean isHead;
 
     @OneToMany(fetch = LAZY, mappedBy = "user")
-    @OrderBy("hours DESC")
+    @OrderBy("hour DESC")
     private List<Schedule> scheduleList;
 
-    public User(String chatId) {
+    public User(int chatId) {
         this.chatId = chatId;
-        this.name = chatId;
+        this.name = String.valueOf(chatId);
     }
 }
