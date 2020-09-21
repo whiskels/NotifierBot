@@ -10,10 +10,21 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>14</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- Spring -->
+        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <spring-boot-starter-data-jpa.version>2.3.4.RELEASE</spring-boot-starter-data-jpa.version>
+
+        <!-- TelegramBots Spring Boot Starter -->
+        <telegrambots-spring.version>0.22</telegrambots-spring.version>
+
+        <!-- Hibernate -->
+        <hibernate.version>5.4.18.Final</hibernate.version>
+        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+        <javax-el.version>3.0.1-b11</javax-el.version>
 
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
@@ -57,7 +68,7 @@
                     <appName>YOUR_APP_NAME</appName>
                     <processTypes>
                         <worker>
-                            java $JAVA_OPTS -cp target/classes:target/dependency/* App
+                            java $JAVA_OPTS -cp target/classes:target/dependency/* com.whiskels.telegrambot.App
                         </worker>
                     </processTypes>
                 </configuration>
@@ -85,9 +96,37 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
 
     <dependencies>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring-boot.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${spring-boot-starter-data-jpa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xabgesagtx</groupId>
+            <artifactId>telegram-spring-boot-starter</artifactId>
+            <version>${telegrambots-spring.version}</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Logging with SLF4J & LogBack -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -108,6 +147,23 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--- ORM -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <!-- Telegram API -->
@@ -148,6 +204,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>2.3.0.RELEASE</version>
         </dependency>
 
     </dependencies>
