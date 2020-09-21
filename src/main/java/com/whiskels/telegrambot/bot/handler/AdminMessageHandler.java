@@ -16,10 +16,10 @@ import static com.whiskels.telegrambot.bot.command.Command.ADMIN_MESSAGE;
 
 @Component
 @Slf4j
-public class AdminMessageBaseHandler extends AbstractBaseHandler {
+public class AdminMessageHandler extends AbstractBaseHandler {
     private final UserService userService;
 
-    public AdminMessageBaseHandler(UserService userService) {
+    public AdminMessageHandler(UserService userService) {
         this.userService = userService;
     }
 
