@@ -12,14 +12,13 @@ import static com.whiskels.telegrambot.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {
-    private JpaUserRepository userRepository;
+    private final JpaUserRepository userRepository;
 
     public UserService(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User get(String chatId) {
-        Assert.notNull(chatId, "chatId must not be null");
+    public User get(int chatId) {
         return checkNotFoundWithId(userRepository.getByChatId(chatId).orElse(null), chatId);
     }
 

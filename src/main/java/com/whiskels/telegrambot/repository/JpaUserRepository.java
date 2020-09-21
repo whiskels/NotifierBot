@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface JpaUserRepository extends JpaRepository<User, Integer> {
-    Optional<User> getByChatId(String chatId);
+    Optional<User> getByChatId(int chatId);
 
     @Query("SELECT u FROM User u WHERE u.isAdmin=true")
     List<User> getAdmins();
