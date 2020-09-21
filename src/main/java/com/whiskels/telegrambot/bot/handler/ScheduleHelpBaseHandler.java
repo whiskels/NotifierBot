@@ -1,6 +1,7 @@
 package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.command.Command;
+import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -15,10 +16,11 @@ import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE_HELP;
 
 @Component
 @Slf4j
-public class ScheduleHelpHandler extends AbstractHandler {
+public class ScheduleHelpBaseHandler extends AbstractBaseHandler {
+
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(String chatId, Message message) {
-        SendMessage sendMessage = createMessageTemplate(chatId);
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+        SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();
         text.append("*Help message for /schedule command*")
