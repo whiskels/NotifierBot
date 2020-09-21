@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface JpaScheduleRepository extends JpaRepository<Schedule, Integer> {
-    @Query("SELECT s FROM Schedule s WHERE s.user.id=:userId ORDER BY s.hour DESC")
+    @Query("SELECT s FROM Schedule s WHERE s.user.id=:userId ORDER BY s.hour ASC")
     List<Schedule> getAll(@Param("userId") String userId);
 
     @Query("DELETE FROM Schedule s WHERE s.user.id=:userId")
