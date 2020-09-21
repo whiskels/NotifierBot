@@ -1,10 +1,12 @@
 # Telegram bot for internal use inside company.
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/31c586b264204eef98c12a700563b089)](https://www.codacy.com/manual/whiskels/TelegramNotifierBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
 ## PLEASE NOTE THAT THIS PROJECT WON'T COMPILE
-Due to exception restrictions this repository doesn't contain pom.xml, tokens and user config.
+Due to security restrictions this repository doesn't contain pom.xml, tokens and user config.
 In order to run this bot:
-- pom_example.xml - Change YOUR_APP_NAME to your app name on Heroku and rename file to pom.xml
-- Set up BOT_NAME, BOT_TOKEN, DATABASE_URL and JSON_URL environment variables on Heroku;
+- pom_example.xml - Change YOUR_APP_NAME to your app name on Heroku, rename file to pom.xml
+- application_example.yaml - Add database credentials, rename to application.yaml (default spring boot config file)
+- bot_example.properties - Add bot name, token and admin chat token, rename file.
+- json.example.properties - Add JSON url, rename.
 
 ### Features:
 - Bot is based on Long Polling Bot;
@@ -16,7 +18,7 @@ In order to run this bot:
 - Several levels of logging;
 - Bot is deployed to Heroku.
 
-Used technologies: Java 8, Maven, Postgres, JDBC, Logback, SLF4J, TelegramBots, TelegramBotsExtensions, Jackson.
+Used technologies: Java 8, TelegramBots API, TelegramBotsExtensions, Spring Boot, Spring Data JPA, Hibernate, Lombok, Maven, Postgres, Logback, SLF4J, Jackson.
 
 Deployment (via Heroku CLI):
 
