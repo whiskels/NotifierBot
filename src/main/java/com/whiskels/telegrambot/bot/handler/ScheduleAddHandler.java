@@ -1,6 +1,8 @@
 package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.command.Command;
+import com.whiskels.telegrambot.model.Schedule;
+import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,17 +18,16 @@ import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE;
 
 @Component
 @Slf4j
-public class ScheduleAddHandler extends AbstractHandler {
-    private final ScheduleService scheduleService;
+public class ScheduleAddHandler extends AbstractScheduleHandler {
 
     public ScheduleAddHandler(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
+        super(scheduleService);
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(String chatId, Message message) {
-        SendMessage sendMessage = createMessageTemplate(chatId);
-        String value = message.getText();
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+        SendMessage sendMessage = createMessageTemplate(user);
+        String value = message.getText().split("\\s+")[1];
 
         StringBuilder text = new StringBuilder();
         try {
@@ -52,14 +53,17 @@ public class ScheduleAddHandler extends AbstractHandler {
                 throw new IllegalArgumentException();
             }
 
-            scheduleService.addSchedule(chatId, hours, minutes);
-            text.append("Scheduled status messages to%n")
+            log.debug("Adding schedule {}:{} to {}", hours, minutes, user.getChatId());
+
+            scheduleService.addSchedule(new Schedule(hours, minutes, null), user.id());
+            text.append("Scheduled status messages to").append(END_LINE)
                     .append("be sent daily at ")
                     .append(String.format("*%02d:%02d*%n", hours, minutes))
                     .append("To reset schedule use '/schedule clear' command");
         } catch (Exception e) {
-            text.append("You've entered invalid time%n");
-            text.append("Please try again");
+            text.append("You've entered invalid time")
+                    .append(END_LINE)
+                    .append("Please try again");
             log.debug("Incorrect schedule time {}", message);
         }
         sendMessage.setText(text.toString());

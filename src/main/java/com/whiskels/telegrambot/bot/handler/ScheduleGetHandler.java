@@ -2,6 +2,7 @@ package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.Schedule;
+import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,22 +19,20 @@ import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE_GET;
 
 @Component
 @Slf4j
-public class ScheduleGetHandler extends AbstractHandler {
-    private final ScheduleService scheduleService;
-
+public class ScheduleGetHandler extends AbstractScheduleHandler {
     public ScheduleGetHandler(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
+        super(scheduleService);
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(String chatId, Message message) {
-        SendMessage sendMessage = createMessageTemplate(chatId);
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+        SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();
-        text.append("*Your current schedule:*%n");
+        text.append("*Your current schedule:*").append(END_LINE);
 
-        final List<Schedule> schedule = scheduleService.getSchedule(chatId);
-        if (schedule == null || schedule.size() == 0) {
+        final List<Schedule> schedule = scheduleService.getSchedule(user.getChatId());
+        if (schedule == null || schedule.isEmpty()) {
             text.append("No messages scheduled");
         } else {
             text.append(schedule.stream()
