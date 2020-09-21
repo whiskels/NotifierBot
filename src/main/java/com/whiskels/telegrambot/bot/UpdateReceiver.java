@@ -4,6 +4,8 @@ import com.whiskels.telegrambot.bot.handler.*;
 import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
+import com.whiskels.telegrambot.util.exception.NotFoundException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -11,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import static com.whiskels.telegrambot.bot.command.Command.*;
@@ -18,32 +21,31 @@ import static com.whiskels.telegrambot.bot.command.Command.*;
 @Component
 @Slf4j
 public class UpdateReceiver {
-    private UserService userService;
-    private List<AbstractHandler> handlers;
+    private final UserService userService;
+    private final List<AbstractBaseHandler> handlers;
 
-    public UpdateReceiver(UserService userService, List<AbstractHandler> handlers) {
+    public UpdateReceiver(UserService userService, List<AbstractBaseHandler> handlers) {
         this.userService = userService;
         this.handlers = handlers;
     }
 
     public List<PartialBotApiMethod<? extends Serializable>> handle(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            AbstractHandler handlerForCommand = handlers.stream()
-                    .filter(handler -> getCommand(update.getMessage())
-                            .equals(handler.supportedCommand()))
+            final Message message = update.getMessage();
+            final User user = getUser(message);
+            AbstractBaseHandler handler = handlers.stream()
+                    .filter(h -> getCommand(user, message)
+                            .equals(h.supportedCommand()))
                     .findAny()
                     .orElse(null);
-            if (handlerForCommand != null) {
-                final Message message = update.getMessage();
-                final String chatId = message.getFrom().getId().toString();
-                return handlerForCommand.operate(chatId, message);
+            if (handler != null) {
+                return handler.operate(user, message);
             }
         }
-        return null;
+        return Collections.emptyList();
     }
 
-    private Command getCommand(Message message) {
-        final User user = getUser(message);
+    private Command getCommand(User user, Message message) {
         String messageContent = message.getText();
 
         if (messageContent.startsWith("/")) {
@@ -73,8 +75,15 @@ public class UpdateReceiver {
 
     private User getUser(Message message) {
         final String chatId = message.getFrom().getId().toString();
-        return userService.containsUser(chatId) ? userService.addUser(new User(chatId)) : userService.getUser(chatId);
+        try {
+            final User user = userService.get(chatId);
+            log.debug("Logged user: {}", user.toString());
+            return user;
+        } catch (NotFoundException e) {
+            log.debug("User {} not found", chatId);
+            final User user = userService.save(new User(chatId));
+            log.debug("Saved new user to database: {}", user.toString());
+            return user;
+        }
     }
-
-
 }
