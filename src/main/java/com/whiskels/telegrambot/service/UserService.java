@@ -2,7 +2,6 @@ package com.whiskels.telegrambot.service;
 
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.repository.JpaUserRepository;
-import com.whiskels.telegrambot.util.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 

@@ -1,6 +1,5 @@
-package com.whiskels.telegrambot.bot.handler;
+package com.whiskels.telegrambot.bot.command;
 
-import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,13 +12,14 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE_HELP;
+import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 @Component
 @Slf4j
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
         SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();

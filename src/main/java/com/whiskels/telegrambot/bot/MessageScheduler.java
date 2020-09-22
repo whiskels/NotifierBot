@@ -1,6 +1,6 @@
 package com.whiskels.telegrambot.bot;
 
-import com.whiskels.telegrambot.bot.handler.GetHandler;
+import com.whiskels.telegrambot.bot.command.GetHandler;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
@@ -63,7 +63,7 @@ public class MessageScheduler implements Runnable {
      * Used to send scheduled messages
      */
     private void processScheduledTasks() {
-        final LocalDateTime ldt = LocalDateTime.now().plusHours(0);
+        final LocalDateTime ldt = LocalDateTime.now().plusHours(SERVER_HOUR_OFFSET);
         if (ldt.getDayOfWeek() != SUNDAY && ldt.getDayOfWeek() != SATURDAY) {
             log.debug("Checking for scheduled messages");
 

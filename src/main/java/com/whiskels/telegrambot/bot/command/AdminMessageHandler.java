@@ -1,6 +1,5 @@
-package com.whiskels.telegrambot.bot.handler;
+package com.whiskels.telegrambot.bot.command;
 
-import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.bot.command.Command.ADMIN_MESSAGE;
+import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 @Component
 @Slf4j
@@ -24,11 +24,11 @@ public class AdminMessageHandler extends AbstractBaseHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User admin, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User admin, String message) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = userService.getUsers()
                 .stream()
                 .map(user -> createMessageTemplate(user)
-                        .setText(message.getText()))
+                        .setText(message))
                 .collect(Collectors.toList());
 
         messagesToSend.add(createMessageTemplate(admin)

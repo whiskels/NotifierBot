@@ -1,7 +1,5 @@
-package com.whiskels.telegrambot.bot.handler;
+package com.whiskels.telegrambot.bot.command;
 
-import com.whiskels.telegrambot.bot.Bot;
-import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.bot.command.Command.UNAUTHORIZED;
+import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 
 @Component
@@ -28,21 +27,22 @@ public class UnauthorizedHandler extends AbstractBaseHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = new ArrayList<>();
         messagesToSend.add(createMessageTemplate(user).setText(
                 String.format("Your token is *%s*%nPlease contact your supervisor to gain access", user.getChatId())));
-        messagesToSend.addAll(prepareStatusMessageToAdmins(user.getChatId()));
+        messagesToSend.addAll(prepareStatusMessageToAdmins(user, message));
         return messagesToSend;
     }
 
     /*
      * Sends status message about unauthorized user to admins
      */
-    protected List<SendMessage> prepareStatusMessageToAdmins(int chatId) {
+    protected List<SendMessage> prepareStatusMessageToAdmins(User user, String message) {
         return userService.getAdmins().stream()
                 .map(admin -> createMessageTemplate(admin)
-                        .setText(String.format("Unauthorized user *%s*", chatId)))
+                        .setText(String.format("Unauthorized user *%s*%nMessage: %s",
+                                user.getChatId(), message)))
                 .collect(Collectors.toList());
     }
 

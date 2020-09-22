@@ -60,6 +60,7 @@ public class Customer {
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
         formatSymbols.setDecimalSeparator('.');
         formatSymbols.setGroupingSeparator(' ');
+
         DecimalFormat formatter = new DecimalFormat("###,###,###,###.#", formatSymbols);
         return formatter.format(value);
     }

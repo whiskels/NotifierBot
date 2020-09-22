@@ -2,7 +2,6 @@ package com.whiskels.telegrambot.bot.command;
 
 public enum Command {
     NONE,
-    START,
     HELP,
     GET,
     TOKEN,

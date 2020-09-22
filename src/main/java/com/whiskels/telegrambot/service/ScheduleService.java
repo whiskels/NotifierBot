@@ -1,7 +1,6 @@
 package com.whiskels.telegrambot.service;
 
 import com.whiskels.telegrambot.model.Schedule;
-import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.repository.JpaScheduleRepository;
 import com.whiskels.telegrambot.repository.JpaUserRepository;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
-package com.whiskels.telegrambot.bot.handler;
+package com.whiskels.telegrambot.bot.command;
 
-import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -17,7 +16,7 @@ public class AbstractScheduleHandler extends AbstractBaseHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
         return null;
     }
 

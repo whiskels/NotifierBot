@@ -1,6 +1,5 @@
-package com.whiskels.telegrambot.bot.handler;
+package com.whiskels.telegrambot.bot.command;
 
-import com.whiskels.telegrambot.bot.command.Command;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.bot.command.Command.SCHEDULE_GET;
+import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 @Component
 @Slf4j
@@ -25,7 +25,7 @@ public class ScheduleGetHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, Message message) {
+    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
         SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();
