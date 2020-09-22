@@ -1,14 +1,16 @@
 package com.whiskels.telegrambot.bot;
 
-import com.whiskels.telegrambot.bot.handler.*;
+import com.whiskels.telegrambot.bot.command.AbstractBaseHandler;
 import com.whiskels.telegrambot.bot.command.Command;
+import com.whiskels.telegrambot.model.AbstractBaseEntity;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
 import com.whiskels.telegrambot.util.exception.NotFoundException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Call;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -30,30 +32,39 @@ public class UpdateReceiver {
     }
 
     public List<PartialBotApiMethod<? extends Serializable>> handle(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+
+        if (!update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText()) {
             final Message message = update.getMessage();
-            final User user = getUser(message);
-            AbstractBaseHandler handler = handlers.stream()
-                    .filter(h -> getCommand(user, message)
-                            .equals(h.supportedCommand()))
-                    .findAny()
-                    .orElse(null);
-            if (handler != null) {
-                return handler.operate(user, message);
-            }
+
+            return handle(getUser(message.getFrom().getId()), message.getText());
+        } else if (update.hasCallbackQuery()) {
+            final CallbackQuery callbackQuery = update.getCallbackQuery();
+
+            return handle(getUser(callbackQuery.getFrom().getId()), callbackQuery.getData());
         }
         return Collections.emptyList();
     }
 
-    private Command getCommand(User user, Message message) {
-        String messageContent = message.getText();
+    private List<PartialBotApiMethod<? extends Serializable>> handle(User user, String command) {
+        AbstractBaseHandler handler = handlers.stream()
+                .filter(h -> getCommand(user, command)
+                        .equals(h.supportedCommand()))
+                .findAny()
+                .orElse(null);
 
-        if (messageContent.startsWith("/")) {
-            switch (messageContent.substring(1).split(" ")[0].toUpperCase()) {
+        if (handler != null) {
+            return handler.operate(user, command);
+        }
+        return Collections.emptyList();
+    }
+
+    private Command getCommand(User user, String command) {
+        if (command.startsWith("/")) {
+            switch (command.substring(1).split(" ")[0].toUpperCase()) {
                 case "START":
-                    return START;
+                case "MENU":
                 case "HELP":
-                    return user.isManager() ? HELP : UNAUTHORIZED;
+                    return HELP;
                 case "TOKEN":
                     return TOKEN;
                 case "GET":
@@ -75,15 +86,14 @@ public class UpdateReceiver {
         return NONE;
     }
 
-    private User getUser(Message message) {
-        final int chatId = message.getFrom().getId();
+    private User getUser(int id) {
         try {
-            final User user = userService.get(chatId);
+            final User user = userService.get(id);
             log.debug("Logged user: {}", user.toString());
             return user;
         } catch (NotFoundException e) {
-            log.debug("User {} not found", chatId);
-            final User user = userService.save(new User(chatId));
+            log.debug("User {} not found", id);
+            final User user = userService.save(new User(id));
             log.debug("Saved new user to database: {}", user.toString());
             return user;
         }
