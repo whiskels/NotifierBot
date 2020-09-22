@@ -4,6 +4,7 @@ import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import static com.whiskels.telegrambot.bot.command.Command.*;
 import static com.whiskels.telegrambot.util.TelegramUtils.*;
 
+@Secured({"MANAGER", "HEAD", "ADMIN"})
 @Component
 @Slf4j
 public class ScheduleAddHandler extends AbstractScheduleHandler {

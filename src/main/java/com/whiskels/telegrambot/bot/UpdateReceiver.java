@@ -2,12 +2,10 @@ package com.whiskels.telegrambot.bot;
 
 import com.whiskels.telegrambot.bot.command.AbstractBaseHandler;
 import com.whiskels.telegrambot.bot.command.Command;
-import com.whiskels.telegrambot.model.AbstractBaseEntity;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.UserService;
 import com.whiskels.telegrambot.util.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Call;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

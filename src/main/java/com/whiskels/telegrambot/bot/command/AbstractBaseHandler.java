@@ -3,8 +3,6 @@ package com.whiskels.telegrambot.bot.command;
 import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;

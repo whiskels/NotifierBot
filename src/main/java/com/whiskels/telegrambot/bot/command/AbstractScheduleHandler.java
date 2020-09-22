@@ -3,7 +3,6 @@ package com.whiskels.telegrambot.bot.command;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.Serializable;
 import java.util.List;
