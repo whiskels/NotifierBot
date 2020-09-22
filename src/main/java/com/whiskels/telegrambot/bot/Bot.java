@@ -1,31 +1,19 @@
 package com.whiskels.telegrambot.bot;
 
-import com.whiskels.telegrambot.model.Customer;
-import com.whiskels.telegrambot.model.User;
-import com.whiskels.telegrambot.service.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static com.whiskels.telegrambot.util.ThreadUtil.getThread;
 
 /**
  * Main bot class
@@ -36,11 +24,11 @@ import static com.whiskels.telegrambot.util.ThreadUtil.getThread;
 @PropertySource("classpath:bot/bot.properties")
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name.test}")
+    @Value("${bot.name.war}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.token.test}")
+    @Value("${bot.token.war}")
     @Getter
     private String botToken;
 
@@ -48,20 +36,25 @@ public class Bot extends TelegramLongPollingBot {
     private String botAdmin;
 
     private final UpdateReceiver updateReceiver;
-    private Thread messageScheduler;
+    private final MessageScheduler messageScheduler;
 
 
     public Bot(UpdateReceiver updateReceiver, MessageScheduler messageScheduler) {
         this.updateReceiver = updateReceiver;
-        this.messageScheduler = getThread(messageScheduler, "MsgScheduler", 3);
+        this.messageScheduler = messageScheduler;
     }
 
     /**
-     * After initialization schedule thread starts running and bot sends start up report to bot admin
+     * After initialization schedule message scheduler thread is started running and bot sends start up report to bot admin
      */
     @PostConstruct
     public void startBot() {
-        messageScheduler.start();
+        Thread messageSchedulerThread = new Thread(messageScheduler);
+        messageSchedulerThread.setDaemon(true);
+        messageSchedulerThread.setName("messageScheduler");
+        messageSchedulerThread.setPriority(3);
+        messageSchedulerThread.start();
+
         sendStartReport();
     }
 
