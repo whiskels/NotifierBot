@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -25,14 +29,13 @@ public class User extends AbstractBaseEntity {
     @NotBlank
     private String name;
 
-    @Column(name = "manager", columnDefinition = "boolean default false")
-    private boolean isManager;
-
-    @Column(name = "admin", columnDefinition = "boolean default false")
-    private boolean isAdmin;
-
-    @Column(name = "head", columnDefinition = "boolean default false")
-    private boolean isHead;
+    @Enumerated(STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})
+    @Column(name = "role")
+    @ElementCollection(fetch = EAGER)
+    @BatchSize(size = 200)
+    private Set<Role> roles;
 
     @OneToMany(fetch = LAZY, mappedBy = "user")
     @OrderBy("hour DESC")
