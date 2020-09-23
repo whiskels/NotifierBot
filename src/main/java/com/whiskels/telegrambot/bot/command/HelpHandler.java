@@ -14,18 +14,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.telegrambot.bot.command.Command.*;
+import static com.whiskels.telegrambot.model.Role.MANAGER;
 import static com.whiskels.telegrambot.util.TelegramUtils.*;
 
 @Component
 @PropertySource("classpath:bot/bot.properties")
 @Slf4j
+@BotCommand(command = {"/HELP", "/START"})
 public class HelpHandler extends AbstractBaseHandler {
     @Value("${bot.name.test}")
     private String botUsername;
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         return Collections.singletonList(createMessageTemplate(user)
                 .setText(String.format("Hello. I'm *%s*%nHere are your available commands%nUse [/help] command to display this message", botUsername))
                 .setReplyMarkup(createIndividualInlineKeyBoard(user)));
@@ -36,18 +37,12 @@ public class HelpHandler extends AbstractBaseHandler {
 
         List<List<InlineKeyboardButton>> inlineKeyboardButtonsRows = new ArrayList<>();
         inlineKeyboardButtonsRows.add(UNAUTHORIZED_ROW);
-        if (user.isManager()) {
+        if (user.getRoles().contains(MANAGER)) {
             inlineKeyboardButtonsRows.add(GET_ROW);
             inlineKeyboardButtonsRows.add(SCHEDULE_ADD_ROW);
             inlineKeyboardButtonsRows.add(SCHEDULE_MANAGE_ROW);
         }
 
         return inlineKeyboardMarkup.setKeyboard(inlineKeyboardButtonsRows);
-    }
-
-
-    @Override
-    public Command supportedCommand() {
-        return HELP;
     }
 }

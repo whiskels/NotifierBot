@@ -72,7 +72,7 @@ public class MessageScheduler implements Runnable {
                 for (Schedule schedule : scheduledUsers) {
                     final User user = schedule.getUser();
                     log.debug("Scheduled message for {} sent at {}:{}", user.getChatId(), ldt.getHour(), ldt.getMinute());
-                    getHandler.operate(user, null).forEach(
+                    getHandler.handle(user, null).forEach(
                             m -> applicationContext.getBean(Bot.class)
                                     .executeWithExceptionCheck((SendMessage) m)
                     );

@@ -18,7 +18,9 @@ public class UserService {
     }
 
     public User get(int chatId) {
-        return checkNotFoundWithId(userRepository.getByChatId(chatId).orElse(null), chatId);
+        final User user = userRepository.getByChatId(chatId).orElse(null);
+
+        return user != null ? user : userRepository.save(new User(chatId));
     }
 
     public User save(User user) {

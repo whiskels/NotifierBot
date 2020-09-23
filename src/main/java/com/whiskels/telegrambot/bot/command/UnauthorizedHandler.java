@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.telegrambot.bot.command.Command.UNAUTHORIZED;
 import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 
@@ -26,7 +25,7 @@ public class UnauthorizedHandler extends AbstractBaseHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = new ArrayList<>();
         messagesToSend.add(createMessageTemplate(user).setText(
                 String.format("Your token is *%s*%nPlease contact your supervisor to gain access", user.getChatId())));
@@ -43,10 +42,5 @@ public class UnauthorizedHandler extends AbstractBaseHandler {
                         .setText(String.format("Unauthorized user *%s*%nMessage: %s",
                                 user.getChatId(), message)))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Command supportedCommand() {
-        return UNAUTHORIZED;
     }
 }

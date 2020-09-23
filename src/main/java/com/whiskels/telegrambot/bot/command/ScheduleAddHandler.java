@@ -2,9 +2,9 @@ package com.whiskels.telegrambot.bot.command;
 
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
+import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,12 +16,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.telegrambot.bot.command.Command.*;
+import static com.whiskels.telegrambot.model.Role.*;
 import static com.whiskels.telegrambot.util.TelegramUtils.*;
 
-@Secured({"MANAGER", "HEAD", "ADMIN"})
 @Component
 @Slf4j
+@BotCommand(command = "/SCHEDULE")
 public class ScheduleAddHandler extends AbstractScheduleHandler {
 
     public ScheduleAddHandler(ScheduleService scheduleService) {
@@ -29,7 +29,8 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
+    @RequiredRoles(roles = {HEAD, MANAGER, ADMIN})
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         if (!message.contains(" ")) {
             return Collections.singletonList(inlineKeyboardMessage(user));
         }
@@ -84,25 +85,19 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
                     .append(END_LINE)
                     .append("Please try again");
             log.debug("Incorrect schedule time {}", message);
-
-            sendMessage.setText(text.toString());
         }
-            return Collections.singletonList(sendMessage);
-    }
 
-    @Override
-    public Command supportedCommand() {
-        return SCHEDULE;
+        sendMessage.setText(text.toString());
+        return Collections.singletonList(sendMessage);
     }
-
 
     private SendMessage inlineKeyboardMessage(User user) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         List<InlineKeyboardButton> inlineKeyboardButtonsRowOne = List.of(
-                createInlineKeyboardButton("9:00", SCHEDULE, true),
-                createInlineKeyboardButton("12:00", SCHEDULE, true),
-                createInlineKeyboardButton("15:00", SCHEDULE, true));
+                createInlineKeyboardButton("9:00", "/SCHEDULE", true),
+                createInlineKeyboardButton("12:00", "/SCHEDULE", true),
+                createInlineKeyboardButton("15:00", "/SCHEDULE", true));
 
         inlineKeyboardMarkup.setKeyboard(List.of(inlineKeyboardButtonsRowOne, SCHEDULE_MANAGE_ROW));
 

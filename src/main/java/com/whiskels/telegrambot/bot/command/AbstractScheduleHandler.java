@@ -15,12 +15,7 @@ public class AbstractScheduleHandler extends AbstractBaseHandler {
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
-        return null;
-    }
-
-    @Override
-    public Command supportedCommand() {
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         return null;
     }
 }

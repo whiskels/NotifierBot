@@ -24,22 +24,22 @@ import java.util.*;
 @PropertySource("classpath:bot/bot.properties")
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name.war}")
+    @Value("${bot.name.test}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.token.war}")
+    @Value("${bot.token.test}")
     @Getter
     private String botToken;
 
     @Value("${bot.admin}")
     private String botAdmin;
 
-    private final UpdateReceiver updateReceiver;
+    private final UpdateHandler updateReceiver;
     private final MessageScheduler messageScheduler;
 
 
-    public Bot(UpdateReceiver updateReceiver, MessageScheduler messageScheduler) {
+    public Bot(UpdateHandler updateReceiver, MessageScheduler messageScheduler) {
         this.updateReceiver = updateReceiver;
         this.messageScheduler = messageScheduler;
     }

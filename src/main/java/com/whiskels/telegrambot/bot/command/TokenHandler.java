@@ -9,20 +9,15 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.telegrambot.bot.command.Command.TOKEN;
 import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 @Component
 @Slf4j
+@BotCommand(command = "/TOKEN")
 public class TokenHandler extends AbstractBaseHandler {
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         return Collections.singletonList(createMessageTemplate(user)
                 .setText(String.format("Your token is *%s*", user.getChatId())));
-    }
-
-    @Override
-    public Command supportedCommand() {
-        return TOKEN;
     }
 }

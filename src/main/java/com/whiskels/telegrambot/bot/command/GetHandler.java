@@ -1,7 +1,9 @@
 package com.whiskels.telegrambot.bot.command;
 
 import com.whiskels.telegrambot.model.Customer;
+import com.whiskels.telegrambot.model.Role;
 import com.whiskels.telegrambot.model.User;
+import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.JSONReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,13 +15,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.whiskels.telegrambot.bot.command.Command.GET;
+import static com.whiskels.telegrambot.model.Role.*;
 import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
 
 @Component
 @Slf4j
+@BotCommand(command = "/GET")
 public class GetHandler extends AbstractBaseHandler {
     private final JSONReader jsonReader;
 
@@ -29,14 +33,14 @@ public class GetHandler extends AbstractBaseHandler {
         this.jsonReader = jsonReader;
     }
 
-
     @PostConstruct
     private void initCustomerList() {
         updateCustomers();
     }
 
     @Override
-    public List<PartialBotApiMethod<? extends Serializable>> operate(User user, String message) {
+    @RequiredRoles(roles = {HEAD, MANAGER, ADMIN})
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();
@@ -72,12 +76,10 @@ public class GetHandler extends AbstractBaseHandler {
         }
     }
 
-    @Override
-    public Command supportedCommand() {
-        return GET;
-    }
-
     private boolean isValid(User user, Customer customer) {
-        return user.isHead() || user.isManager() && user.getName().equals(customer.getAccountManager());
+        final Set<Role> roles = user.getRoles();
+        return roles.contains(ADMIN)
+                || roles.contains(HEAD)
+                || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customer.getAccountManager());
     }
 }

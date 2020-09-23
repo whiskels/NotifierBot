@@ -22,10 +22,6 @@ public interface JpaScheduleRepository extends JpaRepository<Schedule, Integer> 
     @Query("DELETE FROM Schedule s WHERE s.user.id=:userId")
     int delete(@Param("userId") int userId);
 
-    @Transactional
-    @Modifying
-    int deleteByUser(@Param("user") User user);
-
     @Query("SELECT s FROM Schedule s JOIN FETCH s.user WHERE s.hour=:hour AND s.minutes=:minutes ORDER BY s.hour DESC")
     List<Schedule> getAllByHourAndMinute(@Param("hour") int hour, @Param("minutes") int minutes);
 }
