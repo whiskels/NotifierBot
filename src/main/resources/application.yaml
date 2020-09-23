@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    #     Test database
+    url: jdbc:postgresql://localhost:5432/telegram_bot_test
+    username: user
+    password: password
+    #
+    #     Heroku environment variables for database
+    #     https://stackoverflow.com/a/41020278
+    #    url: ${JDBC_DATABASE_URL}
+    #    username: ${JDBC_DATABASE_USERNAME}
+    #    password: ${JDBC_DATABASE_PASSWORD
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: never
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
