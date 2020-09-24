@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
@@ -17,8 +18,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.model.Role.*;
-import static com.whiskels.telegrambot.util.TelegramUtils.*;
+import static com.whiskels.telegrambot.util.ParsingUtil.getTime;
+import static com.whiskels.telegrambot.util.TelegramUtil.*;
 
+/**
+ * Adds schedule to the user and shows current schedule times
+ *
+ * Available to: Manager, Head, Admin
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE")
@@ -29,43 +36,18 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {HEAD, MANAGER, ADMIN})
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         if (!message.contains(" ")) {
-            return Collections.singletonList(inlineKeyboardMessage(user));
+            return List.of(inlineKeyboardMessage(user));
         }
 
         SendMessage sendMessage = createMessageTemplate(user);
-        String value = message.split("\\s+")[1];
         StringBuilder text = new StringBuilder();
         try {
-            int hours = 0;
-            int minutes = 0;
-            int len = value.length();
-
-            if (value.contains(":")) {
-                int delimeter = value.indexOf(":");
-                hours = Integer.parseInt(value.substring(0, delimeter));
-                minutes = Integer.parseInt(value.substring(++delimeter));
-            } else {
-                if (len > 5) {
-                    throw new IllegalArgumentException();
-                } else if (len == 1 || len == 3) {
-                    hours = Integer.parseInt(value.substring(0, 1));
-                    if (len == 3) {
-                        minutes = Integer.parseInt(value.substring(1));
-                    }
-                } else if (len == 2) {
-                    hours = Integer.parseInt(value);
-                } else if (len == 4) {
-                    hours = Integer.parseInt(value.substring(0, 2));
-                    minutes = Integer.parseInt(value.substring(2));
-                }
-            }
-
-            if (hours > 24 || hours < 0 || minutes < 0 || minutes > 60) {
-                throw new IllegalArgumentException();
-            }
+            List<Integer> time = getTime(extractArguments(message));
+            final int hours = time.get(0);
+            final int minutes = time.get(1);
 
             log.debug("Adding schedule {}:{} to {}", hours, minutes, user.getChatId());
 
@@ -75,11 +57,6 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
                     .append(String.format("*%02d:%02d*%n", hours, minutes))
                     .append("To reset schedule use '/schedule clear' command");
 
-        } catch (IllegalArgumentException e1) {
-            text.append("You've entered invalid time")
-                    .append(END_LINE)
-                    .append("Please try again");
-            log.debug("Incorrect schedule time {}", message);
         } catch (Exception e) {
             text.append("You've entered invalid time")
                     .append(END_LINE)
@@ -91,6 +68,9 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
         return Collections.singletonList(sendMessage);
     }
 
+    /**
+     * Returns predefined list of options and information on empty command
+     */
     private SendMessage inlineKeyboardMessage(User user) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
@@ -114,7 +94,7 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
         }
         text.append(END_LINE)
                 .append(END_LINE)
-                .append("Add preferred notification time or choose from available options:");
+                .append("Choose from available options or add preferred time to [/schedule](/schedule) command:");
 
         return createMessageTemplate(user).setText(text.toString())
                 .setReplyMarkup(inlineKeyboardMarkup);

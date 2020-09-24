@@ -31,17 +31,8 @@ public class ScheduleService {
         return scheduleRepository.getAll(chatId);
     }
 
-    public Schedule get(int id, int userId) {
-        return scheduleRepository.findById(id)
-                .filter(meal -> meal.getUser().getId() == userId)
-                .orElse(null);
-    }
-
     @Transactional
     public Schedule addSchedule(Schedule schedule, int userId) {
-        //if (schedule.isNew() && get(schedule.getId(), userId) == null) {
-        //    return null;
-        //}
         schedule.setUser(userRepository.getOne(userId));
         return scheduleRepository.save(schedule);
     }

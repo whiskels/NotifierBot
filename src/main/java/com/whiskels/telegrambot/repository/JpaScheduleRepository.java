@@ -1,7 +1,6 @@
 package com.whiskels.telegrambot.repository;
 
 import com.whiskels.telegrambot.model.Schedule;
-import com.whiskels.telegrambot.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

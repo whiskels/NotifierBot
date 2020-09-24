@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.Customer;
 import com.whiskels.telegrambot.model.Role;
 import com.whiskels.telegrambot.model.User;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -19,27 +19,25 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.model.Role.*;
-import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
+import static com.whiskels.telegrambot.util.TelegramUtil.*;
 
+/**
+ * Sends current customer overdue debts information
+ *
+ * Available to: Manager, Head, Admin
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/GET")
 public class GetHandler extends AbstractBaseHandler {
     private final JSONReader jsonReader;
 
-    private List<Customer> customerList;
-
     public GetHandler(JSONReader jsonReader) {
         this.jsonReader = jsonReader;
     }
 
-    @PostConstruct
-    private void initCustomerList() {
-        updateCustomers();
-    }
-
     @Override
-    @RequiredRoles(roles = {HEAD, MANAGER, ADMIN})
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         SendMessage sendMessage = createMessageTemplate(user);
 
@@ -48,7 +46,7 @@ public class GetHandler extends AbstractBaseHandler {
         try {
             StringBuilder list = new StringBuilder();
 
-            list.append(customerList.stream()
+            list.append(jsonReader.getCustomerList().stream()
                     .filter(customer -> isValid(user, customer))
                     .map(Customer::toString)
                     .collect(Collectors.joining(String.format(
@@ -67,19 +65,19 @@ public class GetHandler extends AbstractBaseHandler {
         return Collections.singletonList(sendMessage);
     }
 
-    public void updateCustomers() {
-        try {
-            jsonReader.update();
-            customerList = jsonReader.getCustomerList();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
+    /**
+     * Checks if user is verified to get information about selected customer
+     *
+     * true - if user is head or admin or is customer's account manager
+     */
     private boolean isValid(User user, Customer customer) {
         final Set<Role> roles = user.getRoles();
         return roles.contains(ADMIN)
                 || roles.contains(HEAD)
                 || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customer.getAccountManager());
+    }
+
+    public void updateCustomers() {
+        jsonReader.update();
     }
 }

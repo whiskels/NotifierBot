@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +13,21 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.whiskels.telegrambot.model.Role.*;
-import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
+import static com.whiskels.telegrambot.util.TelegramUtil.END_LINE;
+import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 
+/**
+ * Shows help message for {@link ScheduleAddHandler} supported syntax
+ *
+ * Available to: Manager, Head, Admin
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE_HELP")
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
-    @RequiredRoles(roles = {HEAD, MANAGER, ADMIN})
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         SendMessage sendMessage = createMessageTemplate(user);
 

@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.UserService;
@@ -12,8 +13,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.model.Role.ADMIN;
-import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
+import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
+import static com.whiskels.telegrambot.util.TelegramUtil.extractArguments;
 
+/**
+ * Notifies all bot users with a message from admin
+ *
+ * Available to: Admin
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/ADMIN_MESSAGE")
@@ -26,11 +33,11 @@ public class AdminMessageHandler extends AbstractBaseHandler {
 
     @Override
     @RequiredRoles(roles = ADMIN)
-    public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String message) {
+    public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String text) {
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = userService.getUsers()
                 .stream()
                 .map(user -> createMessageTemplate(user)
-                        .setText(message))
+                        .setText(extractArguments(text)))
                 .collect(Collectors.toList());
 
         messagesToSend.add(createMessageTemplate(admin)
@@ -38,4 +45,6 @@ public class AdminMessageHandler extends AbstractBaseHandler {
 
         return messagesToSend;
     }
+
+
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +30,12 @@ public class JSONReader {
     @Getter
     private List<Customer> customerList;
 
-    /*
+    @PostConstruct
+    private void initCustomerList() {
+        update();
+    }
+
+    /**
      * Reads all data from reader
      */
     private String readAll(Reader rd) {
@@ -45,7 +51,7 @@ public class JSONReader {
         return sb.toString();
     }
 
-    /*
+    /**
      * Reads JSON data from URL and creates Customer list
      */
     public void update() {
@@ -55,7 +61,7 @@ public class JSONReader {
         }
     }
 
-    /*
+    /**
      * Reads JSONObject from given URL
      */
     private JSONObject readJsonFromUrl(String url) {
@@ -69,7 +75,7 @@ public class JSONReader {
         }
     }
 
-    /*
+    /**
      * Creates customer list based on JSONArray of objects
      */
     private void createCustomerList(JSONObject json) {

@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.telegrambot.model.Role.MANAGER;
-import static com.whiskels.telegrambot.util.TelegramUtils.*;
+import static com.whiskels.telegrambot.model.Role.*;
+import static com.whiskels.telegrambot.util.TelegramUtil.*;
 
+/**
+ * Shows help message and inline keyboard based on user role
+ *
+ * Available to: everyone
+ */
 @Component
 @PropertySource("classpath:bot/bot.properties")
 @Slf4j
@@ -37,7 +43,7 @@ public class HelpHandler extends AbstractBaseHandler {
 
         List<List<InlineKeyboardButton>> inlineKeyboardButtonsRows = new ArrayList<>();
         inlineKeyboardButtonsRows.add(UNAUTHORIZED_ROW);
-        if (user.getRoles().contains(MANAGER)) {
+        if (!Collections.disjoint((user).getRoles(), List.of(MANAGER, HEAD, ADMIN))) {
             inlineKeyboardButtonsRows.add(GET_ROW);
             inlineKeyboardButtonsRows.add(SCHEDULE_ADD_ROW);
             inlineKeyboardButtonsRows.add(SCHEDULE_MANAGE_ROW);

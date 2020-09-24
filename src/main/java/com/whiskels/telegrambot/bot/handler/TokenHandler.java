@@ -1,5 +1,6 @@
-package com.whiskels.telegrambot.bot.command;
+package com.whiskels.telegrambot.bot.handler;
 
+import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,8 +10,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.telegrambot.util.TelegramUtils.createMessageTemplate;
+import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 
+/**
+ * Sends user his token
+ *
+ * Available to: everyone
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/TOKEN")
