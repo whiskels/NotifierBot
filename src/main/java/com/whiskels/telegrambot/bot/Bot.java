@@ -35,21 +35,23 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${bot.admin}")
     private String botAdmin;
 
-    private final UpdateHandler updateReceiver;
-    private final MessageScheduler messageScheduler;
+    private final UpdateReceiver updateReceiver;
+    private final TaskScheduler taskScheduler;
 
 
-    public Bot(UpdateHandler updateReceiver, MessageScheduler messageScheduler) {
+    public Bot(UpdateReceiver updateReceiver, TaskScheduler taskScheduler) {
         this.updateReceiver = updateReceiver;
-        this.messageScheduler = messageScheduler;
+        this.taskScheduler = taskScheduler;
     }
 
     /**
-     * After initialization schedule message scheduler thread is started running and bot sends start up report to bot admin
+     * After initialization actions:
+     * - start task scheduler thread
+     * - send start up report to bot admin
      */
     @PostConstruct
     public void startBot() {
-        Thread messageSchedulerThread = new Thread(messageScheduler);
+        Thread messageSchedulerThread = new Thread(taskScheduler);
         messageSchedulerThread.setDaemon(true);
         messageSchedulerThread.setName("messageScheduler");
         messageSchedulerThread.setPriority(3);
@@ -59,7 +61,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     /**
-     * Main bot method. Delegated update handling to update receiver and executes resulting messages
+     * Main bot method. Delegates update handling to update receiver and executes resulting messages
      *
      * @param update received by bot from users
      */
@@ -89,7 +91,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     /**
-     * Creates message to notify admin that bot successfully started
+     * Creates message to notify admin that bot has successfully started
      */
     public void sendStartReport() {
         executeWithExceptionCheck(new SendMessage()

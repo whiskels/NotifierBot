@@ -1,6 +1,6 @@
 package com.whiskels.telegrambot.bot;
 
-import com.whiskels.telegrambot.bot.command.GetHandler;
+import com.whiskels.telegrambot.bot.handler.GetHandler;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
@@ -17,53 +17,60 @@ import java.util.List;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
+/**
+ * Thread used to check for scheduled tasks once a minute and:
+ * - execute scheduled messages (on workdays)
+ * - update customer info
+ */
 @Component
 @PropertySource("classpath:external/json.properties")
 @Slf4j
-public class MessageScheduler implements Runnable {
+public class TaskScheduler implements Runnable {
     private static final int UPDATE_DELAY = 60_000;
-    private static final int SERVER_HOUR_OFFSET = 3;
+
+    @Value("${server.hour.offset}")
+    private int serverHourOffset;
 
     @Value("${json.update.hour}")
-    private int CUSTOMER_UPDATE_HOUR;
+    private int customerUpdateHour;
 
     @Value("${json.update.minutes}")
-    private int CUSTOMER_UPDATE_MINUTES;
+    private int customerUpdateMinutes;
 
+    private final GetHandler getHandler;
+    private final ScheduleService scheduleService;
+    private final ApplicationContext applicationContext;
 
-    private GetHandler getHandler;
-    private ScheduleService scheduleService;
-    private ApplicationContext applicationContext;
-
-    public MessageScheduler(GetHandler getHandler, ScheduleService scheduleService, ApplicationContext applicationContext) {
+    public TaskScheduler(GetHandler getHandler, ScheduleService scheduleService, ApplicationContext applicationContext) {
         this.getHandler = getHandler;
         this.scheduleService = scheduleService;
         this.applicationContext = applicationContext;
     }
 
-    /*
-     * Scheduler's main loop
+    /**
+     * Main loop.
+     * Checks for scheduled tasks, then sleeps for {@link #UPDATE_DELAY}
      */
     @Override
     public void run() {
-        log.info(String.format("[STARTED] Scheduler."));
+        log.info(String.format("[STARTED] TaskScheduler."));
         while (true) {
             processScheduledTasks();
 
             try {
                 Thread.sleep(UPDATE_DELAY);
             } catch (InterruptedException e) {
-                log.error("Catch interrupt. Exit", e);
+                log.error("Interrupted: {}", e);
                 return;
             }
         }
     }
 
-    /*
-     * Used to send scheduled messages
+    /**
+     * Analyzes if there are any scheduled tasks on workdays
      */
     private void processScheduledTasks() {
-        final LocalDateTime ldt = LocalDateTime.now().plusHours(SERVER_HOUR_OFFSET);
+        final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
         if (ldt.getDayOfWeek() != SUNDAY && ldt.getDayOfWeek() != SATURDAY) {
             log.debug("Checking for scheduled messages");
 
@@ -80,8 +87,8 @@ public class MessageScheduler implements Runnable {
             }
         }
 
-        // Update Customer info daily
-        if (ldt.getHour() == CUSTOMER_UPDATE_HOUR && ldt.getMinute() == CUSTOMER_UPDATE_MINUTES) {
+        // Update Customer info daily at specified time
+        if (ldt.getHour() == customerUpdateHour && ldt.getMinute() == customerUpdateMinutes) {
             getHandler.updateCustomers();
             log.debug("Updated customer info");
         }
