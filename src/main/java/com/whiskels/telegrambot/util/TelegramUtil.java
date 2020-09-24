@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class TelegramUtil {
+public final class TelegramUtil {
     public static final String END_LINE = "\n";
     public static final String EMPTY_LINE = "---------------------------";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -22,6 +22,9 @@ public class TelegramUtil {
     public static final List<InlineKeyboardButton> GET_ROW = List.of(GET_BUTTON);
     public static final List<InlineKeyboardButton> SCHEDULE_ADD_ROW = List.of(SCHEDULE_ADD_BUTTON);
     public static final List<InlineKeyboardButton> SCHEDULE_MANAGE_ROW = List.of(SCHEDULE_CLEAR_BUTTON, SCHEDULE_HELP_BUTTON);
+
+    private TelegramUtil() {
+    }
 
     public static SendMessage createMessageTemplate(User user) {
         return new SendMessage()

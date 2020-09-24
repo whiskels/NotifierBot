@@ -2,7 +2,9 @@ package com.whiskels.telegrambot.util;
 
 import java.util.List;
 
-public class ParsingUtil {
+public final class ParsingUtil {
+    private ParsingUtil() {}
+
     /**
      * Parses input text into hours and minutes
      *
@@ -18,7 +20,7 @@ public class ParsingUtil {
      * @param text
      * @return List of hours and minutes
      */
-    public static final List<Integer> getTime(String text) {
+    public static List<Integer> getTime(String text) {
         int hours = 0;
         int minutes = 0;
         int len = text.length();
