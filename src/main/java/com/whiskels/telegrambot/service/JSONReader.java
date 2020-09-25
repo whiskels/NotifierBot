@@ -2,13 +2,13 @@ package com.whiskels.telegrambot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.telegrambot.model.Customer;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +16,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,6 @@ public class JSONReader {
     @Value("${json.url}")
     private String URL;
 
-    @Getter
     private List<Customer> customerList;
 
     @PostConstruct
@@ -54,10 +54,13 @@ public class JSONReader {
     /**
      * Reads JSON data from URL and creates Customer list
      */
+    @Scheduled(cron = "${json.cron}")
     public void update() {
+        log.info("updating customer list");
         JSONObject json = readJsonFromUrl(URL);
         if (json != null) {
             createCustomerList(json);
+            log.info("customer list updated");
         }
     }
 
@@ -102,5 +105,9 @@ public class JSONReader {
                 .filter(customer -> customer.getOverallDebt() > 10)
                 .sorted(Comparator.comparingDouble(Customer::getOverallDebt).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public List<Customer> getCustomerList() {
+        return Collections.unmodifiableList(customerList);
     }
 }
