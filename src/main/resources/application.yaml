@@ -9,7 +9,7 @@ spring:
     #     https://stackoverflow.com/a/41020278
     #    url: ${JDBC_DATABASE_URL}
     #    username: ${JDBC_DATABASE_USERNAME}
-    #    password: ${JDBC_DATABASE_PASSWORD
+    #    password: ${JDBC_DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
   jpa:
