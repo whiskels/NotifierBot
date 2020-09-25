@@ -23,7 +23,7 @@ import static java.time.DayOfWeek.SUNDAY;
  * - update customer info
  */
 @Component
-@PropertySource({"classpath:external/json.properties", "classpath:external/bot.properties"})
+@PropertySource({"classpath:external/json.properties", "classpath:bot/bot.properties"})
 @Slf4j
 public class TaskScheduler implements Runnable {
     private static final int UPDATE_DELAY = 60_000;
