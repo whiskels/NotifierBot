@@ -23,12 +23,12 @@ import static java.time.DayOfWeek.SUNDAY;
  * - update customer info
  */
 @Component
-@PropertySource("classpath:external/json.properties")
+@PropertySource({"classpath:external/json.properties", "classpath:external/bot.properties"})
 @Slf4j
 public class TaskScheduler implements Runnable {
     private static final int UPDATE_DELAY = 60_000;
 
-    @Value("${server.hour.offset}")
+    @Value("${bot.server.hour.offset}")
     private int serverHourOffset;
 
     @Value("${json.update.hour}")
@@ -53,7 +53,7 @@ public class TaskScheduler implements Runnable {
      */
     @Override
     public void run() {
-        log.info(String.format("[STARTED] TaskScheduler."));
+        log.info("[STARTED] TaskScheduler.");
         while (true) {
             processScheduledTasks();
 
