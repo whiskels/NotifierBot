@@ -14,7 +14,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User get(int chatId) {
+    public User getOrCreate(int chatId) {
         return userRepository.getByChatId(chatId)
                 .orElseGet(() -> userRepository.save(new User(chatId)));
     }

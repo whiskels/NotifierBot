@@ -19,7 +19,7 @@ public abstract class AbstractBaseHandler {
     @Autowired
     protected AuthorizationService authorizationService;
 
-    public final List<PartialBotApiMethod<? extends Serializable>> authenticateAndHandle(User user, String message) {
+    public final List<PartialBotApiMethod<? extends Serializable>> authorizeAndHandle(User user, String message) {
         return authorizationService.authorize(user) ? handle(user, message) :
                 List.of(createMessageTemplate(user).setText(
                         String.format("Your token is *%s*%nPlease contact your supervisor to gain access",

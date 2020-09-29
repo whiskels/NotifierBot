@@ -53,7 +53,7 @@ public class UpdateReceiver {
             }
 
             if (text != null && userId != 0) {
-                return getHandler(text).authenticateAndHandle(userService.get(userId), text);
+                return getHandler(text).authorizeAndHandle(userService.getOrCreate(userId), text);
             }
 
             throw new UnsupportedOperationException("Operation not supported");
