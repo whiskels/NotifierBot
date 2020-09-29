@@ -30,8 +30,9 @@
         <slf4j.version>1.7.30</slf4j.version>
 
         <!--    Tests  -->
-        <junit.version>4.13</junit.version>
+        <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <assertj.version>3.16.1</assertj.version>
+        <mockito.version>3.5.11</mockito.version>
 
         <!--DB-->
         <postgresql.version>42.2.14</postgresql.version>
@@ -211,9 +212,9 @@
 
         <!--Test-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -223,6 +224,23 @@
             <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito Core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
 
         <!-- GSON -->
         <dependency>
