@@ -24,11 +24,10 @@ import static com.whiskels.telegrambot.util.TelegramUtil.*;
  * Available to: everyone
  */
 @Component
-@PropertySource("classpath:bot/bot.properties")
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
 public class HelpHandler extends AbstractBaseHandler {
-    @Value("${bot.name.test}")
+    @Value("${bot.test.name}")
     private String botUsername;
 
     @Override

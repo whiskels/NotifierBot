@@ -5,7 +5,6 @@ import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
@@ -24,7 +23,6 @@ import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
  */
 @Component
 @Slf4j
-@PropertySource("classpath:bot/bot.properties")
 @BotCommand(command = "/ADMIN_TIME")
 public class AdminTimeHandler extends AbstractBaseHandler {
     @Value("${bot.server.hour.offset}")

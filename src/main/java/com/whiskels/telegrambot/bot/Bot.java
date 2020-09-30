@@ -104,7 +104,7 @@ public class Bot extends TelegramLongPollingBot {
         log.info("Start report sent to Admin");
     }
 
-    @Scheduled(cron = "${bot.schedule.cron}")
+    @Scheduled(cron = "${bot.cron}")
     private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
         log.debug("Checking for scheduled messages");

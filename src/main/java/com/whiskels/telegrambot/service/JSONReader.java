@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@PropertySource("classpath:external/json.properties")
 @Slf4j
 public class JSONReader {
     @Value("${json.url}")

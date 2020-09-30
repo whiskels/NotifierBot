@@ -76,8 +76,4 @@ public class GetHandler extends AbstractBaseHandler {
                 || roles.contains(HEAD)
                 || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customer.getAccountManager());
     }
-
-    public void updateCustomers() {
-        jsonReader.update();
-    }
 }
