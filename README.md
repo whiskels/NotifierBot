@@ -8,8 +8,7 @@ ___
 #### PLEASE NOTE THAT THIS PROJECT WON'T COMPILE
 Due to security restrictions this repository doesn't contain tokens.
 In order to run this bot:
-- bot.properties - add bot name, token and admin chat token.
-- json.properties - add JSON url.
+- application.yaml - add bot name, token and admin chat token, add JSON url.
 
 ___
 ### Technology stack: 
