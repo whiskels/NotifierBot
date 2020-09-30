@@ -7,7 +7,6 @@ import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -27,14 +26,14 @@ import java.util.List;
  * @author whiskels
  */
 @Component
-@PropertySource("classpath:bot/bot.properties")
+
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name.test}")
+    @Value("${bot.test.name}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.token.test}")
+    @Value("${bot.test.token}")
     @Getter
     private String botToken;
 
@@ -61,6 +60,7 @@ public class Bot extends TelegramLongPollingBot {
      */
     @PostConstruct
     public void startBot() {
+        log.info(botToken);
         sendStartReport();
     }
 

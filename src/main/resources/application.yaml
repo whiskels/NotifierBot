@@ -17,3 +17,19 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+bot:
+  test:
+    name:
+    token:
+  war:
+    name:
+    token:
+  admin:
+  server:
+    hour:
+      offset: 3
+  cron: 0 * * * * MON-FRI
+json:
+  url:
+  cron: 0 30 8 * * MON-FRI
+
