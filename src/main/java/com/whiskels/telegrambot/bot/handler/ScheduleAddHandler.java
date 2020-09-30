@@ -55,7 +55,7 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
             text.append("Scheduled status messages to").append(END_LINE)
                     .append("be sent daily at ")
                     .append(String.format("*%02d:%02d*%n", hours, minutes))
-                    .append("To reset schedule use '/schedule clear' command");
+                    .append("To reset schedule use '/schedule_clear' command");
 
         } catch (Exception e) {
             text.append("You've entered invalid time")
