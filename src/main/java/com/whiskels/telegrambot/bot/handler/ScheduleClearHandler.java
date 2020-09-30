@@ -23,8 +23,8 @@ import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE_CLEAR")
-public class ScheduleClearBaseHandler extends AbstractScheduleHandler {
-    public ScheduleClearBaseHandler(ScheduleService scheduleService) {
+public class ScheduleClearHandler extends AbstractScheduleHandler {
+    public ScheduleClearHandler(ScheduleService scheduleService) {
         super(scheduleService);
     }
 
