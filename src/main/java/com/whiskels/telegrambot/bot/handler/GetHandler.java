@@ -39,6 +39,7 @@ public class GetHandler extends AbstractBaseHandler {
     @Override
     @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
+        log.debug("Preparing /GET");
         SendMessage sendMessage = createMessageTemplate(user);
 
         StringBuilder text = new StringBuilder();

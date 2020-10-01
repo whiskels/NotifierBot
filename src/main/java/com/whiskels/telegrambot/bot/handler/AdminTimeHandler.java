@@ -31,6 +31,7 @@ public class AdminTimeHandler extends AbstractBaseHandler {
     @Override
     @RequiredRoles(roles = ADMIN)
     public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String message) {
+        log.debug("Preparing /ADMIN_TIME");
         return Collections.singletonList(createMessageTemplate(admin)
                 .setText(String.format("*Bot current time*:%n%s%nServer hour offset is %d",
                         LocalDateTime.now().toString(),

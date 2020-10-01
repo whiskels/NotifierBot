@@ -39,9 +39,11 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
     @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
         if (!message.contains(" ")) {
+            log.debug("Preparing /SCHEDULE (no args)");
             return List.of(inlineKeyboardMessage(user));
         }
 
+        log.debug("Preparing /SCHEDULE (with args)");
         SendMessage sendMessage = createMessageTemplate(user);
         StringBuilder text = new StringBuilder();
         try {

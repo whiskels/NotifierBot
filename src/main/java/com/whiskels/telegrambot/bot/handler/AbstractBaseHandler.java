@@ -24,7 +24,8 @@ public abstract class AbstractBaseHandler {
     protected AuthorizationService authorizationService;
 
     public final List<PartialBotApiMethod<? extends Serializable>> authorizeAndHandle(User user, String message) {
-        return this.authorizationService.authorize(this.getClass(), user) ? handle(user, message) : handleUnauthorized(user, message);
+        return this.authorizationService.authorize(this.getClass(), user) ?
+                handle(user, message) : handleUnauthorized(user, message);
     }
 
     protected abstract List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message);

@@ -60,7 +60,6 @@ public class Bot extends TelegramLongPollingBot {
      */
     @PostConstruct
     public void startBot() {
-        log.info(botToken);
         sendStartReport();
     }
 
@@ -101,22 +100,22 @@ public class Bot extends TelegramLongPollingBot {
         executeWithExceptionCheck(new SendMessage()
                 .setChatId(botAdmin)
                 .setText("Bot start up is successful"));
-        log.info("Start report sent to Admin");
+        log.debug("Start report sent to Admin");
     }
 
     @Scheduled(cron = "${bot.cron}")
     private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
-        log.debug("Checking for scheduled messages");
+        log.debug("Checking for scheduled messages: {}", ldt);
         List<Schedule> scheduledUsers = scheduleService.isAnyScheduled(ldt.toLocalTime());
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 User user = schedule.getUser();
-                log.debug("Scheduled message for {} sent at {}:{}",
-                        user.getChatId(), ldt.getHour(), ldt.getMinute());
-
                 getHandler.handle(user, null).forEach(
                         m -> executeWithExceptionCheck((SendMessage) m));
+
+                log.debug("Scheduled message for {} sent at {}:{}",
+                        user.getChatId(), ldt.getHour(), ldt.getMinute());
             });
         }
     }

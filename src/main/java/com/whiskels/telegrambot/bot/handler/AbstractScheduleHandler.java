@@ -11,5 +11,4 @@ public abstract class AbstractScheduleHandler extends AbstractBaseHandler {
     public AbstractScheduleHandler(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
-
 }

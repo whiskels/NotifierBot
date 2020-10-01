@@ -34,12 +34,14 @@ public class AdminMessageHandler extends AbstractBaseHandler {
     @Override
     @RequiredRoles(roles = ADMIN)
     public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String text) {
+        log.debug("Preparing /ADMIN_MESSAGE");
         List<PartialBotApiMethod<? extends Serializable>> messagesToSend = userService.getUsers()
                 .stream()
                 .map(user -> createMessageTemplate(user)
                         .setText(extractArguments(text)))
                 .collect(Collectors.toList());
 
+        log.debug("Prepared {} messages", messagesToSend.size());
         messagesToSend.add(createMessageTemplate(admin)
                 .setText(String.format("Notified %d users", messagesToSend.size())));
 

@@ -31,6 +31,7 @@ public class ScheduleClearHandler extends AbstractScheduleHandler {
     @Override
     @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
+        log.debug("Preparing /SCHEDULE_CLEAR");
         scheduleService.clear(user.getId());
 
         return Collections.singletonList(createMessageTemplate(user)

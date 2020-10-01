@@ -23,6 +23,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 public class TokenHandler extends AbstractBaseHandler {
     @Override
     public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
+        log.debug("Preparing /TOKEN");
         return Collections.singletonList(createMessageTemplate(user)
                 .setText(String.format("Your token is *%s*", user.getChatId())));
     }

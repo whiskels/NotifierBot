@@ -30,6 +30,9 @@ bot:
       offset: 3
   cron: 0 * * * * MON-FRI
 json:
-  url:
-  cron: 0 30 8 * * MON-FRI
-
+  customer:
+    url:
+    cron: 0 30 8 * * MON-FRI
+logging:
+  level:
+    com.whiskels.telegrambot: info

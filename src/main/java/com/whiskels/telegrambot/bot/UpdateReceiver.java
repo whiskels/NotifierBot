@@ -46,19 +46,21 @@ public class UpdateReceiver {
                 final Message message = update.getMessage();
                 userId = message.getFrom().getId();
                 text = message.getText();
+                log.debug("Update is text message {} from {}", text, userId);
             } else if (update.hasCallbackQuery()) {
                 final CallbackQuery callbackQuery = update.getCallbackQuery();
                 userId = callbackQuery.getFrom().getId();
                 text = callbackQuery.getData();
+                log.debug("Update is callbackquery {} from {}", text, userId);
             }
 
             if (text != null && userId != 0) {
                 return getHandler(text).authorizeAndHandle(userService.getOrCreate(userId), text);
             }
 
-            throw new UnsupportedOperationException("Operation not supported");
-        } catch (Exception e) {
-            log.debug("Exception: {}", e.getMessage());
+            throw new UnsupportedOperationException();
+        } catch (UnsupportedOperationException e) {
+            log.debug("Command: {} is unsupported", update.toString());
             return Collections.emptyList();
         }
     }
