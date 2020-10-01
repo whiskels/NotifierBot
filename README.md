@@ -13,7 +13,7 @@ In order to run this bot:
 
 ___
 ### Technology stack: 
-Java 8, TelegramBots API, TelegramBotsExtensions, Spring Boot, Spring Data JPA, Hibernate, Lombok, Maven, Postgres, Logback, SLF4J, Jackson.
+Java 14, TelegramBots API, TelegramBotsExtensions, Spring Boot, Spring Data JPA, Hibernate, Lombok, Maven, Postgres, SLF4J, Jackson.
 
 ___
 #### Features:
