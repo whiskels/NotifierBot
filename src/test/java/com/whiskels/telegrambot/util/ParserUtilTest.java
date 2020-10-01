@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ParserUtilTest {
 
     @Test
-     void oneArgument() {
+    public void oneArgument() {
         List<Integer> time = getTime("1");
         assertEquals(1, time.get(0));
     }

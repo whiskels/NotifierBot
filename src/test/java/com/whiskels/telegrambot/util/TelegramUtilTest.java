@@ -4,8 +4,7 @@ import org.junit.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import static com.whiskels.telegrambot.UserTestData.ADMIN;
-import static com.whiskels.telegrambot.UserTestData.ADMIN_ID;
+import static com.whiskels.telegrambot.UserTestData.*;
 import static com.whiskels.telegrambot.util.TelegramUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,32 +14,32 @@ public class TelegramUtilTest {
     private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
 
     @Test
-    void getCommand() {
+    public void getCommand() {
         assertEquals(TEST_COMMAND, extractCommand(TEST_STRING));
     }
 
     @Test
-    void getArgs() {
+    public void getArgs() {
         assertEquals(TEST_ARGUMENTS, extractArguments(TEST_STRING));
     }
 
     @Test
-    void createButton() {
+    public void createButton() {
         InlineKeyboardButton actual = createInlineKeyboardButton(TEST_ARGUMENTS, TEST_COMMAND);
         assertEquals(TEST_COMMAND, actual.getCallbackData());
         assertEquals(TEST_ARGUMENTS, actual.getText());
     }
 
     @Test
-    void createButtonWithArguments() {
+    public void createButtonWithArguments() {
         InlineKeyboardButton actual = createInlineKeyboardButton(TEST_ARGUMENTS, TEST_COMMAND, true);
         assertEquals(TEST_STRING, actual.getCallbackData());
         assertEquals(TEST_ARGUMENTS, actual.getText());
     }
 
     @Test
-    void messageTemplate() {
+    public void messageTemplate() {
         SendMessage actual = createMessageTemplate(ADMIN);
-        assertEquals(String.valueOf(ADMIN_ID), actual.getChatId());
+        assertEquals(String.valueOf(ADMIN_CHAT_ID), actual.getChatId());
     }
 }
