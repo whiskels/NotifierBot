@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static java.lang.StackWalker.Option.RETAIN_CLASS_REFERENCE;
-
 /**
  * Checks if user is authorized to use the desired command
  */
@@ -24,19 +22,16 @@ public class AuthorizationService {
      * @return authorization result
      */
     @SneakyThrows
-    public final boolean authorize(User user) {
+    public final boolean authorize(Class clazz, User user) {
         try {
-            // Getting caller class
-            // https://stackoverflow.com/a/51768706
-            final RequiredRoles annotation = Stream.of(StackWalker.getInstance(RETAIN_CLASS_REFERENCE)
-                    .getCallerClass()
-                    .getDeclaredMethods())
+            final RequiredRoles annotation = Stream.of(clazz.getDeclaredMethods())
                     .filter(method -> method.isAnnotationPresent(RequiredRoles.class))
                     .findFirst()
                     .orElseThrow(NoSuchMethodException::new)
                     .getDeclaredAnnotation(RequiredRoles.class);
             return !Collections.disjoint(user.getRoles(), Arrays.asList(annotation.roles()));
         } catch (NoSuchMethodException e) {
+            log.info("No secured methods in class {}", clazz.getSimpleName());
             return true;
         }
     }

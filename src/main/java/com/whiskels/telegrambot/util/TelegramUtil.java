@@ -27,8 +27,12 @@ public final class TelegramUtil {
     }
 
     public static SendMessage createMessageTemplate(User user) {
+        return createMessageTemplate(String.valueOf(user.getChatId()));
+    }
+
+    public static SendMessage createMessageTemplate(String chatId) {
         return new SendMessage()
-                .setChatId(String.valueOf(user.getChatId()))
+                .setChatId(chatId)
                 .enableMarkdown(true);
     }
 
