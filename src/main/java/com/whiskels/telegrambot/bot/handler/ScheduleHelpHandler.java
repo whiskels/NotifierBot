@@ -45,10 +45,6 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
                 .append("   /schedule 1230 - 12:30")
                 .append(END_LINE)
                 .append("Please note that daily messages are not sent on *sundays and saturdays*!")
-                .append(END_LINE)
-                .append("[/schedule clear](/schedule_clear) - clear schedule")
-                .append(END_LINE)
-                .append("[/schedule help](/schedule_help) - show help message")
                 .append(END_LINE);
         sendMessage.setText(text.toString());
 

@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +23,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class JSONReader {
-    @Value("${json.url}")
-    private String URL;
+    @Value("${json.customer.url}")
+    private String customerUrl;
 
     private List<Customer> customerList;
 
@@ -53,10 +52,10 @@ public class JSONReader {
     /**
      * Reads JSON data from URL and creates Customer list
      */
-    @Scheduled(cron = "${json.cron}")
+    @Scheduled(cron = "${json.customer.cron}")
     public void update() {
         log.info("updating customer list");
-        JSONObject json = readJsonFromUrl(URL);
+        JSONObject json = readJsonFromUrl(customerUrl);
         if (json != null) {
             createCustomerList(json);
             log.info("customer list updated");

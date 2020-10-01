@@ -8,6 +8,7 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 public class User extends AbstractBaseEntity {
     @Column(name = "chat_id", unique = true, nullable = false)
+    @NotNull
     private int chatId;
 
     @Column(name = "name", unique = true, nullable = false)
@@ -44,5 +46,13 @@ public class User extends AbstractBaseEntity {
     public User(int chatId) {
         this.chatId = chatId;
         this.name = String.valueOf(chatId);
+    }
+
+    public User(Integer id, @NotNull int chatId, @NotBlank String name, Set<Role> roles, List<Schedule> scheduleList) {
+        super(id);
+        this.chatId = chatId;
+        this.name = name;
+        this.roles = roles;
+        this.scheduleList = scheduleList;
     }
 }
