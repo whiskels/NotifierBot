@@ -15,19 +15,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.22</telegrambots-spring.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.4.18.Final</hibernate.version>
-        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
-        <javax-el.version>3.0.1-b11</javax-el.version>
-
-        <!-- Logging -->
-        <logback.version>1.2.3</logback.version>
-        <slf4j.version>1.7.30</slf4j.version>
 
         <!--    Tests  -->
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
@@ -134,58 +128,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Logging with SLF4J & LogBack -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!--- ORM -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jcache</artifactId>
             <version>${hibernate.version}</version>
-        </dependency>
-
-        <!-- Telegram API -->
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambotsextensions</artifactId>
-            <version>LATEST</version>
         </dependency>
 
         <!--DataBase-->
@@ -224,8 +170,6 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
-
 
         <!-- GSON -->
         <dependency>
