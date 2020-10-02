@@ -1,42 +1,21 @@
 package com.whiskels.telegrambot.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whiskels.telegrambot.model.Customer;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class JSONReader {
-    @Value("${json.customer.url}")
-    private String customerUrl;
-
-    private List<Customer> customerList;
-
-    @PostConstruct
-    private void initCustomerList() {
-        update();
-    }
-
     /**
      * Reads all data from reader
      */
-    private String readAll(Reader rd) {
+    private JSONObject readAll(Reader rd) {
         StringBuilder sb = new StringBuilder();
         int cp;
         try {
@@ -46,66 +25,20 @@ public class JSONReader {
         } catch (IOException e) {
             log.error("Exception while trying to read data - {}", e.getMessage());
         }
-        return sb.toString();
+        return new JSONObject(sb.toString());
     }
 
-    /**
-     * Reads JSON data from URL and creates Customer list
-     */
-    @Scheduled(cron = "${json.customer.cron}")
-    public void update() {
-        log.info("updating customer list");
-        JSONObject json = readJsonFromUrl(customerUrl);
-        if (json != null) {
-            createCustomerList(json);
-            log.info("customer list updated");
-        }
-    }
 
     /**
      * Reads JSONObject from given URL
      */
-    private JSONObject readJsonFromUrl(String url) {
+    public JSONObject readJsonFromUrl(String url) {
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            String jsonText = readAll(rd);
-            return new JSONObject(jsonText);
+            return readAll(rd);
         } catch (IOException | JSONException e) {
             log.error("Exception while trying to get JSON data from URL - {}", e.getMessage());
             return null;
         }
-    }
-
-    /**
-     * Creates customer list based on JSONArray of objects
-     */
-    private void createCustomerList(JSONObject json) {
-        customerList = new ArrayList<>();
-        JSONArray content = (JSONArray) json.get("content");
-
-        try {
-
-            for (Object o : content) {
-                StringReader reader = new StringReader(o.toString());
-
-                ObjectMapper mapper = new ObjectMapper();
-
-                Customer customer = mapper.readValue(reader, Customer.class);
-                customer.calculateOverallDebt();
-
-                customerList.add(customer);
-            }
-        } catch (IOException e) {
-            log.error("Exception while reading value from reader - {}", e.getMessage());
-        }
-
-        customerList = customerList.stream()
-                .filter(customer -> customer.getOverallDebt() > 10)
-                .sorted(Comparator.comparingDouble(Customer::getOverallDebt).reversed())
-                .collect(Collectors.toList());
-    }
-
-    public List<Customer> getCustomerList() {
-        return Collections.unmodifiableList(customerList);
     }
 }

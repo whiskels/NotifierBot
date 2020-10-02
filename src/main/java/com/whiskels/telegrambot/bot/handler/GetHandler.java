@@ -5,7 +5,7 @@ import com.whiskels.telegrambot.model.Customer;
 import com.whiskels.telegrambot.model.Role;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
-import com.whiskels.telegrambot.service.JSONReader;
+import com.whiskels.telegrambot.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -30,10 +30,10 @@ import static com.whiskels.telegrambot.util.TelegramUtil.*;
 @Slf4j
 @BotCommand(command = "/GET")
 public class GetHandler extends AbstractBaseHandler {
-    private final JSONReader jsonReader;
+    private final CustomerService customerService;
 
-    public GetHandler(JSONReader jsonReader) {
-        this.jsonReader = jsonReader;
+    public GetHandler(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class GetHandler extends AbstractBaseHandler {
         try {
             StringBuilder list = new StringBuilder();
 
-            list.append(jsonReader.getCustomerList().stream()
+            list.append(customerService.getCustomerList().stream()
                     .filter(customer -> isValid(user, customer))
                     .map(Customer::toString)
                     .collect(Collectors.joining(String.format(
