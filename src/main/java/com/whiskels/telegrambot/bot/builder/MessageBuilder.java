@@ -56,8 +56,9 @@ public final class MessageBuilder {
                 .enableMarkdown(true)
                 .setText(sb.toString());
 
+        addRowToKeyboard();
+
         if (!keyboard.isEmpty()) {
-            addRowToKeyboard();
             sendMessage.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(keyboard));
         }
 
