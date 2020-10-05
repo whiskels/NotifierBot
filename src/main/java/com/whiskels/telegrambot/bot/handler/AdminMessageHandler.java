@@ -1,6 +1,7 @@
 package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.BotCommand;
+import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.UserService;
@@ -13,12 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.model.Role.ADMIN;
-import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 import static com.whiskels.telegrambot.util.TelegramUtil.extractArguments;
 
 /**
  * Notifies all bot users with a message from admin
- *
+ * <p>
  * Available to: Admin
  */
 @Component
@@ -37,13 +37,15 @@ public class AdminMessageHandler extends AbstractBaseHandler {
         log.debug("Preparing /ADMIN_MESSAGE");
         List<BotApiMethod<Message>> messagesToSend = userService.getUsers()
                 .stream()
-                .map(user -> createMessageTemplate(user)
-                        .setText(extractArguments(text)))
+                .map(user -> MessageBuilder.create(user)
+                        .text(extractArguments(text))
+                        .build())
                 .collect(Collectors.toList());
 
         log.debug("Prepared {} messages", messagesToSend.size());
-        messagesToSend.add(createMessageTemplate(admin)
-                .setText(String.format("Notified %d users", messagesToSend.size())));
+        messagesToSend.add(MessageBuilder.create(admin)
+                .text("Notified %d users", messagesToSend.size())
+                .build());
 
         return messagesToSend;
     }

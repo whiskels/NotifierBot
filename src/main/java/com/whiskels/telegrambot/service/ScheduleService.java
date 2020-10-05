@@ -23,8 +23,8 @@ public class ScheduleService {
         return scheduleRepository.getAllByHourAndMinute(ldt.getHour(), ldt.getMinute());
     }
 
-    public void clear(int userId) {
-        scheduleRepository.delete(userId);
+    public int clear(int userId) {
+        return scheduleRepository.delete(userId);
     }
 
     public List<Schedule> getSchedule(int chatId) {

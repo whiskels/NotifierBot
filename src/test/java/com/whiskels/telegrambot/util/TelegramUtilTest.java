@@ -22,24 +22,4 @@ public class TelegramUtilTest {
     public void getArgs() {
         assertEquals(TEST_ARGUMENTS, extractArguments(TEST_STRING));
     }
-
-    @Test
-    public void createButton() {
-        InlineKeyboardButton actual = createInlineKeyboardButton(TEST_ARGUMENTS, TEST_COMMAND);
-        assertEquals(TEST_COMMAND, actual.getCallbackData());
-        assertEquals(TEST_ARGUMENTS, actual.getText());
-    }
-
-    @Test
-    public void createButtonWithArguments() {
-        InlineKeyboardButton actual = createInlineKeyboardButton(TEST_ARGUMENTS, TEST_COMMAND, true);
-        assertEquals(TEST_STRING, actual.getCallbackData());
-        assertEquals(TEST_ARGUMENTS, actual.getText());
-    }
-
-    @Test
-    public void messageTemplate() {
-        SendMessage actual = createMessageTemplate(ADMIN);
-        assertEquals(String.valueOf(ADMIN_CHAT_ID), actual.getChatId());
-    }
 }

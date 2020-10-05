@@ -1,7 +1,8 @@
 package com.whiskels.telegrambot.bot.handler;
 
-import com.whiskels.telegrambot.security.AuthorizationService;
+import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.User;
+import com.whiskels.telegrambot.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +10,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
-
-import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 
 /**
  * Abstract class for all handlers
@@ -32,12 +31,13 @@ public abstract class AbstractBaseHandler {
 
     private List<BotApiMethod<Message>> handleUnauthorized(User user, String message) {
         log.info("Unauthorized access: {} {}", user, message);
-        return List.of(
-                createMessageTemplate(user).setText(String.format(
-                        "Your token is *%s*%nPlease contact your supervisor to gain access",
-                        user.getChatId())),
-                createMessageTemplate(botAdmin).setText(String.format(
-                        "Unauthorized access *%s*%n%s", user, message))
-        );
+        String userChatId = String.valueOf(user.getChatId());
+        return List.of(MessageBuilder.create(userChatId)
+                        .text("Your token is *%s*%nPlease contact your supervisor to gain access",
+                                userChatId)
+                        .build(),
+                MessageBuilder.create(botAdmin)
+                        .text("Unauthorized access *%s*%n%s", user, message)
+                        .build());
     }
 }

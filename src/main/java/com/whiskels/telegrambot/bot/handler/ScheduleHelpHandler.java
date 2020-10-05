@@ -1,24 +1,21 @@
 package com.whiskels.telegrambot.bot.handler;
 
 import com.whiskels.telegrambot.bot.BotCommand;
+import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.whiskels.telegrambot.model.Role.*;
-import static com.whiskels.telegrambot.util.TelegramUtil.END_LINE;
-import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
 
 /**
  * Shows help message for {@link ScheduleAddHandler} supported syntax
- *
+ * <p>
  * Available to: Manager, Head, Admin
  */
 @Component
@@ -30,24 +27,13 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
     @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_HELP");
-        SendMessage sendMessage = createMessageTemplate(user);
-
-        StringBuilder text = new StringBuilder();
-        text.append("*Help message for /schedule command*")
-                .append(END_LINE)
-                .append(END_LINE)
-                .append("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")
-                .append(END_LINE)
-                .append("   /schedule 1 - 01:00")
-                .append(END_LINE)
-                .append("   /schedule 10 - 10:00")
-                .append(END_LINE)
-                .append("   /schedule 1230 - 12:30")
-                .append(END_LINE)
-                .append("Please note that daily messages are not sent on *sundays and saturdays*!")
-                .append(END_LINE);
-        sendMessage.setText(text.toString());
-
-        return Collections.singletonList(sendMessage);
+        return List.of(MessageBuilder.create(user)
+                .text("*Help message for /schedule command*%n")
+                .text("%n[/schedule *time*](/schedule time) - set daily message at time. Examples: ")
+                .text("%n   /schedule 1 - 01:00")
+                .text("%n   /schedule 10 - 10:00")
+                .text("%n   /schedule 1230 - 12:30")
+                .text("%nPlease note that daily messages are not sent on *sundays and saturdays*!")
+                .build());
     }
 }
