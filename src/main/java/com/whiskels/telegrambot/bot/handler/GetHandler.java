@@ -8,6 +8,7 @@ import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -32,6 +33,9 @@ import static com.whiskels.telegrambot.util.TelegramUtil.EMPTY_LINE;
 public class GetHandler extends AbstractBaseHandler {
     private final CustomerService customerService;
 
+    @Value("${bot.server.hour.offset}")
+    private int serverHourOffset;
+
     public GetHandler(CustomerService customerService) {
         this.customerService = customerService;
     }
@@ -42,8 +46,8 @@ public class GetHandler extends AbstractBaseHandler {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)
                 .text("Overdue debts on %s%n%n",
-                        DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(3)));
-        String customerInfo = null;
+                        DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset)));
+        String customerInfo = "";
         try {
             customerInfo = customerService.getCustomerList().stream()
                     .filter(customer -> isValid(user, customer))
@@ -55,7 +59,7 @@ public class GetHandler extends AbstractBaseHandler {
             log.error("Exception while creating message GET: {}", e.getMessage());
         }
 
-        builder.text(customerInfo == null ? "No overdue debts" : customerInfo);
+        builder.text(customerInfo.isEmpty() ? "No overdue debts" : customerInfo);
 
         return List.of(builder.build());
     }
