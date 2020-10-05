@@ -6,9 +6,9 @@ import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +33,9 @@ public class AdminMessageHandler extends AbstractBaseHandler {
 
     @Override
     @RequiredRoles(roles = ADMIN)
-    public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String text) {
+    public List<BotApiMethod<Message>> handle(User admin, String text) {
         log.debug("Preparing /ADMIN_MESSAGE");
-        List<PartialBotApiMethod<? extends Serializable>> messagesToSend = userService.getUsers()
+        List<BotApiMethod<Message>> messagesToSend = userService.getUsers()
                 .stream()
                 .map(user -> createMessageTemplate(user)
                         .setText(extractArguments(text)))

@@ -6,9 +6,9 @@ import com.whiskels.telegrambot.security.RequiredRoles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +30,7 @@ public class AdminTimeHandler extends AbstractBaseHandler {
 
     @Override
     @RequiredRoles(roles = ADMIN)
-    public List<PartialBotApiMethod<? extends Serializable>> handle(User admin, String message) {
+    public List<BotApiMethod<Message>> handle(User admin, String message) {
         log.debug("Preparing /ADMIN_TIME");
         return Collections.singletonList(createMessageTemplate(admin)
                 .setText(String.format("*Bot current time*:%n%s%nServer hour offset is %d",

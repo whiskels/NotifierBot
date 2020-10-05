@@ -8,10 +8,10 @@ import com.whiskels.telegrambot.security.RequiredRoles;
 import com.whiskels.telegrambot.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +38,7 @@ public class GetHandler extends AbstractBaseHandler {
 
     @Override
     @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
-    public List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message) {
+    public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET");
         SendMessage sendMessage = createMessageTemplate(user);
 

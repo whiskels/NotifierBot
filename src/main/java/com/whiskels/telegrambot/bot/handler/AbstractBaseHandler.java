@@ -5,9 +5,9 @@ import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static com.whiskels.telegrambot.util.TelegramUtil.createMessageTemplate;
@@ -23,14 +23,14 @@ public abstract class AbstractBaseHandler {
     @Autowired
     protected AuthorizationService authorizationService;
 
-    public final List<PartialBotApiMethod<? extends Serializable>> authorizeAndHandle(User user, String message) {
+    public final List<BotApiMethod<Message>> authorizeAndHandle(User user, String message) {
         return this.authorizationService.authorize(this.getClass(), user) ?
                 handle(user, message) : handleUnauthorized(user, message);
     }
 
-    protected abstract List<PartialBotApiMethod<? extends Serializable>> handle(User user, String message);
+    protected abstract List<BotApiMethod<Message>> handle(User user, String message);
 
-    private List<PartialBotApiMethod<? extends Serializable>> handleUnauthorized(User user, String message) {
+    private List<BotApiMethod<Message>> handleUnauthorized(User user, String message) {
         log.info("Unauthorized access: {} {}", user, message);
         return List.of(
                 createMessageTemplate(user).setText(String.format(

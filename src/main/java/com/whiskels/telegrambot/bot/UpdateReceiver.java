@@ -4,12 +4,11 @@ import com.whiskels.telegrambot.bot.handler.AbstractBaseHandler;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public class UpdateReceiver {
      * @param update
      * @return list of SendMessages to execute
      */
-    public List<PartialBotApiMethod<? extends Serializable>> handle(Update update) {
+    public List<BotApiMethod<Message>> handle(Update update) {
         try {
             int userId = 0;
             String text = null;

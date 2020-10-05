@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        List<PartialBotApiMethod<? extends Serializable>> messagesToSend = updateReceiver.handle(update);
+        List<BotApiMethod<Message>> messagesToSend = updateReceiver.handle(update);
 
         if (messagesToSend != null && !messagesToSend.isEmpty()) {
             messagesToSend.forEach(response -> {
