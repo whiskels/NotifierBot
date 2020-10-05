@@ -38,13 +38,13 @@ public class AdminMessageHandler extends AbstractBaseHandler {
         List<BotApiMethod<Message>> messagesToSend = userService.getUsers()
                 .stream()
                 .map(user -> MessageBuilder.create(user)
-                        .text(extractArguments(text))
+                        .line(extractArguments(text))
                         .build())
                 .collect(Collectors.toList());
 
         log.debug("Prepared {} messages", messagesToSend.size());
         messagesToSend.add(MessageBuilder.create(admin)
-                .text("Notified %d users", messagesToSend.size())
+                .line("Notified %d users", messagesToSend.size())
                 .build());
 
         return messagesToSend;

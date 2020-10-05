@@ -45,8 +45,9 @@ public class GetHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)
-                .text("Overdue debts on %s%n%n",
-                        DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset)));
+                .line("Overdue debts on %s",
+                        DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset)))
+                .line();
         String customerInfo = "";
         try {
             customerInfo = customerService.getCustomerList().stream()
@@ -59,7 +60,7 @@ public class GetHandler extends AbstractBaseHandler {
             log.error("Exception while creating message GET: {}", e.getMessage());
         }
 
-        builder.text(customerInfo.isEmpty() ? "No overdue debts" : customerInfo);
+        builder.line(customerInfo.isEmpty() ? "No overdue debts" : customerInfo);
 
         return List.of(builder.build());
     }

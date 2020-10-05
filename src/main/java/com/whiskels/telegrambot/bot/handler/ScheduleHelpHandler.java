@@ -28,12 +28,13 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_HELP");
         return List.of(MessageBuilder.create(user)
-                .text("*Help message for /schedule command*%n")
-                .text("%n[/schedule *time*](/schedule time) - set daily message at time. Examples: ")
-                .text("%n   /schedule 1 - 01:00")
-                .text("%n   /schedule 10 - 10:00")
-                .text("%n   /schedule 1230 - 12:30")
-                .text("%nPlease note that daily messages are not sent on *sundays and saturdays*!")
+                .line("*Help message for /schedule command*")
+                .line()
+                .line("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")
+                .line("   /schedule 1 - 01:00")
+                .line("   /schedule 10 - 10:00")
+                .line("   /schedule 1230 - 12:30")
+                .line("Please note that daily messages are not sent on *sundays and saturdays*!")
                 .build());
     }
 }

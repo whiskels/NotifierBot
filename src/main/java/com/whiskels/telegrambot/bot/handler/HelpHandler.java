@@ -30,9 +30,10 @@ public class HelpHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /HELP");
         MessageBuilder builder = MessageBuilder.create(user)
-                .text("Hello. I'm *%s*%nHere are your available commands%nUse [/help] command to display this message", botUsername);
-
-        builder.row()
+                .line("Hello. I'm *%s*", botUsername)
+                .line("Here are your available commands")
+                .line("Use [/help] command to display this message")
+                .row()
                 .button("Show your token", "/TOKEN");
 
         if (!Collections.disjoint((user).getRoles(), List.of(MANAGER, HEAD, ADMIN))) {

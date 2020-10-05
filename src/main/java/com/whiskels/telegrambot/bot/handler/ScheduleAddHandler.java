@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,10 +53,11 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
             log.debug("Adding schedule {}:{} to {}", hours, minutes, user.getChatId());
 
             scheduleService.addSchedule(new Schedule(hours, minutes, null), user.id());
-            builder.text("Scheduled status messages to%nbe sent daily at *%02d:%02d*%n",
-                    hours, minutes);
+            builder.line("Scheduled status messages to")
+                    .line("be sent daily at *%02d:%02d*", hours, minutes);
         } catch (Exception e) {
-            builder.text("You've entered invalid time%nPlease try again");
+            builder.line("You've entered invalid time")
+                    .line("Please try again");
             log.debug("Incorrect schedule time {}", message);
         }
 
@@ -66,19 +68,20 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
      * Returns predefined list of options and information on empty command
      */
     private SendMessage inlineKeyboardMessage(User user) {
-        String scheduleSizeMessage = "No messages scheduled";
+        String currentSchedule = "No messages scheduled";
 
         final List<Schedule> schedule = scheduleService.getSchedule(user.getChatId());
         if (schedule != null && !schedule.isEmpty()) {
-            scheduleSizeMessage = schedule.stream()
+            currentSchedule = schedule.stream()
                     .map(e -> String.format("%02d:%02d", e.getHour(), e.getMinutes()))
                     .collect(Collectors.joining(", "));
         }
 
         return MessageBuilder.create(user)
-                .text("*Your current schedule:*%n%s%n%n" +
-                                "Choose from available options or add preferred time to [/schedule](/schedule) command:",
-                        scheduleSizeMessage)
+                .line("*Your current schedule:*")
+                .line(currentSchedule)
+                .line()
+                .line("Choose from available options or add preferred time to [/schedule](/schedule) command:")
                 .row()
                 .buttonWithArguments("9:00", "/SCHEDULE")
                 .buttonWithArguments("12:00", "/SCHEDULE")

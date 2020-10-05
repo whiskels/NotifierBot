@@ -30,8 +30,13 @@ public final class MessageBuilder {
         return create(String.valueOf(user.getChatId()));
     }
 
-    public MessageBuilder text(String text, Object... args) {
+    public MessageBuilder line(String text, Object... args) {
         sb.append(String.format(text, args));
+        return line();
+    }
+
+    public MessageBuilder line() {
+        sb.append(String.format("%n"));
         return this;
     }
 

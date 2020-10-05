@@ -23,7 +23,7 @@ public class TokenHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /TOKEN");
         return List.of(MessageBuilder.create(user)
-                .text("Your token is *%s*", user.getChatId())
+                .line("Your token is *%s*", user.getChatId())
                 .build());
     }
 }

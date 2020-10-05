@@ -32,9 +32,9 @@ public class AdminTimeHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User admin, String message) {
         log.debug("Preparing /ADMIN_TIME");
         return List.of(MessageBuilder.create(admin)
-                .text("*Bot current time*:%n%s%nServer hour offset is %d",
-                        LocalDateTime.now().toString(),
-                        serverHourOffset)
+                .line("*Bot current time*:")
+                .line(LocalDateTime.now().toString())
+                .line("Server hour offset is %d", serverHourOffset)
                 .build());
     }
 }

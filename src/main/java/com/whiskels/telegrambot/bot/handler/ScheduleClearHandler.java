@@ -34,7 +34,7 @@ public class ScheduleClearHandler extends AbstractScheduleHandler {
         final int count = scheduleService.clear(user.getId());
 
         return List.of(MessageBuilder.create(user)
-                .text("Your schedule (%d) was cleared", count)
+                .line("Your schedule (%d) was cleared", count)
                 .build());
     }
 }
