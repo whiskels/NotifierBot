@@ -21,7 +21,7 @@ import static com.whiskels.telegrambot.model.Role.*;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/SCHEDULE_CLEAR")
+@BotCommand(command = "/SCHEDULE_CLEAR", message = "Clear schedule")
 public class ScheduleClearHandler extends AbstractScheduleHandler {
     public ScheduleClearHandler(ScheduleService scheduleService) {
         super(scheduleService);

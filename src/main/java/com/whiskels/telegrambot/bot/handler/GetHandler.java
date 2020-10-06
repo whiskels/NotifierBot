@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.whiskels.telegrambot.model.Role.*;
-import static com.whiskels.telegrambot.util.TelegramUtil.DATE_TIME_FORMATTER;
+import static com.whiskels.telegrambot.util.TelegramUtil.DATE_YEAR_FORMATTER;
 import static com.whiskels.telegrambot.util.TelegramUtil.EMPTY_LINE;
 
 /**
@@ -29,7 +29,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.EMPTY_LINE;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/GET")
+@BotCommand(command = "/GET", message = "Get customer overdue debts")
 public class GetHandler extends AbstractBaseHandler {
     private final CustomerService customerService;
 
@@ -46,7 +46,7 @@ public class GetHandler extends AbstractBaseHandler {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)
                 .line("Overdue debts on %s",
-                        DATE_TIME_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset)))
+                        DATE_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset)))
                 .line();
         String customerInfo = "";
         try {

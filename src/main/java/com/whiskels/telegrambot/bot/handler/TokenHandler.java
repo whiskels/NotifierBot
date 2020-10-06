@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/TOKEN")
+@BotCommand(command = "/TOKEN", message = "Show your token")
 public class TokenHandler extends AbstractBaseHandler {
     @Override
     public List<BotApiMethod<Message>> handle(User user, String message) {

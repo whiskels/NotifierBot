@@ -22,7 +22,7 @@ import static com.whiskels.telegrambot.model.Role.ADMIN;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/ADMIN_TIME")
+@BotCommand(command = "/ADMIN_TIME", message = "Show bot server time")
 public class AdminTimeHandler extends AbstractBaseHandler {
     @Value("${bot.server.hour.offset}")
     private int serverHourOffset;

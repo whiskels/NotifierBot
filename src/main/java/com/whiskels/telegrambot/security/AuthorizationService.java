@@ -4,8 +4,8 @@ import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +29,7 @@ public class AuthorizationService {
                     .orElseThrow(NoSuchMethodException::new)
                     .getDeclaredAnnotation(RequiredRoles.class);
             log.debug("User roles: {}\nRequired roles: {}", user.getRoles(), annotation.roles());
-            return !Collections.disjoint(user.getRoles(), Arrays.asList(annotation.roles()));
+            return !Collections.disjoint(user.getRoles(), List.of(annotation.roles()));
         } catch (NoSuchMethodException e) {
             log.debug("No secured methods in class {}", clazz.getSimpleName());
             return true;
