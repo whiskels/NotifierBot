@@ -29,11 +29,11 @@ import java.util.List;
 
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.active.name}")
+    @Value("${bot.name}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.active.token}")
+    @Value("${bot.token}")
     @Getter
     private String botToken;
 

@@ -1,15 +1,7 @@
 spring:
+  profiles:
+    active: test
   datasource:
-    #     Test database
-    url: jdbc:postgresql://localhost:5432/telegram_bot_test
-    username: user
-    password: password
-    #
-    #     Heroku environment variables for database
-    #     https://stackoverflow.com/a/41020278
-    #    url: ${JDBC_DATABASE_URL}
-    #    username: ${JDBC_DATABASE_USERNAME}
-    #    password: ${JDBC_DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
   jpa:
@@ -18,13 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
 bot:
-  test:
-    name:
-    token:
-  war:
-    name:
-    token:
-  admin:
+  admin: 87971601
   server:
     hour:
       offset: 3
@@ -39,3 +25,24 @@ json:
 logging:
   level:
     com.whiskels.telegrambot: info
+---
+spring:
+  profiles: test
+  datasource:
+#           Test database
+    url: jdbc:postgresql://localhost:5432/telegram_bot_test
+    username: user
+    password: password
+bot:
+  name: TelegramNotifierBot
+  token:
+---
+spring:
+  profiles: war
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+bot:
+  name:
+  token:
