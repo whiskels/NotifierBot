@@ -1,10 +1,7 @@
 package com.whiskels.telegrambot.util;
 
 import org.junit.Test;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import static com.whiskels.telegrambot.UserTestData.*;
 import static com.whiskels.telegrambot.util.TelegramUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

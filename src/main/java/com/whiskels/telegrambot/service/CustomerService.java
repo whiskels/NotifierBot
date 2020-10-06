@@ -27,7 +27,7 @@ public class CustomerService {
     @Getter
     private List<Customer> customerList;
 
-    private JSONReader jsonReader;
+    private final JSONReader jsonReader;
 
     public CustomerService(JSONReader jsonReader) {
         this.jsonReader = jsonReader;
@@ -44,7 +44,7 @@ public class CustomerService {
     @Scheduled(cron = "${json.customer.cron}")
     public void update() {
         log.info("updating customer list");
-        JSONObject json = jsonReader.readJsonFromUrl(customerUrl);
+        JSONObject json = (JSONObject) jsonReader.readJsonFromUrl(customerUrl);
         if (json != null) {
             createCustomerList(json);
             log.info("customer list updated");
@@ -62,9 +62,7 @@ public class CustomerService {
             for (Object o : content) {
                 StringReader reader = new StringReader(o.toString());
 
-                ObjectMapper mapper = new ObjectMapper();
-
-                Customer customer = mapper.readValue(reader, Customer.class);
+                Customer customer = new ObjectMapper().readValue(reader, Customer.class);
                 customer.calculateOverallDebt();
 
                 customerList.add(customer);

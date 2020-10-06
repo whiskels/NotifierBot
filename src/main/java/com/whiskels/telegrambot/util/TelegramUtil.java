@@ -1,10 +1,21 @@
 package com.whiskels.telegrambot.util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public final class TelegramUtil {
     public static final String EMPTY_LINE = "---------------------------";
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter DATE_YEAR_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMMM");
+    public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
+
+    public static LocalDate toLocalDate(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
+    }
+
 
     public static String extractCommand(String text) {
         return text.split(" ")[0];

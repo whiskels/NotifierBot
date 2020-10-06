@@ -33,6 +33,9 @@ json:
   customer:
     url:
     cron: 0 30 8 * * MON-FRI
+  employee:
+    url:
+    cron: 0 30 3 * * MON-FRI
 logging:
   level:
     com.whiskels.telegrambot: info

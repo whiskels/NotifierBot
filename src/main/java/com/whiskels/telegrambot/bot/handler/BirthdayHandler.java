@@ -1,0 +1,94 @@
+package com.whiskels.telegrambot.bot.handler;
+
+import com.whiskels.telegrambot.bot.BotCommand;
+import com.whiskels.telegrambot.bot.builder.MessageBuilder;
+import com.whiskels.telegrambot.model.Employee;
+import com.whiskels.telegrambot.model.User;
+import com.whiskels.telegrambot.security.RequiredRoles;
+import com.whiskels.telegrambot.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.whiskels.telegrambot.model.Role.*;
+import static com.whiskels.telegrambot.util.TelegramUtil.*;
+
+@Component
+@Slf4j
+@BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
+public class BirthdayHandler extends AbstractBaseHandler {
+    @Value("${bot.server.hour.offset}")
+    private int serverHourOffset;
+
+    private final EmployeeService employeeService;
+
+    public BirthdayHandler(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    @Override
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
+    public List<BotApiMethod<Message>> handle(User user, String message) {
+        log.debug("Preparing /BIRTHDAY");
+        LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
+        MessageBuilder builder = MessageBuilder.create(user)
+                .line("*Birthdays*")
+                .line("*Today (%s)*:", DATE_FORMATTER.format(today))
+                .line();
+        String birthdayInfoToday = "";
+        try {
+            birthdayInfoToday = employeeService.getEmployeeList().stream()
+                    .filter(isBirthdayToday(today))
+                    .map(Employee::getName)
+                    .collect(Collectors.joining(", "));
+
+        } catch (Exception e) {
+            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
+        }
+
+        builder.line(birthdayInfoToday.isEmpty() ? "Nobody" : birthdayInfoToday)
+                .line()
+                .line("*Upcoming week:*");
+
+        String birthdayInfoUpcomingWeek = "";
+        try {
+            birthdayInfoUpcomingWeek = employeeService.getEmployeeList().stream()
+                    .sorted(Comparator.comparing(Employee::getBirthday))
+                    .filter(isBirthdayNextWeek(today))
+                    .map(employee -> String.format("%s (%s)",
+                            employee.getName(),
+                            BIRTHDAY_FORMATTER.format(toLocalDate(employee.getBirthday()))))
+                    .collect(Collectors.joining(", "));
+
+        } catch (Exception e) {
+            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
+        }
+
+        builder.line(birthdayInfoUpcomingWeek.isEmpty() ? "Nobody" : birthdayInfoUpcomingWeek);
+
+        return List.of(builder.build());
+    }
+
+    private Predicate<Employee> isBirthdayToday(LocalDate today) {
+        return employee -> toLocalDate(employee.getBirthday()).equals(today);
+    }
+
+    private Predicate<Employee> isBirthdayNextWeek(LocalDate today) {
+        return employee -> {
+            long daysUntilBirthday = ChronoUnit.DAYS.between(
+                    today.atStartOfDay(),
+                    toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
+            return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
+        };
+    }
+}

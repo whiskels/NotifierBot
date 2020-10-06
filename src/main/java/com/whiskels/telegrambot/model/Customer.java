@@ -3,11 +3,13 @@ package com.whiskels.telegrambot.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+@Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
