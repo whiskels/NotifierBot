@@ -20,7 +20,7 @@ import static com.whiskels.telegrambot.model.Role.*;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/SCHEDULE_HELP", message = "Schedule help")
+@BotCommand(command = "/SCHEDULE_HELP")
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override

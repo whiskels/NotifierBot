@@ -26,7 +26,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.extractArguments;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/SCHEDULE", message = "Show/add schedule")
+@BotCommand(command = "/SCHEDULE", message = "Manage schedule")
 public class ScheduleAddHandler extends AbstractScheduleHandler {
 
     public ScheduleAddHandler(ScheduleService scheduleService) {

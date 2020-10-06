@@ -20,7 +20,7 @@ public class AuthorizationService {
      * @param user
      * @return authorization result
      */
-    public final boolean authorize(Class clazz, User user) {
+    public final boolean authorize(Class<?> clazz, User user) {
         log.debug("Authorizing {} to use {}", user, clazz.getSimpleName());
         try {
             final RequiredRoles annotation = Stream.of(clazz.getDeclaredMethods())

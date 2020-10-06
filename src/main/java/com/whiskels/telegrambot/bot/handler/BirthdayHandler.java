@@ -23,6 +23,11 @@ import java.util.stream.Collectors;
 import static com.whiskels.telegrambot.model.Role.*;
 import static com.whiskels.telegrambot.util.TelegramUtil.*;
 
+/**
+ * Shows upcoming birthdays to employees
+ * <p>
+ * Available to: Employee, Manager, Head, Admin
+ */
 @Component
 @Slf4j
 @BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
@@ -37,14 +42,13 @@ public class BirthdayHandler extends AbstractBaseHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
+    @RequiredRoles(roles = {EMPLOYEE, MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /BIRTHDAY");
         LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         MessageBuilder builder = MessageBuilder.create(user)
                 .line("*Birthdays*")
-                .line("*Today (%s)*:", DATE_FORMATTER.format(today))
-                .line();
+                .line("*Today (%s)*:", DATE_FORMATTER.format(today));
         String birthdayInfoToday = "";
         try {
             birthdayInfoToday = employeeService.getEmployeeList().stream()

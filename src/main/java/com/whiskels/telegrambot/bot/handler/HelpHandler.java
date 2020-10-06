@@ -3,7 +3,6 @@ package com.whiskels.telegrambot.bot.handler;
 import com.whiskels.telegrambot.bot.BotCommand;
 import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.User;
-import com.whiskels.telegrambot.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,13 +23,10 @@ public class HelpHandler extends AbstractBaseHandler {
     @Value("${bot.test.name}")
     private String botUsername;
 
-    private List<AbstractBaseHandler> handlers;
+    private final List<AbstractBaseHandler> handlers;
 
-    private AuthorizationService authorizationService;
-
-    public HelpHandler(List<AbstractBaseHandler> handlers, AuthorizationService authorizationService) {
+    public HelpHandler(List<AbstractBaseHandler> handlers) {
         this.handlers = handlers;
-        this.authorizationService = authorizationService;
     }
 
     @Override
