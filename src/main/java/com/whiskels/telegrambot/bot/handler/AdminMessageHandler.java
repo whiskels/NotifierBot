@@ -24,11 +24,9 @@ import static com.whiskels.telegrambot.util.TelegramUtil.extractArguments;
 @Component
 @Slf4j
 @BotCommand(command = "/ADMIN_MESSAGE")
-public class AdminMessageHandler extends AbstractBaseHandler {
-    private final UserService userService;
-
+public class AdminMessageHandler extends AbstractUserHandler {
     public AdminMessageHandler(UserService userService) {
-        this.userService = userService;
+        super(userService);
     }
 
     @Override

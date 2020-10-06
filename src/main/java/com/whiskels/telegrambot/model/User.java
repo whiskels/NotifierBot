@@ -56,4 +56,13 @@ public class User extends AbstractBaseEntity {
         this.roles = roles;
         this.scheduleList = scheduleList;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "chatId=" + chatId +
+                ", name='" + name + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }
