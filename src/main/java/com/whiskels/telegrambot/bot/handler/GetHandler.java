@@ -31,10 +31,10 @@ import static com.whiskels.telegrambot.util.TelegramUtil.EMPTY_LINE;
 @Slf4j
 @BotCommand(command = "/GET", message = "Get customer overdue debts")
 public class GetHandler extends AbstractBaseHandler {
-    private final CustomerService customerService;
-
     @Value("${bot.server.hour.offset}")
     private int serverHourOffset;
+
+    private final CustomerService customerService;
 
     public GetHandler(CustomerService customerService) {
         this.customerService = customerService;
