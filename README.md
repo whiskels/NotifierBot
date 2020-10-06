@@ -18,10 +18,14 @@ Java 14, TelegramBots API, TelegramBotsExtensions, Spring Boot, Spring Data JPA,
 ___
 #### Features:
 - Bot is based on Long Polling Bot;
-- Authorization based on predefined green list of tokens stored in Postgres DB;
-- Bot admin is notified if unauthorized user tries to use bot;
+- Authentication is based on green list of tokens stored in Postgres DB;
+- Role-based authorization;
+- Bot admin is notified if user calls command he is unauthorized to use;
+- Help message is generated dynamically (based on user roles);
+- Unauthorized users can get their token;
+- Authorized users can get information about upcoming birthdays;
 - Authorized users can get information about customer debts based on their role (manager, head);
-- Information is cached and updated daily by deserialization from JSON;
+- Admins can get bot server time, notify all users, update users using chat commands;
 - Scheduling of individual notification time for each user;
 - Several levels of logging;
 - Bot is deployed to Heroku.
@@ -35,6 +39,10 @@ Message about successful initialization:
 Unauthorized user available commands:
 
 ![ScreenShot](https://raw.github.com/whiskels/TelegramNotifierBot/master/screenshots/user_unauthorized_commands.png)
+
+Authorized user (employee) available commands:
+
+![ScreenShot](https://raw.github.com/whiskels/TelegramNotifierBot/master/screenshots/user_employee_commands.png)
 
 Authorized user (manager, head) available commands:
 
