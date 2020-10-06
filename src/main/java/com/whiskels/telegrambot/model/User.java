@@ -46,6 +46,7 @@ public class User extends AbstractBaseEntity {
     public User(int chatId) {
         this.chatId = chatId;
         this.name = String.valueOf(chatId);
+        this.roles = Set.of(Role.UNAUTHORIZED);
     }
 
     public User(Integer id, @NotNull int chatId, @NotBlank String name, Set<Role> roles, List<Schedule> scheduleList) {
