@@ -59,7 +59,7 @@ public class AdminPromoteHandler extends AbstractUserHandler {
 
                 return List.of(
                         MessageBuilder.create(admin)
-                                .line("Updated user: ", toUpdate.toString())
+                                .line("Updated user: %s", toUpdate.toString())
                                 .build(),
                         MessageBuilder.create(toUpdate)
                                 .line("Your roles were updated: %s", userRoles.stream()
