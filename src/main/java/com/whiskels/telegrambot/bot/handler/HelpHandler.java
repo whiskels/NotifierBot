@@ -39,10 +39,11 @@ public class HelpHandler extends AbstractBaseHandler {
 
         // Dynamically creates buttons if handler has message and is available to user
         for (AbstractBaseHandler handler : handlers) {
-            String msg = handler.getClass().getAnnotation(BotCommand.class).message();
+            BotCommand command = handler.getClass().getAnnotation(BotCommand.class);
+            String msg = command.message();
             if (!msg.isEmpty() && authorizationService.authorize(handler.getClass(), user)) {
                 builder.row()
-                        .button(msg, handler.getClass().getAnnotation(BotCommand.class).command()[0]);
+                        .button(msg, command.command()[0]);
             }
         }
 
