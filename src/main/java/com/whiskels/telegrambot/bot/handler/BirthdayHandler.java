@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.whiskels.telegrambot.model.Role.*;
 import static com.whiskels.telegrambot.util.TelegramUtil.*;
@@ -48,39 +49,39 @@ public class BirthdayHandler extends AbstractBaseHandler {
         LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         MessageBuilder builder = MessageBuilder.create(user)
                 .line("*Birthdays*")
-                .line("*Today (%s)*:", DATE_FORMATTER.format(today));
-        String birthdayInfoToday = "";
-        try {
-            birthdayInfoToday = employeeService.getEmployeeList().stream()
-                    .filter(isBirthdayToday(today))
-                    .map(Employee::getName)
-                    .collect(Collectors.joining(", "));
-
-        } catch (Exception e) {
-            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
-        }
-
-        builder.line(birthdayInfoToday.isEmpty() ? "Nobody" : birthdayInfoToday)
+                .line("*Today (%s)*:", DATE_FORMATTER.format(today))
+                .line(getBirthdayStringByPredicate(isBirthdayToday(today), false))
                 .line()
-                .line("*Upcoming week:*");
-
-        String birthdayInfoUpcomingWeek = "";
-        try {
-            birthdayInfoUpcomingWeek = employeeService.getEmployeeList().stream()
-                    .sorted(Comparator.comparing(Employee::getBirthday))
-                    .filter(isBirthdayNextWeek(today))
-                    .map(employee -> String.format("%s (%s)",
-                            employee.getName(),
-                            BIRTHDAY_FORMATTER.format(toLocalDate(employee.getBirthday()))))
-                    .collect(Collectors.joining(", "));
-
-        } catch (Exception e) {
-            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
-        }
-
-        builder.line(birthdayInfoUpcomingWeek.isEmpty() ? "Nobody" : birthdayInfoUpcomingWeek);
+                .line("*Upcoming week:*")
+                .line(getBirthdayStringByPredicate(isBirthdayNextWeek(today), true));
 
         return List.of(builder.build());
+    }
+
+    private String getBirthdayStringByPredicate(Predicate<Employee> predicate, boolean withDate) {
+        String birthdayInfo = "";
+        try {
+            if (withDate) {
+                birthdayInfo = employeeStream(predicate)
+                        .map(employee -> String.format("%s (%s)",
+                                employee.getName(),
+                                BIRTHDAY_FORMATTER.format(toLocalDate(employee.getBirthday()))))
+                        .collect(Collectors.joining(", "));
+            } else {
+                birthdayInfo = employeeStream(predicate)
+                        .map(Employee::getName)
+                        .collect(Collectors.joining(", "));
+            }
+        } catch (Exception e) {
+            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
+        }
+        return birthdayInfo.isEmpty() ? "Nobody" : birthdayInfo;
+    }
+
+    private Stream<Employee> employeeStream(Predicate<Employee> predicate) {
+        return employeeService.getEmployeeList().stream()
+                .sorted(Comparator.comparing(Employee::getBirthday))
+                .filter(predicate);
     }
 
     private Predicate<Employee> isBirthdayToday(LocalDate today) {
