@@ -9,7 +9,9 @@ ___
 #### PLEASE NOTE THAT THIS PROJECT WON'T COMPILE
 Due to security restrictions this repository doesn't contain tokens.
 In order to run this bot:
-- application.yaml - add bot name, token and admin chat token, add JSON url.
+ - add bot token and name to application.yaml (required minimum to compile the project and run bot);
+ - add bot admin token to application.yaml (to get start up report and receive unauthorized messages);
+ - make changes to services that use JSON data as those defined in this project are built in order to work with API given by the customer.
 
 ___
 ### Technology stack: 
