@@ -37,10 +37,10 @@ public class JSONReader {
         try (InputStream is = new URL(url).openStream();
                 BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             value = readAll(rd);
-            return new JSONObject(value);
+            return value.startsWith("[") ? new JSONArray(value) : new JSONObject(value);
         } catch (IOException | JSONException e) {
             log.error("Exception while trying to get JSON data from URL - {}", e.getMessage());
-            return new JSONArray(value);
+            return null;
         }
     }
 }
