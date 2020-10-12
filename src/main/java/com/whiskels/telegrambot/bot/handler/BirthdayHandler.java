@@ -85,15 +85,19 @@ public class BirthdayHandler extends AbstractBaseHandler {
     }
 
     private Predicate<Employee> isBirthdayToday(LocalDate today) {
-        return employee -> toLocalDate(employee.getBirthday()).equals(today);
+        return employee -> daysBetweenBirthdayAndToday(employee, today) == 0;
     }
 
     private Predicate<Employee> isBirthdayNextWeek(LocalDate today) {
         return employee -> {
-            long daysUntilBirthday = ChronoUnit.DAYS.between(
-                    today.atStartOfDay(),
-                    toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
+            long daysUntilBirthday = daysBetweenBirthdayAndToday(employee, today);
             return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
         };
+    }
+
+    private long daysBetweenBirthdayAndToday(Employee employee, LocalDate today) {
+        return ChronoUnit.DAYS.between(
+                today.atStartOfDay(),
+                toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 }
