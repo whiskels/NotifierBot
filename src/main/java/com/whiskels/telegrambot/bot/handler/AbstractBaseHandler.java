@@ -33,13 +33,12 @@ public abstract class AbstractBaseHandler {
         log.info("Unauthorized access: {} {}", user, message);
         String userChatId = String.valueOf(user.getChatId());
         return List.of(MessageBuilder.create(userChatId)
-                        .line("Your token is *%s*")
-                        .line("Please contact your supervisor to gain access",
-                                userChatId)
+                        .line("Your token is *%s*", userChatId)
+                        .line("Please contact your supervisor to gain access")
                         .build(),
                 MessageBuilder.create(botAdmin)
-                        .line("Unauthorized access *%s")
-                        .line(message)
+                        .line("*Unauthorized access:* %s", userChatId)
+                        .line("*Message:* %s", message.replaceAll("_","-"))
                         .build());
     }
 }
