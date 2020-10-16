@@ -1,5 +1,6 @@
 package com.whiskels.telegrambot.bot;
 
+import com.whiskels.telegrambot.annotations.BotCommand;
 import com.whiskels.telegrambot.bot.handler.AbstractBaseHandler;
 import com.whiskels.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;

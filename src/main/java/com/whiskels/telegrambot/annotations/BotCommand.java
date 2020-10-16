@@ -1,4 +1,4 @@
-package com.whiskels.telegrambot.bot;
+package com.whiskels.telegrambot.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -10,5 +10,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 public @interface BotCommand {
     String[] command();
+
     String message() default "";
 }

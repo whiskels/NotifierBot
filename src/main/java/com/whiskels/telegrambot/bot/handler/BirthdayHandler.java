@@ -1,10 +1,11 @@
 package com.whiskels.telegrambot.bot.handler;
 
-import com.whiskels.telegrambot.bot.BotCommand;
+import com.whiskels.telegrambot.annotations.BotCommand;
+import com.whiskels.telegrambot.annotations.Schedulable;
 import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.Employee;
 import com.whiskels.telegrambot.model.User;
-import com.whiskels.telegrambot.security.RequiredRoles;
+import com.whiskels.telegrambot.annotations.RequiredRoles;
 import com.whiskels.telegrambot.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.*;
 @Component
 @Slf4j
 @BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
+@Schedulable(roles = HR)
 public class BirthdayHandler extends AbstractBaseHandler {
     @Value("${bot.server.hour.offset}")
     private int serverHourOffset;

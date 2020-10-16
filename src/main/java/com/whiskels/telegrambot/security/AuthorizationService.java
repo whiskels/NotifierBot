@@ -1,5 +1,6 @@
 package com.whiskels.telegrambot.security;
 
+import com.whiskels.telegrambot.annotations.RequiredRoles;
 import com.whiskels.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

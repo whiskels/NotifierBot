@@ -1,10 +1,10 @@
 package com.whiskels.telegrambot.bot.handler;
 
-import com.whiskels.telegrambot.bot.BotCommand;
+import com.whiskels.telegrambot.annotations.BotCommand;
 import com.whiskels.telegrambot.bot.builder.MessageBuilder;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
-import com.whiskels.telegrambot.security.RequiredRoles;
+import com.whiskels.telegrambot.annotations.RequiredRoles;
 import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

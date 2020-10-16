@@ -1,4 +1,4 @@
-package com.whiskels.telegrambot.security;
+package com.whiskels.telegrambot.annotations;
 
 import com.whiskels.telegrambot.model.Role;
 
