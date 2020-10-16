@@ -22,7 +22,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.extractArguments;
 /**
  * Adds schedule to the user and shows current schedule times
  * <p>
- * Available to: Manager, Head, Admin
+ * Available to: HR, Manager, Head, Admin
  */
 @Component
 @Slf4j
@@ -34,7 +34,7 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN, HR})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         if (!message.contains(" ")) {
             log.debug("Preparing /SCHEDULE (no args)");

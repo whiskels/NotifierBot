@@ -1,5 +1,6 @@
 package com.whiskels.telegrambot.bot;
 
+import com.whiskels.telegrambot.bot.handler.BirthdayHandler;
 import com.whiskels.telegrambot.bot.handler.GetHandler;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
@@ -19,6 +20,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.whiskels.telegrambot.model.Role.HR;
 
 /**
  * Main bot class
@@ -46,11 +49,13 @@ public class Bot extends TelegramLongPollingBot {
     private final UpdateReceiver updateReceiver;
     private final ScheduleService scheduleService;
     private final GetHandler getHandler;
+    private final BirthdayHandler birthdayHandler;
 
-    public Bot(UpdateReceiver updateReceiver, ScheduleService scheduleService, GetHandler getHandler) {
+    public Bot(UpdateReceiver updateReceiver, ScheduleService scheduleService, GetHandler getHandler, BirthdayHandler birthdayHandler) {
         this.updateReceiver = updateReceiver;
         this.scheduleService = scheduleService;
         this.getHandler = getHandler;
+        this.birthdayHandler = birthdayHandler;
     }
 
     /**
@@ -111,11 +116,17 @@ public class Bot extends TelegramLongPollingBot {
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 User user = schedule.getUser();
-                getHandler.handle(user, null).forEach(
-                        m -> executeWithExceptionCheck((SendMessage) m));
-
-                log.debug("Scheduled message for {} sent at {}:{}",
-                        user.getChatId(), ldt.getHour(), ldt.getMinute());
+                List<BotApiMethod<Message>> messagesToSend;
+                if (user.getRoles().contains(HR)) {
+                    messagesToSend = birthdayHandler.handle(user, null);
+                } else {
+                    messagesToSend = getHandler.handle(user, null);
+                }
+                if (!messagesToSend.isEmpty()) {
+                    messagesToSend.forEach(m -> executeWithExceptionCheck((SendMessage) m));
+                    log.debug("Scheduled message for {} sent at {}:{}",
+                            user.getChatId(), ldt.getHour(), ldt.getMinute());
+                }
             });
         }
     }

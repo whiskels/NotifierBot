@@ -27,7 +27,7 @@ import static com.whiskels.telegrambot.util.TelegramUtil.*;
 /**
  * Shows upcoming birthdays to employees
  * <p>
- * Available to: Employee, Manager, Head, Admin
+ * Available to: Employee, HR, Manager, Head, Admin
  */
 @Component
 @Slf4j
@@ -43,7 +43,7 @@ public class BirthdayHandler extends AbstractBaseHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {EMPLOYEE, MANAGER, HEAD, ADMIN})
+    @RequiredRoles(roles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /BIRTHDAY");
         LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();

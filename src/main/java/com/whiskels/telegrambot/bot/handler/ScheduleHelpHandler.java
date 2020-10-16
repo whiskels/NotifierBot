@@ -16,7 +16,7 @@ import static com.whiskels.telegrambot.model.Role.*;
 /**
  * Shows help message for {@link ScheduleAddHandler} supported syntax
  * <p>
- * Available to: Manager, Head, Admin
+ * Available to: Manager, Head, Admin, HR
  */
 @Component
 @Slf4j
@@ -24,7 +24,7 @@ import static com.whiskels.telegrambot.model.Role.*;
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
+    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN, HR})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_HELP");
         return List.of(MessageBuilder.create(user)
