@@ -28,7 +28,7 @@ public class ScheduleClearHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
+    @RequiredRoles(roles = {HR, MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_CLEAR");
         final int count = scheduleService.clear(user.getId());
