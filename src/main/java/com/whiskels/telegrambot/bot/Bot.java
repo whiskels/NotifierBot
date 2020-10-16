@@ -1,14 +1,8 @@
 package com.whiskels.telegrambot.bot;
 
-import com.whiskels.telegrambot.bot.handler.BirthdayHandler;
-import com.whiskels.telegrambot.bot.handler.GetHandler;
-import com.whiskels.telegrambot.model.Schedule;
-import com.whiskels.telegrambot.model.User;
-import com.whiskels.telegrambot.service.ScheduleService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -18,10 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.whiskels.telegrambot.model.Role.HR;
 
 /**
  * Main bot class
@@ -29,7 +20,6 @@ import static com.whiskels.telegrambot.model.Role.HR;
  * @author whiskels
  */
 @Component
-
 @Slf4j
 public class Bot extends TelegramLongPollingBot {
     @Value("${bot.name}")
@@ -43,19 +33,10 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${bot.admin}")
     private String botAdmin;
 
-    @Value("${bot.server.hour.offset}")
-    private int serverHourOffset;
-
     private final UpdateReceiver updateReceiver;
-    private final ScheduleService scheduleService;
-    private final GetHandler getHandler;
-    private final BirthdayHandler birthdayHandler;
 
-    public Bot(UpdateReceiver updateReceiver, ScheduleService scheduleService, GetHandler getHandler, BirthdayHandler birthdayHandler) {
+    public Bot(UpdateReceiver updateReceiver) {
         this.updateReceiver = updateReceiver;
-        this.scheduleService = scheduleService;
-        this.getHandler = getHandler;
-        this.birthdayHandler = birthdayHandler;
     }
 
     /**
@@ -106,28 +87,5 @@ public class Bot extends TelegramLongPollingBot {
                 .setChatId(botAdmin)
                 .setText("Bot start up is successful"));
         log.debug("Start report sent to Admin");
-    }
-
-    @Scheduled(cron = "${bot.cron}")
-    private void processScheduledTasks() {
-        final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
-        log.debug("Checking for scheduled messages: {}", ldt);
-        List<Schedule> scheduledUsers = scheduleService.isAnyScheduled(ldt.toLocalTime());
-        if (!scheduledUsers.isEmpty()) {
-            scheduledUsers.forEach(schedule -> {
-                User user = schedule.getUser();
-                List<BotApiMethod<Message>> messagesToSend;
-                if (user.getRoles().contains(HR)) {
-                    messagesToSend = birthdayHandler.handle(user, null);
-                } else {
-                    messagesToSend = getHandler.handle(user, null);
-                }
-                if (!messagesToSend.isEmpty()) {
-                    messagesToSend.forEach(m -> executeWithExceptionCheck((SendMessage) m));
-                    log.debug("Scheduled message for {} sent at {}:{}",
-                            user.getChatId(), ldt.getHour(), ldt.getMinute());
-                }
-            });
-        }
     }
 }
