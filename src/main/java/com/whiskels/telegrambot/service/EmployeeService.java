@@ -3,6 +3,7 @@ package com.whiskels.telegrambot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.telegrambot.model.Employee;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmployeeService {
 
     @Value("${json.employee.url}")
@@ -26,10 +28,6 @@ public class EmployeeService {
     private List<Employee> employeeList;
 
     private final JSONReader jsonReader;
-
-    public EmployeeService(JSONReader jsonReader) {
-        this.jsonReader = jsonReader;
-    }
 
     @PostConstruct
     private void initEmployeeList() {

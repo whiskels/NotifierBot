@@ -3,6 +3,7 @@ package com.whiskels.telegrambot.service;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.repository.JpaScheduleRepository;
 import com.whiskels.telegrambot.repository.JpaUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,14 +11,10 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
-    private JpaScheduleRepository scheduleRepository;
-    private JpaUserRepository userRepository;
-
-    public ScheduleService(JpaScheduleRepository scheduleRepository, JpaUserRepository userRepository) {
-        this.scheduleRepository = scheduleRepository;
-        this.userRepository = userRepository;
-    }
+    private final JpaScheduleRepository scheduleRepository;
+    private final JpaUserRepository userRepository;
 
     public List<Schedule> isAnyScheduled(LocalTime ldt) {
         return scheduleRepository.getAllByHourAndMinute(ldt.getHour(), ldt.getMinute());

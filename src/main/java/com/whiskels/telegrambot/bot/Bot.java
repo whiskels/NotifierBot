@@ -1,6 +1,7 @@
 package com.whiskels.telegrambot.bot;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
     @Value("${bot.name}")
     @Getter
@@ -34,10 +36,6 @@ public class Bot extends TelegramLongPollingBot {
     private String botAdmin;
 
     private final UpdateReceiver updateReceiver;
-
-    public Bot(UpdateReceiver updateReceiver) {
-        this.updateReceiver = updateReceiver;
-    }
 
     /**
      * After initialization actions:

@@ -2,18 +2,16 @@ package com.whiskels.telegrambot.service;
 
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.repository.JpaUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final JpaUserRepository userRepository;
-
-    public UserService(JpaUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public User getOrCreate(int chatId) {
         return get(chatId)

@@ -3,6 +3,7 @@ package com.whiskels.telegrambot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.telegrambot.model.Customer;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomerService {
     @Value("${json.customer.url}")
     private String customerUrl;
@@ -28,10 +30,6 @@ public class CustomerService {
     private List<Customer> customerList;
 
     private final JSONReader jsonReader;
-
-    public CustomerService(JSONReader jsonReader) {
-        this.jsonReader = jsonReader;
-    }
 
     @PostConstruct
     private void initCustomerList() {

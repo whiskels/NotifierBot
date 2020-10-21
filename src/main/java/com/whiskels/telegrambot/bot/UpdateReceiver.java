@@ -3,6 +3,7 @@ package com.whiskels.telegrambot.bot;
 import com.whiskels.telegrambot.annotations.BotCommand;
 import com.whiskels.telegrambot.bot.handler.AbstractBaseHandler;
 import com.whiskels.telegrambot.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -22,14 +23,10 @@ import static com.whiskels.telegrambot.util.TelegramUtil.extractCommand;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class UpdateReceiver {
     private final List<AbstractBaseHandler> handlers;
     private final UserService userService;
-
-    public UpdateReceiver(List<AbstractBaseHandler> handlers, UserService userService) {
-        this.handlers = handlers;
-        this.userService = userService;
-    }
 
     /**
      * Analyzes received update and chooses correct handler if possible

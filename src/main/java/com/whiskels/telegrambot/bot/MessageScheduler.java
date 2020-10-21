@@ -6,6 +6,7 @@ import com.whiskels.telegrambot.model.Role;
 import com.whiskels.telegrambot.model.Schedule;
 import com.whiskels.telegrambot.model.User;
 import com.whiskels.telegrambot.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class MessageScheduler {
     @Value("${bot.server.hour.offset}")
     private int serverHourOffset;
@@ -26,12 +28,6 @@ public class MessageScheduler {
     private final Bot bot;
     private final ScheduleService scheduleService;
     private final List<AbstractBaseHandler> handlers;
-
-    public MessageScheduler(Bot bot, ScheduleService scheduleService, List<AbstractBaseHandler> handlers) {
-        this.bot = bot;
-        this.scheduleService = scheduleService;
-        this.handlers = handlers;
-    }
 
     @Scheduled(cron = "${bot.cron}")
     private void processScheduledTasks() {
