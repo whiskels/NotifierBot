@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: war
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -17,10 +17,10 @@ bot:
   cron: 0 * * * * MON-FRI
 json:
   customer:
-    url:
+    url: ${CUSTOMER_URL}
     cron: 0 30 8 * * MON-FRI
   employee:
-    url:
+    url: ${EMPLOYEE_URL}
     cron: 0 30 3 * * MON-FRI
 logging:
   level:
@@ -44,5 +44,5 @@ spring:
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
 bot:
-  name:
-  token:
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
