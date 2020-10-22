@@ -58,8 +58,8 @@ public class EmployeeService {
 
                 Employee employee = new ObjectMapper().readValue(reader, Employee.class);
 
-                if (!employee.getStatusSystem().equalsIgnoreCase(Employee.STATUS_SYSTEM_FIRED) &&
-                        !employee.getStatus().equalsIgnoreCase(Employee.STATUS_DECREE)) {
+                if (employee.getStatusSystem() != null && !employee.getStatusSystem().equalsIgnoreCase(Employee.STATUS_SYSTEM_FIRED) &&
+                        employee.getStatus() != null && !employee.getStatus().equalsIgnoreCase(Employee.STATUS_DECREE)) {
                     log.debug(employee.toString());
 
 
