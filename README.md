@@ -1,7 +1,7 @@
 ### Telegram Notifier Bot
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/31c586b264204eef98c12a700563b089)](https://www.codacy.com/manual/whiskels/TelegramNotifierBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fwhiskels%2FTelegramNotifierBot&count_bg=%2379C83D&title_bg=%23555555&icon=telegram.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-[![Known Vulnerabilities](https://snyk.io/test/github/{username}/{repo}/badge.svg)](https://snyk.io/test/github/whiskels/telegramnotifierbot)
+[![Known Vulnerabilities](https://snyk.io/test/github/whiskels/telegramnotifierbot/badge.svg)](https://snyk.io/test/github/whiskels/telegramnotifierbot)
 ___
 Bot is used by account managers and their heads in order to get information about overdue debts daily.
 Designed for internal use inside company.
