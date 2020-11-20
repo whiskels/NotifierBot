@@ -23,6 +23,7 @@ public class Customer {
     @JsonProperty("wop")
     private String wayOfPayment;
     @JsonProperty("account_manager")
+    @Getter
     private String accountManager;
     @JsonProperty("currency")
     private String currency;
@@ -62,10 +63,6 @@ public class Customer {
         if (Double.isNaN(totalDebtRouble)) {
             totalDebtRouble = totalDebt;
         }
-    }
-
-    public String getAccountManager() {
-        return accountManager;
     }
 
     /*
