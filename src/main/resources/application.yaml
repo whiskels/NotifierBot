@@ -19,7 +19,11 @@ telegram:
     cron: 0 0 9 * * MON-FRI
 slack:
   customer:
-    cron: 0 * * * * MON-FRI
+    cron: 0 0 9 * * MON-FRI
+  employee:
+    birthday:
+      dailyCron: 0 0 9 * * MON-FRI
+      monthlyCron: 0 0 9 1 * ?
 json:
   customer:
     url: ${CUSTOMER_URL}
@@ -49,6 +53,9 @@ telegram:
 slack:
   customer:
     webhook:
+  employee:
+    birthday:
+      webhook:
 ---
 spring:
   profiles: war
@@ -63,3 +70,6 @@ telegram:
 slack:
   customer:
     webhook: ${CUSTOMER_SLACK_WEBHOOK}
+  employee:
+    birthday:
+      webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}
