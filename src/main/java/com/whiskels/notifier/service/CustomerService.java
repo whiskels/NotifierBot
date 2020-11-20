@@ -30,10 +30,7 @@ import static com.whiskels.notifier.util.TelegramUtil.EMPTY_LINE;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerService {
-    @Value("${heroku.server.hour.offset}")
-    private int serverHourOffset;
-
+public class CustomerService extends AbstractJSONService {
     @Value("${json.customer.url}")
     private String customerUrl;
 
