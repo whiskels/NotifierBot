@@ -1,11 +1,11 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.User;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.service.UserService;
+import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.annotations.RequiredRoles;
+import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

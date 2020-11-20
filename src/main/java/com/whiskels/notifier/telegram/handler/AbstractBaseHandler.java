@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.model.User;
+import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

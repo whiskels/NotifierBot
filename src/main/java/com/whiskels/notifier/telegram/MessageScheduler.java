@@ -1,11 +1,11 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.telegram.annotations.Schedulable;
-import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.Schedule;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.ScheduleService;
+import com.whiskels.notifier.telegram.annotations.Schedulable;
+import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

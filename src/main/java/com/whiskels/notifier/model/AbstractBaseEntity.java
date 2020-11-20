@@ -2,9 +2,8 @@ package com.whiskels.notifier.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.util.Assert;
-
 import org.hibernate.Hibernate;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 

@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram;
 
+import com.whiskels.notifier.service.UserService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
-import com.whiskels.notifier.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

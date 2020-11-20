@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.security;
 
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.model.User;
+import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
