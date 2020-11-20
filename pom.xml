@@ -15,13 +15,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.22</telegrambots-spring.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.18.Final</hibernate.version>
+        <hibernate.version>5.4.22.Final</hibernate.version>
 
         <!--    Tests  -->
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
@@ -29,7 +29,7 @@
         <mockito.version>3.5.11</mockito.version>
 
         <!--DB-->
-        <postgresql.version>42.2.14</postgresql.version>
+        <postgresql.version>42.2.18.jre7</postgresql.version>
     </properties>
 
     <build>
