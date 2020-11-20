@@ -10,7 +10,7 @@ import static com.slack.api.webhook.WebhookPayloads.payload;
 
 @Slf4j
 public abstract class AbstractSlackHandler {
-    public void createAndSendPayload(String webHook, String message) {
+    protected void createAndSendPayload(String webHook, String message) {
         try {
             final Slack slack = Slack.getInstance();
             WebhookResponse response = slack.send(webHook, payload(p -> p.text(message)));

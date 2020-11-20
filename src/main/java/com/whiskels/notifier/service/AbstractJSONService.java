@@ -6,5 +6,5 @@ public abstract class AbstractJSONService {
     @Value("${heroku.server.hour.offset}")
     protected int serverHourOffset;
 
-    abstract void update();
+    protected abstract void update();
 }
