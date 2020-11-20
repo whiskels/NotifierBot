@@ -9,7 +9,7 @@ import java.io.IOException;
 import static com.slack.api.webhook.WebhookPayloads.payload;
 
 @Slf4j
-public abstract class AbstractSlackHandler {
+public abstract class AbstractSlackWebHookHandler {
     protected void createAndSendPayload(String webHook, String message) {
         try {
             final Slack slack = Slack.getInstance();
