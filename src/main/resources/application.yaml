@@ -22,6 +22,10 @@ json:
   employee:
     url: ${EMPLOYEE_URL}
     cron: 0 30 3 * * MON-FRI
+moex:
+  url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates
+  usd: CBRF_USD_LAST (double)
+  eur: CBRF_EUR_LAST (double)
 logging:
   level:
     com.whiskels.telegrambot: info

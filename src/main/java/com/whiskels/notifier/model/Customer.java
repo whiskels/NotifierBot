@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -38,13 +40,28 @@ public class Customer {
     private double delay0;
     @JsonProperty("debtor_delay_current")
     private String debtorDelayCurrent;
+
+    @Getter
     private double totalDebt;
+
+    @Getter
+    private double totalDebtRouble = Double.NaN;
 
     /*
      * Calculates overall customer debt with delay more than 0 days
      */
-    public void calculateOverallDebt() {
+    public void calculateOverallDebt(double usdRate, double eurRate) {
         totalDebt = delay0 + delay30 + delay60 + delay90 + delay180;
+        if (!StringUtils.isEmpty(currency)) {
+            if (currency.equalsIgnoreCase("USD")) {
+                totalDebtRouble = totalDebt * usdRate;
+            } else if (currency.equalsIgnoreCase("EUR")) {
+                totalDebtRouble = totalDebt * eurRate;
+            }
+        }
+        if (Double.isNaN(totalDebtRouble)) {
+            totalDebtRouble = totalDebt;
+        }
     }
 
     public double getOverallDebt() {
