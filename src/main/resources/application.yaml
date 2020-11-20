@@ -16,10 +16,9 @@ heroku:
 telegram:
   bot:
     admin: 87971601
-    cron: 0 * * * * MON-FRI
+    cron: 0 0 9 * * MON-FRI
 slack:
   customer:
-    webhook: ${CUSTOMER_SLACK_WEBHOOK}
     cron: 0 * * * * MON-FRI
 json:
   customer:
@@ -47,6 +46,9 @@ telegram:
   bot:
     name: TelegramNotifierBot
     token:
+slack:
+  customer:
+    webhook:
 ---
 spring:
   profiles: war
@@ -58,3 +60,6 @@ telegram:
   bot:
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}
+slack:
+  customer:
+    webhook: ${CUSTOMER_SLACK_WEBHOOK}
