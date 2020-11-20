@@ -129,11 +129,11 @@ public class EmployeeService extends AbstractJSONService {
     public String getDailyBirthdayInfo() {
         final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         final StringBuilder sb = new StringBuilder();
-        sb.append("*Birthdays*%n*" + "Today (")
+        sb.append("*Birthdays*\n*" + "Today (")
                 .append(DATE_FORMATTER.format(today))
-                .append(")*:%n")
+                .append(")*:\n")
                 .append(getDailyBirthdayInfo(isBirthday(today), false))
-                .append("%n*Upcoming week:*%n")
+                .append("\n*Upcoming week:*\n")
                 .append(getDailyBirthdayInfo(isBirthdayNextWeek(today), true));
 
         return sb.toString();
