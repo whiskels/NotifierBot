@@ -2,7 +2,6 @@ package com.whiskels.notifier.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.notifier.model.Customer;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -17,16 +16,24 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.whiskels.notifier.util.TelegramUtil.DATE_YEAR_FORMATTER;
+import static com.whiskels.notifier.util.TelegramUtil.EMPTY_LINE;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CustomerService {
+    @Value("${heroku.server.hour.offset}")
+    private int serverHourOffset;
+
     @Value("${json.customer.url}")
     private String customerUrl;
 
@@ -42,7 +49,6 @@ public class CustomerService {
     private double usdRate;
     private double eurRate;
 
-    @Getter
     private List<Customer> customerList;
 
     private final JSONReader jsonReader;
@@ -125,4 +131,30 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
+    public String createCustomerDebtMessage(Predicate<Customer> predicate) {
+        log.debug("Preparing customer debts message for Slack");
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Overdue debts on %s%n",
+                DATE_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset))));
+        String customerInfo = "";
+        try {
+            customerInfo = customerList.stream()
+                    .filter(predicate)
+                    .map(Customer::toString)
+                    .collect(Collectors.joining(String.format(
+                            "%n%s%n", EMPTY_LINE)));
+
+        } catch (Exception e) {
+            log.error("Exception while creating message GET: {}", e.getMessage());
+        }
+
+        sb.append(customerInfo.isEmpty() ? "No overdue debts" : customerInfo);
+
+        return sb.toString();
+    }
+
+    public static Predicate<Customer> alwaysTruePredicate() {
+        return customer -> true;
+    }
 }

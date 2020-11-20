@@ -24,15 +24,15 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name}")
+    @Value("${telegram.bot.name}")
     @Getter
     private String botUsername;
 
-    @Value("${bot.token}")
+    @Value("${telegram.bot.token}")
     @Getter
     private String botToken;
 
-    @Value("${bot.admin}")
+    @Value("${telegram.bot.admin}")
     private String botAdmin;
 
     private final UpdateReceiver updateReceiver;

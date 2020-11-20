@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Slf4j
 public abstract class AbstractBaseHandler {
-    @Value("${bot.admin}")
+    @Value("${telegram.bot.admin}")
     protected String botAdmin;
 
     @Autowired

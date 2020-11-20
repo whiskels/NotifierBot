@@ -35,7 +35,7 @@ import static com.whiskels.notifier.util.TelegramUtil.*;
 @BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
 @Schedulable(roles = HR)
 public class BirthdayHandler extends AbstractBaseHandler {
-    @Value("${bot.server.hour.offset}")
+    @Value("${heroku.server.hour.offset}")
     private int serverHourOffset;
 
     private final EmployeeService employeeService;

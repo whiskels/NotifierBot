@@ -9,12 +9,18 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-bot:
-  admin: 87971601
+heroku:
   server:
     hour:
       offset: 3
-  cron: 0 * * * * MON-FRI
+telegram:
+  bot:
+    admin: 87971601
+    cron: 0 * * * * MON-FRI
+slack:
+  customer:
+    webhook: ${CUSTOMER_SLACK_WEBHOOK}
+    cron: 0 * * * * MON-FRI
 json:
   customer:
     url: ${CUSTOMER_URL}
@@ -33,13 +39,14 @@ logging:
 spring:
   profiles: test
   datasource:
-#           Test database
+    #           Test database
     url: jdbc:postgresql://localhost:5432/telegram_bot_test
     username: user
     password: password
-bot:
-  name: TelegramNotifierBot
-  token:
+telegram:
+  bot:
+    name: TelegramNotifierBot
+    token:
 ---
 spring:
   profiles: war
@@ -47,6 +54,7 @@ spring:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
-bot:
-  name: ${BOT_NAME}
-  token: ${BOT_TOKEN}
+telegram:
+  bot:
+    name: ${BOT_NAME}
+    token: ${BOT_TOKEN}

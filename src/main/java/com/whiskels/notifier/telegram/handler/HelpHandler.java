@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
 public class HelpHandler extends AbstractBaseHandler {
-    @Value("${bot.name}")
+    @Value("${telegram.bot.name}")
     private String botUsername;
 
     private final List<AbstractBaseHandler> handlers;

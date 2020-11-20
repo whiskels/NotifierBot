@@ -64,10 +64,6 @@ public class Customer {
         }
     }
 
-    public double getOverallDebt() {
-        return totalDebt;
-    }
-
     public String getAccountManager() {
         return accountManager;
     }

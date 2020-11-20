@@ -22,14 +22,14 @@ import java.util.stream.Stream;
 @Slf4j
 @RequiredArgsConstructor
 public class MessageScheduler {
-    @Value("${bot.server.hour.offset}")
+    @Value("${heroku.server.hour.offset}")
     private int serverHourOffset;
 
     private final Bot bot;
     private final ScheduleService scheduleService;
     private final List<AbstractBaseHandler> handlers;
 
-    @Scheduled(cron = "${bot.cron}")
+    @Scheduled(cron = "${telegram.bot.cron}")
     private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
         log.debug("Checking for scheduled messages: {}", ldt);

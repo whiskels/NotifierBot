@@ -24,7 +24,7 @@ import static com.whiskels.notifier.model.Role.ADMIN;
 @Slf4j
 @BotCommand(command = "/ADMIN_TIME", message = "Show bot server time")
 public class AdminTimeHandler extends AbstractBaseHandler {
-    @Value("${bot.server.hour.offset}")
+    @Value("${heroku.server.hour.offset}")
     private int serverHourOffset;
 
     @Override
