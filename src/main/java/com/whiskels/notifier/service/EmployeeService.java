@@ -79,7 +79,7 @@ public class EmployeeService extends AbstractJSONService {
         }
     }
 
-    private String getBirthdayString(Predicate<Employee> predicate, boolean withDate) {
+    private String getDailyBirthdayInfo(Predicate<Employee> predicate, boolean withDate) {
         String birthdayInfo = "";
         try {
             if (withDate) {
@@ -116,17 +116,27 @@ public class EmployeeService extends AbstractJSONService {
         };
     }
 
+    private Predicate<Employee> isBirthdayThisMonth(LocalDate today) {
+        return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
+    }
+
     private long daysBetweenBirthdayAndToday(Employee employee, LocalDate today) {
         return ChronoUnit.DAYS.between(
                 today.atStartOfDay(),
                 toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 
-    public String getBirthdayString() {
+    public String getDailyBirthdayInfo() {
         final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         return String.format("*Birthdays*%n*Today (%s)*:%n%s%n%*Upcoming week:*%n%s",
                 DATE_FORMATTER.format(today),
-                getBirthdayString(isBirthday(today), false),
-                getBirthdayString(isBirthdayNextWeek(today), true));
+                getDailyBirthdayInfo(isBirthday(today), false),
+                getDailyBirthdayInfo(isBirthdayNextWeek(today), true));
+    }
+
+    public String getMonthlyBirthdayInfo() {
+        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
+        return String.format("*Birthdays this month*%n%s",
+                getDailyBirthdayInfo(isBirthdayThisMonth(today), false));
     }
 }
