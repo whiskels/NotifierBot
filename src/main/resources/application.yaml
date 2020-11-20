@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: war
+    active: telegram, slack
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -58,7 +58,7 @@ slack:
       webhook:
 ---
 spring:
-  profiles: war
+  profiles: telegram
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
@@ -67,6 +67,9 @@ telegram:
   bot:
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}
+---
+spring:
+  profiles: slack
 slack:
   customer:
     webhook: ${CUSTOMER_SLACK_WEBHOOK}
