@@ -62,7 +62,7 @@
                     <appName>telegramnotifierbot</appName>
                     <processTypes>
                         <worker>
-                            java $JAVA_OPTS -cp target/classes:target/dependency/* com.whiskels.telegrambot.App
+                            java $JAVA_OPTS -cp target/classes:target/dependency/* com.whiskels.notifier.App
                         </worker>
                     </processTypes>
                 </configuration>
