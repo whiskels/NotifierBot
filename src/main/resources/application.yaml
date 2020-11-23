@@ -1,13 +1,5 @@
 spring:
-  profiles.active: war
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    initialization-mode: never
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+  profiles.active: test
 heroku.server.hour.offset: 3
 telegram:
   bot:
@@ -22,18 +14,15 @@ slack:
       monthlyCron: 0 0 9 1 * ?
 json:
   customer:
-    url: ${CUSTOMER_URL}
+    url:
     cron: 0 30 8 * * MON-FRI
   employee:
-    url: ${EMPLOYEE_URL}
+    url:
     cron: 0 30 3 * * MON-FRI
 moex:
   url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates
   usd: CBRF_USD_LAST (double)
   eur: CBRF_EUR_LAST (double)
-logging:
-  level:
-    com.whiskels.telegrambot: info
 ---
 # War includes telegram bot and slack webhook notifications
 spring:
@@ -46,6 +35,7 @@ spring:
 ---
 spring:
   profiles: telegram
+  profiles.include: telegram-db
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
@@ -63,6 +53,7 @@ slack:
 ---
 spring:
   profiles: telegram-test
+  profiles.include: telegram-db
   datasource:
     # Test database
     url: jdbc:postgresql://localhost:5432/telegram_bot_test
@@ -78,3 +69,21 @@ spring:
 slack:
   customer.webhook:
   employee.birthday.webhook:
+---
+spring:
+  profiles: telegram-db
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: never
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+---
+spring:
+  profiles: no-db
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
