@@ -37,7 +37,7 @@ public class MessageScheduler {
     /**
      * Checks if there is any job scheduled and processes it
      */
-    @Scheduled(cron = "${telegram.bot.cron}")
+    @Scheduled(cron = "${telegram.bot.schedule.cron}")
     private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
         log.debug("Checking for scheduled messages: {}", ldt);

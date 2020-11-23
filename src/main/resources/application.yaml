@@ -1,56 +1,88 @@
 spring:
-  profiles.active: test
+  # Available profiles: war, test, telegram, telegram-test, [slack, no-db], [slack-test, no-db]
+  # The last two slack-only profiles need to include no-db profile in order to start
+  # as no-db profile turns off automatic configuration of datasource
+  profiles.active: war
+# Offset of Heroku European server from Moscow
 heroku.server.hour.offset: 3
 telegram:
   bot:
+    # Telegram chat ID of bot admin
     admin: 87971601
-    cron: 0 0 9 * * MON-FRI
+    # Workdays every minute cron - check for scheduled messages
+    schedule.cron: 0 * * * * MON-FRI
 slack:
   customer:
+    # Workdays at 10:00 - send customer info to slack
+    # Cron time is based on environment time, so for Moscow time it is Moscow time - server offset time
+    # eg. 10:00 cron with server offset of 3 is 13:00 Moscow time
     cron: 0 0 10 * * MON-FRI
   employee:
     birthday:
+      # Workdays at 9:00 - send daily birthday info to slack
       dailyCron: 0 0 9 * * MON-FRI
+      # Every 1st of new month at 9:00 - send monthly birthday info to slack
       monthlyCron: 0 0 9 1 * ?
 json:
   customer:
-    url:
+    # URL to customer debt JSON
+    url: ${CUSTOMER_URL}
+    # Workdays at 8:30 - update
     cron: 0 30 8 * * MON-FRI
   employee:
-    url:
+    # URL to employee data
+    url: ${EMPLOYEE_URL}
+    # Workdays at 3:30 - update
     cron: 0 30 3 * * MON-FRI
 moex:
+  # MOEX RUB/USD and RUB/EUR exchange data
   url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates
   usd: CBRF_USD_LAST (double)
   eur: CBRF_EUR_LAST (double)
 ---
-# War includes telegram bot and slack webhook notifications
+# PROFILES SECTION
+# War profile
+# Includes: telegram, slack
 spring:
   profiles: war
   profiles.include: telegram, slack
 ---
+# Test profile
+# Includes: telegram-test, slack-test
 spring:
   profiles: test
   profiles.include: telegram-test, slack-test
 ---
+# Telegram war profile
+# Includes: telegram bot database
+# Included in: war
 spring:
   profiles: telegram
   profiles.include: telegram-db
   datasource:
+    # Database credentials
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
 telegram:
   bot:
+    # Bot name and token from BotFather
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}
 ---
+# Slack war profile
+# Included in: war
 spring:
   profiles: slack
 slack:
+  # Webhook of chat that receives customer debt info
   customer.webhook: ${CUSTOMER_SLACK_WEBHOOK}
+  # Webhook of chat that receives birthday info
   employee.birthday.webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}
 ---
+# Telegram test profile
+# Includes: telegram bot database
+# Included in: test
 spring:
   profiles: telegram-test
   profiles.include: telegram-db
@@ -64,12 +96,16 @@ telegram:
     name: TelegramNotifierBot
     token:
 ---
+# Slack test profile
+# Included in: test
 spring:
   profiles: slack-test
 slack:
   customer.webhook:
   employee.birthday.webhook:
 ---
+# Telegram database config
+# This profile is included in telegram, telegram-test
 spring:
   profiles: telegram-db
   datasource:
@@ -81,6 +117,7 @@ spring:
     hibernate:
       ddl-auto: update
 ---
+# No database configuration created to run slack profiles
 spring:
   profiles: no-db
   autoconfigure:
