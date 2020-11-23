@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 
 /**
- * Shows help message and inline keyboard based on user role
+ * Shows help message and dynamically created inline keyboard based on user role
  * <p>
  * Available to: everyone
  */

@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.util.TelegramUtil.DATE_YEAR_FORMATTER;
-import static com.whiskels.notifier.util.TelegramUtil.EMPTY_LINE;
+import static com.whiskels.notifier.util.FormatUtil.DATE_YEAR_FORMATTER;
+import static com.whiskels.notifier.util.FormatUtil.EMPTY_LINE;
 
 @Service
 @Slf4j

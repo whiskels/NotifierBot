@@ -8,8 +8,17 @@ import java.io.IOException;
 
 import static com.slack.api.webhook.WebhookPayloads.payload;
 
+/**
+ * Abstract class that allows interaction with Slack's ability to send updates using webhooks
+ */
 @Slf4j
 public abstract class AbstractSlackWebHookHandler {
+    /**
+     * Creates JSON payload and sends it to the webhook passed as method argument.
+     *
+     * @param webHook URL to the webhook
+     * @param message String that will be sent in JSON payload
+     */
     protected void createAndSendPayload(String webHook, String message) {
         try {
             final Slack slack = Slack.getInstance();

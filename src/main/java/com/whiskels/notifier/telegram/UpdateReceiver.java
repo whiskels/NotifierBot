@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.util.TelegramUtil.extractCommand;
+import static com.whiskels.notifier.util.FormatUtil.extractCommand;
 
 /**
  * Main class used to handle incoming Updates.
@@ -33,7 +33,7 @@ public class UpdateReceiver {
     /**
      * Analyzes received update and chooses correct handler if possible
      *
-     * @param update
+     * @param update received from user
      * @return list of SendMessages to execute
      */
     public List<BotApiMethod<Message>> handle(Update update) {

@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.util.TelegramUtil.*;
+import static com.whiskels.notifier.util.FormatUtil.*;
 
 @Service
 @Slf4j

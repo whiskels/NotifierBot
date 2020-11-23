@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * Allows bot to send scheduled messages
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +34,9 @@ public class MessageScheduler {
     private final ScheduleService scheduleService;
     private final List<AbstractBaseHandler> handlers;
 
+    /**
+     * Checks if there is any job scheduled and processes it
+     */
     @Scheduled(cron = "${telegram.bot.cron}")
     private void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
@@ -47,6 +53,15 @@ public class MessageScheduler {
         }
     }
 
+    /**
+     * Searches for an {@link AbstractBaseHandler} that supports {@link Schedulable} annotation where
+     * any of defined roles are presented in the set of {@link User} roles
+     *
+     * Note: current realization suggests that any user role can schedule no more than one handler
+     *
+     * @param user {@link User} that scheduled an event
+     * @return {@link AbstractBaseHandler} that was scheduled by user
+     */
     private AbstractBaseHandler getHandler(User user) {
         final Set<Role> userRoles = user.getRoles();
         return handlers.stream()

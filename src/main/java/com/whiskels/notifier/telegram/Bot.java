@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * Main bot class
+ * Main Telegram bot class
  *
  * @author whiskels
  */
@@ -52,7 +52,7 @@ public class Bot extends TelegramLongPollingBot {
     /**
      * Main bot method. Delegates update handling to update receiver and executes resulting messages
      *
-     * @param update received by bot from users
+     * @param update received by bot from user
      */
     @Override
     public void onUpdateReceived(Update update) {

@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.model.Role.ADMIN;
-import static com.whiskels.notifier.util.TelegramUtil.extractArguments;
+import static com.whiskels.notifier.util.FormatUtil.extractArguments;
 
 /**
  * Allows bot admin to change user roles by sending bot a chat command

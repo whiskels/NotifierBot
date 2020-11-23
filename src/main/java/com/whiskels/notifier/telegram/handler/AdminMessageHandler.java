@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.model.Role.ADMIN;
-import static com.whiskels.notifier.util.TelegramUtil.extractArguments;
+import static com.whiskels.notifier.util.FormatUtil.extractArguments;
 
 /**
  * Notifies all bot users with a message from admin
