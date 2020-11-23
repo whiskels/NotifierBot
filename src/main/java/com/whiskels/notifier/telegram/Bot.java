@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -23,6 +24,7 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile({"telegram", "telegram-test"})
 public class Bot extends TelegramLongPollingBot {
     @Value("${telegram.bot.name}")
     @Getter

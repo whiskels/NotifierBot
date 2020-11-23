@@ -12,15 +12,17 @@ Due to security restrictions this repository doesn't contain tokens.
 In order to run this bot:
  - add bot token and name to application.yaml (required minimum to compile the project and run bot);
  - add bot admin token to application.yaml (to get start up report and receive unauthorized messages);
- - make changes to services that use JSON data as those defined in this project are built in order to work with API given by the customer.
+ - make changes to services that use JSON data as those defined in this project are built in order to work with API given by the customer;
+ - add slack webhook URL's to receive scheduled messages to designated slack channel.
 
 ___
 ### Technology stack: 
-Java 14, TelegramBots API, TelegramBotsExtensions, Spring Boot, Spring Data JPA, Hibernate, Lombok, Maven, Postgres, SLF4J, Jackson.
+Java 14, TelegramBots API, TelegramBotsExtensions, Slack API, Spring Boot, Spring Data JPA, Hibernate, Lombok, Maven, Postgres, SLF4J, Jackson.
 
 ___
 #### Features:
 - Bot is based on Long Polling Bot;
+- Separate profiles (war, test);
 - Authentication is based on green list of tokens stored in Postgres DB;
 - Role-based authorization;
 - Bot admin is notified if user calls command he is unauthorized to use;

@@ -3,6 +3,7 @@ package com.whiskels.notifier.service;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Profile({"telegram", "telegram-test"})
 public class UserService {
     private final JpaUserRepository userRepository;
 

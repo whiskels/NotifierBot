@@ -1,6 +1,5 @@
 spring:
-  profiles:
-    active: telegram, slack
+  profiles.active: war
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -9,17 +8,14 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-heroku:
-  server:
-    hour:
-      offset: 3
+heroku.server.hour.offset: 3
 telegram:
   bot:
     admin: 87971601
     cron: 0 0 9 * * MON-FRI
 slack:
   customer:
-    cron: 0 0 9 * * MON-FRI
+    cron: 0 0 10 * * MON-FRI
   employee:
     birthday:
       dailyCron: 0 0 9 * * MON-FRI
@@ -39,23 +35,14 @@ logging:
   level:
     com.whiskels.telegrambot: info
 ---
+# War includes telegram bot and slack webhook notifications
+spring:
+  profiles: war
+  profiles.include: telegram, slack
+---
 spring:
   profiles: test
-  datasource:
-    #           Test database
-    url: jdbc:postgresql://localhost:5432/telegram_bot_test
-    username: user
-    password: password
-telegram:
-  bot:
-    name: TelegramNotifierBot
-    token:
-slack:
-  customer:
-    webhook:
-  employee:
-    birthday:
-      webhook:
+  profiles.include: telegram-test, slack-test
 ---
 spring:
   profiles: telegram
@@ -71,8 +58,23 @@ telegram:
 spring:
   profiles: slack
 slack:
-  customer:
-    webhook: ${CUSTOMER_SLACK_WEBHOOK}
-  employee:
-    birthday:
-      webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}
+  customer.webhook: ${CUSTOMER_SLACK_WEBHOOK}
+  employee.birthday.webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}
+---
+spring:
+  profiles: telegram-test
+  datasource:
+    # Test database
+    url: jdbc:postgresql://localhost:5432/telegram_bot_test
+    username: user
+    password: password
+telegram:
+  bot:
+    name: TelegramNotifierBot
+    token:
+---
+spring:
+  profiles: slack-test
+slack:
+  customer.webhook:
+  employee.birthday.webhook:

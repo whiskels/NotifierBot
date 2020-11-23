@@ -5,6 +5,7 @@ import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -19,6 +20,7 @@ import java.util.List;
 @Component
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
+@Profile({"telegram", "telegram-test"})
 public class HelpHandler extends AbstractBaseHandler {
     @Value("${telegram.bot.name}")
     private String botUsername;

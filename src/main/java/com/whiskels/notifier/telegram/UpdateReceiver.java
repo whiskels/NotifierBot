@@ -5,6 +5,7 @@ import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -24,6 +25,7 @@ import static com.whiskels.notifier.util.TelegramUtil.extractCommand;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile({"telegram", "telegram-test"})
 public class UpdateReceiver {
     private final List<AbstractBaseHandler> handlers;
     private final UserService userService;

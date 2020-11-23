@@ -9,6 +9,7 @@ import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -28,6 +29,7 @@ import static com.whiskels.notifier.model.Role.*;
 @Slf4j
 @BotCommand(command = "/GET", message = "Get customer overdue debts")
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
+@Profile({"telegram", "telegram-test"})
 public class GetHandler extends AbstractBaseHandler {
     private final CustomerService customerService;
 

@@ -1,6 +1,7 @@
 package com.whiskels.notifier.repository;
 
 import com.whiskels.notifier.model.Schedule;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
+@Profile({"telegram", "telegram-test"})
 public interface JpaScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.user.chatId=:chatId ORDER BY s.hour ASC")
     List<Schedule> getAll(@Param("chatId") int chatId);

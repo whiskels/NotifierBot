@@ -7,6 +7,7 @@ import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -24,6 +25,7 @@ import static com.whiskels.notifier.model.Role.*;
 @Slf4j
 @BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
 @Schedulable(roles = HR)
+@Profile({"telegram", "telegram-test"})
 public class BirthdayHandler extends AbstractBaseHandler {
     private final EmployeeService employeeService;
 

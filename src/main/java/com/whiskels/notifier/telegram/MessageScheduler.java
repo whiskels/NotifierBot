@@ -9,6 +9,7 @@ import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile({"telegram", "telegram-test"})
 public class MessageScheduler {
     @Value("${heroku.server.hour.offset}")
     private int serverHourOffset;
