@@ -1,28 +1,26 @@
 package com.whiskels.notifier.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.notifier.model.Employee;
+import com.whiskels.notifier.util.JsonUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.io.StringReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.whiskels.notifier.model.Employee.STATUS_DECREE;
+import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
 import static com.whiskels.notifier.util.FormatUtil.*;
 
 @Service
@@ -35,8 +33,6 @@ public class EmployeeService extends AbstractJSONService {
     @Getter
     private List<Employee> employeeList;
 
-    private final JSONReader jsonReader;
-
     @PostConstruct
     private void initEmployeeList() {
         update();
@@ -48,38 +44,14 @@ public class EmployeeService extends AbstractJSONService {
     @Scheduled(cron = "${json.employee.cron}")
     public void update() {
         log.info("updating employee list");
-        JSONArray json = (JSONArray) jsonReader.readJsonFromUrl(employeeUrl);
-        if (json != null) {
-            createEmployeeList(json);
-            log.info("employee list updated");
-        }
+        employeeList = JsonUtil.readValuesFromUrl(employeeUrl, Employee.class).stream()
+                .filter(employee -> employee.getBirthday() != null
+                        && !employee.getStatus().equals(STATUS_DECREE)
+                        && !employee.getStatusSystem().equals(STATUS_SYSTEM_FIRED))
+                .collect(Collectors.toList());
     }
 
-    /**
-     * Creates customer list based on JSONArray of objects
-     */
-    private void createEmployeeList(JSONArray json) {
-        employeeList = new ArrayList<>();
-        try {
-            for (Object o : json) {
-                final StringReader reader = new StringReader(o.toString());
-
-                Employee employee = new ObjectMapper().readValue(reader, Employee.class);
-
-                if (employee.getStatusSystem() != null && !employee.getStatusSystem().equalsIgnoreCase(Employee.STATUS_SYSTEM_FIRED) &&
-                        employee.getStatus() != null && !employee.getStatus().equalsIgnoreCase(Employee.STATUS_DECREE)) {
-                    log.debug(employee.toString());
-
-
-                    employeeList.add(employee);
-                }
-            }
-        } catch (IOException e) {
-            log.error("Exception while reading value from reader - {}", e.getMessage());
-        }
-    }
-
-    private String getDailyBirthdayInfo(Predicate<Employee> predicate, boolean withDate) {
+    private String getBirthdayString(Predicate<Employee> predicate, boolean withDate) {
         String birthdayInfo = "";
         try {
             if (withDate) {
@@ -126,22 +98,22 @@ public class EmployeeService extends AbstractJSONService {
                 toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 
-    public String getDailyBirthdayInfo() {
+    public String getBirthdayMessage() {
         final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         final StringBuilder sb = new StringBuilder();
         sb.append("*Birthdays*\n*" + "Today (")
                 .append(DATE_FORMATTER.format(today))
                 .append(")*:\n")
-                .append(getDailyBirthdayInfo(isBirthday(today), false))
+                .append(getBirthdayString(isBirthday(today), false))
                 .append("\n*Upcoming week:*\n")
-                .append(getDailyBirthdayInfo(isBirthdayNextWeek(today), true));
+                .append(getBirthdayString(isBirthdayNextWeek(today), true));
 
         return sb.toString();
     }
 
-    public String getMonthlyBirthdayInfo() {
+    public String getMonthlyBirthdayMessage() {
         final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
         return String.format("*Birthdays this month*%n%s",
-                getDailyBirthdayInfo(isBirthdayThisMonth(today), true));
+                getBirthdayString(isBirthdayThisMonth(today), true));
     }
 }

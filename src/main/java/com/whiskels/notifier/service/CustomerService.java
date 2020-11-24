@@ -1,23 +1,19 @@
 package com.whiskels.notifier.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.notifier.model.Customer;
+import com.whiskels.notifier.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +44,6 @@ public class CustomerService extends AbstractJSONService {
 
     private List<Customer> customerList;
 
-    private final JSONReader jsonReader;
-
     @PostConstruct
     private void initCustomerList() {
         update();
@@ -60,20 +54,15 @@ public class CustomerService extends AbstractJSONService {
      */
     @Scheduled(cron = "${json.customer.cron}")
     public void update() {
-        log.info("updating exchange rates");
         updateExchangeRates();
-        log.info("updating customer list");
-        JSONObject json = (JSONObject) jsonReader.readJsonFromUrl(customerUrl);
-        if (json != null) {
-            createCustomerList(json);
-            log.info("customer list updated");
-        }
+        updateCustomerList();
     }
 
     /**
      * Updates USD/RUB and EUR/RUB exchange rates using MOEX data
      */
     private void updateExchangeRates() {
+        log.info("updating exchange rates");
         // Getting moex exchange rates string
         String moexContent = null;
         try {
@@ -102,29 +91,17 @@ public class CustomerService extends AbstractJSONService {
         }
     }
 
-    /**
-     * Creates customer list based on JSONArray of objects
-     */
-    private void createCustomerList(JSONObject json) {
-        customerList = new ArrayList<>();
-        JSONArray content = (JSONArray) json.get("content");
+    private void updateCustomerList() {
+        log.info("updating customer list");
+        customerList = JsonUtil.readValuesFromNode(customerUrl, Customer.class, "content");
 
-        try {
-            for (Object o : content) {
-                StringReader reader = new StringReader(o.toString());
-
-                Customer customer = new ObjectMapper().readValue(reader, Customer.class);
-                customer.calculateOverallDebt(usdRate, eurRate);
-
-                customerList.add(customer);
-            }
-        } catch (IOException e) {
-            log.error("Exception while reading value from reader - {}", e.getMessage());
-        }
+        customerList
+                .forEach(customer -> customer.calculateOverallDebt(usdRate, eurRate));
 
         customerList = customerList.stream()
                 .filter(customer -> customer.getTotalDebtRouble() > 500)
-                .sorted(Comparator.comparingDouble(Customer::getTotalDebtRouble).thenComparing(Customer::getContractor).reversed())
+                .sorted(Comparator.comparingDouble(Customer::getTotalDebtRouble)
+                        .thenComparing(Customer::getContractor).reversed())
                 .collect(Collectors.toList());
     }
 
