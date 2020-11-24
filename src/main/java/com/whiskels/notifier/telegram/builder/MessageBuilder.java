@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  MessageBuilder is used to build instances of {@link org.telegram.telegrambots.meta.api.methods.send.SendMessage}
- *  <p>
- *  MessageBuilder provides useful methods that simplify creation of bot replies
+ * MessageBuilder is used to build instances of {@link org.telegram.telegrambots.meta.api.methods.send.SendMessage}
+ * <p>
+ * MessageBuilder provides useful methods that simplify creation of bot replies
  */
 public final class MessageBuilder {
     @Setter
@@ -84,7 +84,7 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text button text
+     * @param text         button text
      * @param callbackData on click callback
      * @return this
      */
@@ -96,7 +96,7 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text button text (and callback argument)
+     * @param text         button text (and callback argument)
      * @param callbackData on click callback
      * @return this
      */

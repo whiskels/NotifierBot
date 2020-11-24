@@ -3,19 +3,20 @@ package com.whiskels.notifier.util;
 import java.util.List;
 
 public final class ParsingUtil {
-    private ParsingUtil() {}
+    private ParsingUtil() {
+    }
 
     /**
      * Parses input text into hours and minutes
-     *
-     *  1 -> 1:00
-     *  12 -> 12:00
-     *  123 -> 1:23
-     *  1234 -> 12:34
-     *  12:34 -> 12:34
-     *
-     *  25 -> IllegalArgumentException
-     *  10:62 -> IllegalArgumentException
+     * <p>
+     * 1 -> 1:00
+     * 12 -> 12:00
+     * 123 -> 1:23
+     * 1234 -> 12:34
+     * 12:34 -> 12:34
+     * <p>
+     * 25 -> IllegalArgumentException
+     * 10:62 -> IllegalArgumentException
      *
      * @param text
      * @return List of hours and minutes

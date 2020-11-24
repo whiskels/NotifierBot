@@ -32,8 +32,8 @@ import java.util.Date;
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
-public static final String STATUS_SYSTEM_FIRED = "fired";
-public static final String STATUS_DECREE = "Декрет";
+    public static final String STATUS_SYSTEM_FIRED = "fired";
+    public static final String STATUS_DECREE = "Декрет";
 
 
 //    @JsonProperty("id")

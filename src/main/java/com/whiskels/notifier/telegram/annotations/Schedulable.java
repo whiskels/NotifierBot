@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 public @interface Schedulable {
     /**
-     * Returns an array of user roles that can schedule execution of the annotated method }
+     * Returns an array of user roles that can schedule execution of the annotated method
      *
      * @return an array of user roles that can schedule execution of the annotated method
      */

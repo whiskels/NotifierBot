@@ -56,7 +56,7 @@ public class MessageScheduler {
     /**
      * Searches for an {@link AbstractBaseHandler} that supports {@link Schedulable} annotation where
      * any of defined roles are presented in the set of {@link User} roles
-     *
+     * <p>
      * Note: current realization suggests that any user role can schedule no more than one handler
      *
      * @param user {@link User} that scheduled an event

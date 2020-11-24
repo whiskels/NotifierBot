@@ -34,7 +34,7 @@ public abstract class AbstractBaseHandler {
     /**
      * Performs authorization of user and handling of the command
      *
-     * @param user {@link} User that sent update to the bot
+     * @param user    {@link} User that sent update to the bot
      * @param message {@link} content of the update
      * @return List of {@link BotApiMethod<Message>} that bot will send
      */
@@ -60,7 +60,7 @@ public abstract class AbstractBaseHandler {
                         .build(),
                 MessageBuilder.create(botAdmin)
                         .line("*Unauthorized access:* %s", userChatId)
-                        .line("*Message:* %s", message.replaceAll("_","-"))
+                        .line("*Message:* %s", message.replaceAll("_", "-"))
                         .build());
     }
 }

@@ -13,25 +13,25 @@ import java.util.Locale;
 
 /**
  * Customer data is received from JSON of the following syntax:
- *  * {"status":1,"content":
- *  [{"c2fs_id":"",
- *  "wop_id":"",
- *  "contractor":"",
- *  "finance_subject":""
- *  ,"wop":"",
- *  "account_manager":"Employee employee",
- *  "currency":"RUB",
- *  "debt_comment":null,
- *  "debtor_delay_180":"0",
- *  "debtor_delay_90":"0",
- *  "debtor_delay_60":"0",
- *  "debtor_delay_30":"0",
- *  "debtor_delay_0":"0",
- *  "debtor_delay_current":"0",
- *  "not_realization":"",
- *  "delay_90":"0",
- *  "delay_60":"0",
- *  "delay_30":"0"},...
+ * {"status":1,"content":
+ * [{"c2fs_id":"",
+ * "wop_id":"",
+ * "contractor":"",
+ * "finance_subject":""
+ * ,"wop":"",
+ * "account_manager":"Employee employee",
+ * "currency":"RUB",
+ * "debt_comment":null,
+ * "debtor_delay_180":"0",
+ * "debtor_delay_90":"0",
+ * "debtor_delay_60":"0",
+ * "debtor_delay_30":"0",
+ * "debtor_delay_0":"0",
+ * "debtor_delay_current":"0",
+ * "not_realization":"",
+ * "delay_90":"0",
+ * "delay_60":"0",
+ * "delay_30":"0"},...
  */
 @Data
 @JsonAutoDetect
