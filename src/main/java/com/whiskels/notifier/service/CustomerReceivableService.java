@@ -10,17 +10,15 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.whiskels.notifier.model.CustomerReceivable.CATEGORY_REVENUE;
+import static com.whiskels.notifier.util.DateTimeUtil.getWithOffset;
 import static com.whiskels.notifier.util.DateTimeUtil.subtractWorkingDays;
-import static com.whiskels.notifier.util.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
-import static com.whiskels.notifier.util.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
+import static com.whiskels.notifier.util.FormatUtil.*;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
@@ -29,6 +27,7 @@ import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 @RequiredArgsConstructor
 public class CustomerReceivableService extends AbstractJSONService {
     private static final int CACHED_DAYS = 2;
+    private static final String REVENUE_REPORT_HEADER = "Revenue";
 
     @Value("${json.customer.receivable.url}")
     private String customerUrl;
@@ -81,29 +80,14 @@ public class CustomerReceivableService extends AbstractJSONService {
     }
 
     public String dailyMessage() {
-        log.debug("Preparing customer receivable message");
-
-        final StringBuilder sb = new StringBuilder();
-        sb.append(String.format("*Payment report on %s:*%n",
-                DAY_MONTH_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset))))
-                .append(getCustomerString(alwaysTruePredicate()));
-
-        return sb.toString();
+        return dailyMessage(alwaysTruePredicate());
     }
 
+    public String dailyMessage(Predicate<CustomerReceivable> predicate) {
+        log.debug("Preparing customer receivable message");
 
-    private String getCustomerString(Predicate<CustomerReceivable> predicate) {
-        String customerInfo = "";
-        try {
-            customerInfo = customerReceivables.stream()
-                    .filter(predicate)
-                    .map(CustomerReceivable::toString)
-                    .collect(Collectors.joining(String.format("%n")));
-        } catch (Exception e) {
-            log.error("Exception while creating customer receivable message: {}", e.getMessage());
-        }
-
-        return customerInfo.isEmpty() ? "No new payments" : customerInfo;
+        return reportHeader(REVENUE_REPORT_HEADER, getWithOffset(serverHourOffset)) +
+                formatList(customerReceivables, predicate);
     }
 
     private Predicate<CustomerReceivable> isRevenue() {

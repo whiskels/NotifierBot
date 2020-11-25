@@ -13,14 +13,14 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.util.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
-import static com.whiskels.notifier.util.FormatUtil.EMPTY_LINE;
+import static com.whiskels.notifier.util.DateTimeUtil.getWithOffset;
+import static com.whiskels.notifier.util.FormatUtil.formatListWithEmptyLine;
+import static com.whiskels.notifier.util.FormatUtil.reportHeader;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 
 @Service
@@ -28,6 +28,7 @@ import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 @RequiredArgsConstructor
 public class CustomerDebtService extends AbstractJSONService {
     private static final int MIN_RUB_VALUE = 500;
+    private static final String DEBT_REPORT_HEADER = "Overdue debts";
 
     @Value("${json.customer.debt.url}")
     private String customerUrl;
@@ -55,6 +56,18 @@ public class CustomerDebtService extends AbstractJSONService {
     protected void update() {
         updateExchangeRates();
         updateCustomerList();
+    }
+
+
+    public String dailyMessage(Predicate<CustomerDebt> predicate) {
+        log.debug("Preparing customer debts message");
+
+        return reportHeader(DEBT_REPORT_HEADER, getWithOffset(serverHourOffset)) +
+                formatListWithEmptyLine(customerDebts, predicate);
+    }
+
+    public String dailyMessage() {
+        return dailyMessage(alwaysTruePredicate());
     }
 
     /**
@@ -109,37 +122,6 @@ public class CustomerDebtService extends AbstractJSONService {
                 .filter(debtHigherThenMinRub())
                 .sorted()
                 .collect(Collectors.toList());
-    }
-
-    public String dailyMessage() {
-        return dailyMessage(alwaysTruePredicate());
-    }
-
-    public String dailyMessage(Predicate<CustomerDebt> predicate) {
-        log.debug("Preparing customer debts message");
-
-        final StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Overdue debts on %s%n",
-                DAY_MONTH_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset))))
-                .append(getCustomerString(predicate));
-
-        return sb.toString();
-    }
-
-    private String getCustomerString(Predicate<CustomerDebt> predicate) {
-        String customerInfo = "";
-        try {
-            customerInfo = customerDebts.stream()
-                    .filter(predicate)
-                    .map(CustomerDebt::toString)
-                    .collect(Collectors.joining(String.format(
-                            "%n%s%n", EMPTY_LINE)));
-
-        } catch (Exception e) {
-            log.error("Exception while creating customer debt message: {}", e.getMessage());
-        }
-
-        return customerInfo.isEmpty() ? "No overdue debts" : customerInfo;
     }
 
     private Predicate<CustomerDebt> debtHigherThenMinRub() {

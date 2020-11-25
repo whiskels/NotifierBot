@@ -1,9 +1,14 @@
 package com.whiskels.notifier.util;
 
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class FormatUtil {
     public static final String EMPTY_LINE = "---------------------------";
@@ -32,7 +37,28 @@ public final class FormatUtil {
         return formatter.format(value);
     }
 
-    public static String hashTagMessage(String hashtag, String message) {
-        return String.format("%s%n%s", hashtag, message);
+    public static String reportHeader(String name, LocalDateTime date) {
+        return String.format("*%s report on %s:*%n", name, DAY_MONTH_YEAR_FORMATTER.format(date));
+    }
+
+    public static <T> String formatListWithEmptyLine(List<T> list, Predicate<T> predicate) {
+        final String result = list.stream()
+                .filter(predicate)
+                .map(T::toString)
+                .collect(Collectors.joining(String.format(
+                        "%n%s%n", EMPTY_LINE)));
+
+
+        return result.isEmpty() ? "Nothing" : result;
+    }
+
+    public static <T> String formatList(List<T> list, Predicate<T> predicate) {
+        final String result = list.stream()
+                .filter(predicate)
+                .map(T::toString)
+                .collect(Collectors.joining(String.format("%n")));
+
+
+        return result.isEmpty() ? "Nothing" : result;
     }
 }
