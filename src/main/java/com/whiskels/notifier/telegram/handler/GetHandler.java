@@ -1,9 +1,9 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.model.Customer;
+import com.whiskels.notifier.model.CustomerDebt;
 import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.User;
-import com.whiskels.notifier.service.CustomerService;
+import com.whiskels.notifier.service.CustomerDebtService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
@@ -31,10 +31,10 @@ import static com.whiskels.notifier.model.Role.*;
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class GetHandler extends AbstractBaseHandler {
-    private final CustomerService customerService;
+    private final CustomerDebtService customerDebtService;
 
-    public GetHandler(CustomerService customerService) {
-        this.customerService = customerService;
+    public GetHandler(CustomerDebtService customerDebtService) {
+        this.customerDebtService = customerDebtService;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class GetHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)
-                .line(customerService.createCustomerDebtMessage(isValid(user)));
+                .line(customerDebtService.dailyMessage(isValid(user)));
 
         return List.of(builder.build());
     }
@@ -52,12 +52,12 @@ public class GetHandler extends AbstractBaseHandler {
      * <p>
      * true - if user is head or admin or is customer's account manager
      */
-    private Predicate<Customer> isValid(User user) {
-        return customer -> {
+    private Predicate<CustomerDebt> isValid(User user) {
+        return customerDebt -> {
             final Set<Role> roles = user.getRoles();
             return roles.contains(ADMIN)
                     || roles.contains(HEAD)
-                    || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customer.getAccountManager());
+                    || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customerDebt.getAccountManager());
         };
     }
 }

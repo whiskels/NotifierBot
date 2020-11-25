@@ -2,33 +2,21 @@ spring:
   # Available profiles: war, test, telegram, telegram-test, [slack, no-db], [slack-test, no-db]
   # The last two slack-only profiles need to include no-db profile in order to start
   # as no-db profile turns off automatic configuration of datasource
-  profiles.active: war
+  profiles.active: slack, no-db
 # Offset of Heroku European server from Moscow
 heroku.server.hour.offset: 3
-telegram:
-  bot:
-    # Telegram chat ID of bot admin
-    admin: 87971601
-    # Workdays every minute cron - check for scheduled messages
-    schedule.cron: 0 * * * * MON-FRI
-slack:
-  customer:
-    # Workdays at 10:00 - send customer info to slack
-    # Cron time is based on environment time, so for Moscow time it is Moscow time - server offset time
-    # eg. 10:00 cron with server offset of 3 is 13:00 Moscow time
-    cron: 0 0 10 * * MON-FRI
-  employee:
-    birthday:
-      # Workdays at 9:00 - send daily birthday info to slack
-      dailyCron: 0 0 9 * * MON-FRI
-      # Every 1st of new month at 9:00 - send monthly birthday info to slack
-      monthlyCron: 0 0 9 1 * ?
 json:
   customer:
-    # URL to customer debt JSON
-    url: ${CUSTOMER_URL}
-    # Workdays at 8:30 - update
-    cron: 0 30 8 * * MON-FRI
+    debt:
+      # URL to customer debt JSON
+      url: ${CUSTOMER_DEBT_JSON_URL}
+      # Workdays at 8:55 - update
+      cron: 0 55 8 * * MON-FRI
+    receivable:
+      # URL to customer receivable JSON
+      url: ${CUSTOMER_RECEIVABLE_JSON_URL}
+      # Workdays at 8:55 - update
+      cron: 0 55 8 * * MON-FRI
   employee:
     # URL to employee data
     url: ${EMPLOYEE_URL}
@@ -74,9 +62,13 @@ telegram:
 # Included in: war
 spring:
   profiles: slack
+  profiles.include: slack-config
 slack:
   # Webhook of chat that receives customer debt info
-  customer.webhook: ${CUSTOMER_SLACK_WEBHOOK}
+  customer:
+    debt.webhook: ${CUSTOMER_DEBT_SLACK_WEBHOOK}
+    # Webhook of chat that receives customer payment info
+    receivable.webhook: ${CUSTOMER_RECEIVABLE_SLACK_WEBHOOK}
   # Webhook of chat that receives birthday info
   employee.birthday.webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}
 ---
@@ -100,14 +92,21 @@ telegram:
 # Included in: test
 spring:
   profiles: slack-test
+  profiles.include: slack-config
 slack:
-  customer.webhook:
+  # Webhook of chat that receives customer debt info
+  customer:
+    debt.webhook:
+    # Webhook of chat that receives customer payment info
+    receivable.webhook:
+  # Webhook of chat that receives birthday info
   employee.birthday.webhook:
 ---
 # Telegram database config
 # This profile is included in telegram, telegram-test
 spring:
   profiles: telegram-db
+  profiles.include: telegram-config
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -124,3 +123,32 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+---
+# Slack general configuration
+# Included in: slack, slack-test
+spring:
+  profiles: slack-config
+slack:
+  customer:
+    # Workdays at 10:00 - send customer info to slack
+    # Cron time is based on environment time, so for Moscow time it is Moscow time - server offset time
+    # eg. 10:00 cron with server offset of 3 is 13:00 Moscow time
+    debt.cron: 0 0 10 * * MON-FRI
+    receivable.cron: 0 0 10 * * MON-FRI
+  employee:
+    birthday:
+      # Workdays at 6:00 - send daily birthday info to slack
+      dailyCron: 0 0 6 * * MON-FRI
+      # Every 1st of new month at 9:00 - send monthly birthday info to slack
+      monthlyCron: 0 0 6 1 * ?
+---
+# Telegram general configuration
+# Included in: telegram-db
+spring:
+  profiles: telegram-config
+telegram:
+  bot:
+    # Telegram chat ID of bot admin
+    admin: 87971601
+    # Workdays every minute cron - check for scheduled messages
+    schedule.cron: 0 * * * * MON-FRI

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -31,15 +33,13 @@ import java.util.Date;
 @Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Employee {
+public class Employee implements Comparable<Employee> {
     public static final String STATUS_SYSTEM_FIRED = "fired";
     public static final String STATUS_DECREE = "Декрет";
 
 
-//    @JsonProperty("id")
+    //    @JsonProperty("id")
 //    private int id;
-    @JsonProperty("name")
-    private String name;
 //    @JsonProperty("employee_id")
 //    private int employeeId;
 //    @JsonProperty("full_name")
@@ -60,15 +60,23 @@ public class Employee {
 //    private String position;
 //    @JsonProperty("grade")
 //    private String grade;
-    @JsonProperty("birthday")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
-    private Date birthday;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("status_system")
-    private String statusSystem;
 //    @JsonProperty("office")
 //    private String office;
 //    @JsonProperty("is_new_employee")
 //    private boolean isNew;
+    private String name;
+    @JsonProperty("birthday")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
+    private Date birthday;
+    private String status;
+    @JsonProperty("status_system")
+    private String statusSystem;
+
+
+    @Override
+    public int compareTo(@NotNull Employee o) {
+        return Comparator.comparing(Employee::getBirthday)
+                .thenComparing(Employee::getName).reversed()
+                .compare(this, o);
+    }
 }

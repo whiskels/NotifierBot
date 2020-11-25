@@ -1,6 +1,6 @@
 package com.whiskels.notifier.service;
 
-import com.whiskels.notifier.model.Customer;
+import com.whiskels.notifier.model.CustomerDebt;
 import com.whiskels.notifier.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +14,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.util.FormatUtil.DATE_YEAR_FORMATTER;
+import static com.whiskels.notifier.util.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
 import static com.whiskels.notifier.util.FormatUtil.EMPTY_LINE;
+import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerService extends AbstractJSONService {
-    @Value("${json.customer.url}")
+public class CustomerDebtService extends AbstractJSONService {
+    private static final int MIN_RUB_VALUE = 500;
+
+    @Value("${json.customer.debt.url}")
     private String customerUrl;
 
     @Value("${moex.url}")
@@ -42,18 +44,15 @@ public class CustomerService extends AbstractJSONService {
     private double usdRate;
     private double eurRate;
 
-    private List<Customer> customerList;
+    private List<CustomerDebt> customerDebts;
 
     @PostConstruct
     private void initCustomerList() {
         update();
     }
 
-    /**
-     * Reads JSON data from URL and creates Customer list
-     */
-    @Scheduled(cron = "${json.customer.cron}")
-    public void update() {
+    @Scheduled(cron = "${json.customer.debt.cron}")
+    protected void update() {
         updateExchangeRates();
         updateCustomerList();
     }
@@ -91,44 +90,59 @@ public class CustomerService extends AbstractJSONService {
         }
     }
 
+    /**
+     * Reads JSON data from URL and creates Customer list
+     */
     private void updateCustomerList() {
-        log.info("updating customer list");
-        customerList = JsonUtil.readValuesFromNode(customerUrl, Customer.class, "content");
+        log.info("updating customer debt list");
+        customerDebts = filterByMinRubValue(readFromJson(customerUrl));
+    }
 
-        customerList
-                .forEach(customer -> customer.calculateOverallDebt(usdRate, eurRate));
+    private List<CustomerDebt> readFromJson(String url) {
+        return JsonUtil.readValuesFromNode(url, CustomerDebt.class, "content");
+    }
 
-        customerList = customerList.stream()
-                .filter(customer -> customer.getTotalDebtRouble() > 500)
-                .sorted(Comparator.comparingDouble(Customer::getTotalDebtRouble)
-                        .thenComparing(Customer::getContractor).reversed())
+    private List<CustomerDebt> filterByMinRubValue(List<CustomerDebt> customerDebtList) {
+        customerDebtList.forEach(customerDebt -> customerDebt.calculateOverallDebt(usdRate, eurRate));
+
+        return customerDebtList.stream()
+                .filter(debtHigherThenMinRub())
+                .sorted()
                 .collect(Collectors.toList());
     }
 
-    public String createCustomerDebtMessage(Predicate<Customer> predicate) {
-        log.debug("Preparing customer debts message for Slack");
+    public String dailyMessage() {
+        return dailyMessage(alwaysTruePredicate());
+    }
+
+    public String dailyMessage(Predicate<CustomerDebt> predicate) {
+        log.debug("Preparing customer debts message");
 
         final StringBuilder sb = new StringBuilder();
         sb.append(String.format("Overdue debts on %s%n",
-                DATE_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset))));
-        String customerInfo = "";
-        try {
-            customerInfo = customerList.stream()
-                    .filter(predicate)
-                    .map(Customer::toString)
-                    .collect(Collectors.joining(String.format(
-                            "%n%s%n", EMPTY_LINE)));
-
-        } catch (Exception e) {
-            log.error("Exception while creating message GET: {}", e.getMessage());
-        }
-
-        sb.append(customerInfo.isEmpty() ? "No overdue debts" : customerInfo);
+                DAY_MONTH_YEAR_FORMATTER.format(LocalDateTime.now().plusHours(serverHourOffset))))
+                .append(getCustomerString(predicate));
 
         return sb.toString();
     }
 
-    public static Predicate<Customer> alwaysTruePredicate() {
-        return customer -> true;
+    private String getCustomerString(Predicate<CustomerDebt> predicate) {
+        String customerInfo = "";
+        try {
+            customerInfo = customerDebts.stream()
+                    .filter(predicate)
+                    .map(CustomerDebt::toString)
+                    .collect(Collectors.joining(String.format(
+                            "%n%s%n", EMPTY_LINE)));
+
+        } catch (Exception e) {
+            log.error("Exception while creating customer debt message: {}", e.getMessage());
+        }
+
+        return customerInfo.isEmpty() ? "No overdue debts" : customerInfo;
+    }
+
+    private Predicate<CustomerDebt> debtHigherThenMinRub() {
+        return customerDebt -> customerDebt.getTotalDebtRouble() > MIN_RUB_VALUE;
     }
 }

@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import java.util.Comparator;
+
+import static com.whiskels.notifier.util.FormatUtil.formatDouble;
 
 /**
- * Customer data is received from JSON of the following syntax:
+ * Customer debt data is received from JSON of the following syntax:
  * {"status":1,"content":
  * [{"c2fs_id":"",
  * "wop_id":"",
@@ -36,18 +37,15 @@ import java.util.Locale;
 @Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+public class CustomerDebt implements Comparable<CustomerDebt> {
 
-    @JsonProperty("contractor")
     private String contractor;
     @JsonProperty("finance_subject")
     private String financeSubject;
     @JsonProperty("wop")
     private String wayOfPayment;
     @JsonProperty("account_manager")
-    @Getter
     private String accountManager;
-    @JsonProperty("currency")
     private String currency;
     @JsonProperty("debt_comment")
     private String debtComment;
@@ -87,22 +85,18 @@ public class Customer {
         }
     }
 
-    /*
-     * Formats total debt to easy-to-read format
-     */
-    private String formatValue(Number value) {
-        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
-        formatSymbols.setDecimalSeparator('.');
-        formatSymbols.setGroupingSeparator(' ');
-
-        DecimalFormat formatter = new DecimalFormat("###,###,###,###.#", formatSymbols);
-        return formatter.format(value);
-    }
 
     @Override
     public String toString() {
         return String.format("*%s*%n  %s%n  %s%n  %s%n  *%s %s*%n%s",
                 contractor, financeSubject, wayOfPayment, accountManager,
-                formatValue(totalDebt), currency, debtComment);
+                formatDouble(totalDebt), currency, debtComment);
+    }
+
+    @Override
+    public int compareTo(@NotNull CustomerDebt o) {
+        return Comparator.comparing(CustomerDebt::getTotalDebtRouble)
+                .thenComparing(CustomerDebt::getContractor).reversed()
+                .compare(this, o);
     }
 }

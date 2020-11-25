@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,7 +20,9 @@ import java.util.stream.Stream;
 
 import static com.whiskels.notifier.model.Employee.STATUS_DECREE;
 import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
+import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
 import static com.whiskels.notifier.util.FormatUtil.*;
+import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
 @Service
 @Slf4j
@@ -42,26 +43,48 @@ public class EmployeeService extends AbstractJSONService {
      * Reads JSON data from URL and creates Customer list
      */
     @Scheduled(cron = "${json.employee.cron}")
-    public void update() {
+    protected void update() {
         log.info("updating employee list");
-        employeeList = JsonUtil.readValuesFromUrl(employeeUrl, Employee.class).stream()
-                .filter(employee -> employee.getBirthday() != null
-                        && !employee.getStatus().equals(STATUS_DECREE)
-                        && !employee.getStatusSystem().equals(STATUS_SYSTEM_FIRED))
-                .collect(Collectors.toList());
+        employeeList = filterAndSort(readFromJson(employeeUrl),
+                List.of(notDecree(), notFired(), hasBirthday()));
+    }
+
+    public String dailyMessage() {
+        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("*Birthdays*\n*" + "Today (")
+                .append(DATE_FORMATTER.format(today))
+                .append(")*:\n")
+                .append(getBirthdayString(isBirthdayOn(today), false))
+                .append("\n*Upcoming week:*\n")
+                .append(getBirthdayString(isBirthdayNextWeekFrom(today), true));
+
+        return sb.toString();
+    }
+
+    public String monthlyMessage() {
+        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
+        return String.format("*Birthdays this month*%n%s",
+                getBirthdayString(isBirthdaySameMonth(today), true));
+    }
+
+    private List<Employee> readFromJson(String url) {
+        return JsonUtil.readValuesFromUrl(url, Employee.class);
     }
 
     private String getBirthdayString(Predicate<Employee> predicate, boolean withDate) {
         String birthdayInfo = "";
         try {
+            Stream<Employee> filteredEmployees = employeeList.stream()
+                    .filter(predicate);
             if (withDate) {
-                birthdayInfo = employeeStream(predicate)
+                birthdayInfo = filteredEmployees
                         .map(employee -> String.format("%s (%s)",
                                 employee.getName(),
                                 BIRTHDAY_FORMATTER.format(toLocalDate(employee.getBirthday()))))
                         .collect(Collectors.joining(", "));
             } else {
-                birthdayInfo = employeeStream(predicate)
+                birthdayInfo = filteredEmployees
                         .map(Employee::getName)
                         .collect(Collectors.joining(", "));
             }
@@ -71,49 +94,36 @@ public class EmployeeService extends AbstractJSONService {
         return birthdayInfo.isEmpty() ? "Nobody" : birthdayInfo;
     }
 
-    private Stream<Employee> employeeStream(Predicate<Employee> predicate) {
-        return employeeList.stream()
-                .sorted(Comparator.comparing(Employee::getBirthday))
-                .filter(predicate);
-    }
-
-    private Predicate<Employee> isBirthday(LocalDate today) {
-        return employee -> daysBetweenBirthdayAndToday(employee, today) == 0;
-    }
-
-    private Predicate<Employee> isBirthdayNextWeek(LocalDate today) {
-        return employee -> {
-            long daysUntilBirthday = daysBetweenBirthdayAndToday(employee, today);
-            return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
-        };
-    }
-
-    private Predicate<Employee> isBirthdayThisMonth(LocalDate today) {
-        return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
-    }
-
-    private long daysBetweenBirthdayAndToday(Employee employee, LocalDate today) {
+    private long daysBetweenBirthdayAnd(Employee employee, LocalDate today) {
         return ChronoUnit.DAYS.between(
                 today.atStartOfDay(),
                 toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 
-    public String getBirthdayMessage() {
-        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
-        final StringBuilder sb = new StringBuilder();
-        sb.append("*Birthdays*\n*" + "Today (")
-                .append(DATE_FORMATTER.format(today))
-                .append(")*:\n")
-                .append(getBirthdayString(isBirthday(today), false))
-                .append("\n*Upcoming week:*\n")
-                .append(getBirthdayString(isBirthdayNextWeek(today), true));
-
-        return sb.toString();
+    private Predicate<Employee> isBirthdayOn(LocalDate today) {
+        return employee -> daysBetweenBirthdayAnd(employee, today) == 0;
     }
 
-    public String getMonthlyBirthdayMessage() {
-        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
-        return String.format("*Birthdays this month*%n%s",
-                getBirthdayString(isBirthdayThisMonth(today), true));
+    private Predicate<Employee> isBirthdayNextWeekFrom(LocalDate today) {
+        return employee -> {
+            long daysUntilBirthday = daysBetweenBirthdayAnd(employee, today);
+            return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
+        };
+    }
+
+    private Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
+        return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
+    }
+
+    private Predicate<Employee> notFired() {
+        return e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
+    }
+
+    private Predicate<Employee> notDecree() {
+        return e -> !e.getStatus().equals(STATUS_DECREE);
+    }
+
+    private Predicate<Employee> hasBirthday() {
+        return e -> e.getBirthday() != null;
     }
 }

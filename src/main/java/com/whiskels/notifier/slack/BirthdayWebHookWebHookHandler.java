@@ -18,11 +18,11 @@ public class BirthdayWebHookWebHookHandler extends AbstractSlackWebHookHandler {
 
     @Scheduled(cron = "${slack.employee.birthday.dailyCron}")
     public void dailyPayload() {
-        createAndSendPayload(webHook, employeeService.getBirthdayMessage());
+        createAndSendPayload(webHook, employeeService.dailyMessage());
     }
 
     @Scheduled(cron = "${slack.employee.birthday.monthlyCron}")
     public void monthlyPayload() {
-        createAndSendPayload(webHook, employeeService.getMonthlyBirthdayMessage());
+        createAndSendPayload(webHook, employeeService.monthlyMessage());
     }
 }

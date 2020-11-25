@@ -1,23 +1,18 @@
 package com.whiskels.notifier.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 
 public final class FormatUtil {
     public static final String EMPTY_LINE = "---------------------------";
-    public static final DateTimeFormatter DATE_YEAR_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter DAY_MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter YEAR_MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMMM", Locale.ENGLISH);
     public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
 
     private FormatUtil() {
-    }
-
-    public static LocalDate toLocalDate(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
 
     public static String extractCommand(String text) {
@@ -26,5 +21,18 @@ public final class FormatUtil {
 
     public static String extractArguments(String text) {
         return text.substring(text.indexOf(" ") + 1);
+    }
+
+    public static String formatDouble(Number value) {
+        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+        formatSymbols.setDecimalSeparator('.');
+        formatSymbols.setGroupingSeparator(' ');
+
+        DecimalFormat formatter = new DecimalFormat("###,###,###,###.#", formatSymbols);
+        return formatter.format(value);
+    }
+
+    public static String hashTagMessage(String hashtag, String message) {
+        return String.format("%s%n%s", hashtag, message);
     }
 }
