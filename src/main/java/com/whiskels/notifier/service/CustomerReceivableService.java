@@ -55,7 +55,7 @@ public class CustomerReceivableService extends AbstractJSONService {
         LocalDate startDate = subtractWorkingDays(endDate, CACHED_DAYS);
         final String actualUrl = getUrlBetween(startDate, endDate);
 
-        customerReceivables = filterAndSort(readFromJson(actualUrl), List.of(IS_REVENUE, cache.notCached()));
+        customerReceivables = filterAndSort(readFromJson(actualUrl), IS_REVENUE, cache.notCached());
     }
 
     private void updateCache() {

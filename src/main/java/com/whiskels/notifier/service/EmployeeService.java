@@ -28,7 +28,8 @@ public class EmployeeService extends AbstractJSONService {
     private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";
     private static final String NO_DATA = "Nobody";
     private static final String UPCOMING_WEEK = "*Upcoming week:*";
-    private static final List<Predicate<Employee>> EMPLOYEE_FILTERS = List.of(NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL);
+    private static final Predicate<Employee>[] EMPLOYEE_FILTERS = new Predicate[]{
+            NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL};
 
     @Value("${json.employee.url}")
     private String employeeUrl;

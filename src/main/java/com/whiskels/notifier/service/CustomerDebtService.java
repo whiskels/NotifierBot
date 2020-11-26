@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.util.CustomerDebtUtil.totalDebtRoubleHigherThan;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_EMPTY_LINE;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
+import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
 @Service
 @Slf4j
@@ -57,25 +57,20 @@ public class CustomerDebtService extends AbstractJSONService {
         return dailyMessage(alwaysTruePredicate());
     }
 
-    /**
-     * Reads JSON data from URL and creates Customer list
-     */
     private void updateCustomerList() {
         log.info("updating customer debt list");
-        customerDebts = filterByMinRubValue(readFromJson(customerUrl));
+        customerDebts = filterAndSort(calculateTotalDebt(readFromJson(customerUrl)),
+                totalDebtRoubleHigherThan(MIN_RUB_VALUE));
     }
 
     private List<CustomerDebt> readFromJson(String url) {
         return JsonUtil.readValuesFromNode(url, CustomerDebt.class, JSON_NODE);
     }
 
-    private List<CustomerDebt> filterByMinRubValue(List<CustomerDebt> customerDebtList) {
+    private List<CustomerDebt> calculateTotalDebt(List<CustomerDebt> customerDebtList) {
         customerDebtList.forEach(customerDebt -> customerDebt.calculateOverallDebt(
                 moexService.getUsdRate(), moexService.getEurRate()));
 
-        return customerDebtList.stream()
-                .filter(totalDebtRoubleHigherThan(MIN_RUB_VALUE))
-                .sorted()
-                .collect(Collectors.toList());
+        return customerDebtList;
     }
 }
