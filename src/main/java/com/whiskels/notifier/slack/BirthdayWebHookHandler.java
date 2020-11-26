@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Profile({"slack", "slack-test"})
-public class BirthdayWebHookWebHookHandler extends AbstractSlackWebHookHandler {
+public class BirthdayWebHookHandler extends AbstractSlackWebHookHandler {
     @Value("${slack.employee.birthday.webhook}")
     private String webHook;
 
