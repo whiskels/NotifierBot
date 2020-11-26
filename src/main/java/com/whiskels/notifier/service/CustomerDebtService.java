@@ -29,6 +29,8 @@ public class CustomerDebtService extends AbstractJSONService {
 
     private List<CustomerDebt> customerDebts;
 
+    private final MoexService moexService;
+
     @PostConstruct
     private void initCustomerList() {
         update();
@@ -51,8 +53,6 @@ public class CustomerDebtService extends AbstractJSONService {
     public String dailyMessage() {
         return dailyMessage(alwaysTruePredicate());
     }
-
-    private final MoexService moexService;
 
     /**
      * Reads JSON data from URL and creates Customer list
