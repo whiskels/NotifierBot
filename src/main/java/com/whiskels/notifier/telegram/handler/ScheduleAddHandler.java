@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.model.Role.*;
-import static com.whiskels.notifier.util.FormatUtil.extractArguments;
+import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.util.ParsingUtil.getTime;
 
 /**

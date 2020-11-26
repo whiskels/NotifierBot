@@ -12,9 +12,7 @@ import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
 
 public final class EmployeeUtil {
     public static final Predicate<Employee> NOT_FIRED = e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
-
     public static final Predicate<Employee> NOT_DECREE = e -> !e.getStatus().equals(STATUS_DECREE);
-
     public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
 
     private EmployeeUtil() {

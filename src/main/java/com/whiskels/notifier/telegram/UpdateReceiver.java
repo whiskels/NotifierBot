@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.util.FormatUtil.extractCommand;
+import static com.whiskels.notifier.util.ParsingUtil.extractCommand;
 
 /**
  * Main class used to handle incoming Updates.

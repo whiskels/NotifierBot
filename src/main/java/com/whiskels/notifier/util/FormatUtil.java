@@ -12,7 +12,6 @@ public final class FormatUtil {
     public static final String EMPTY_LINE = "---------------------------";
     public static final DateTimeFormatter DAY_MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     public static final DateTimeFormatter YEAR_MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMMM", Locale.ENGLISH);
     public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
 
     public static final Collector<CharSequence, ?, String> COLLECTOR_NEW_LINE = Collectors.joining(String.format(
@@ -21,16 +20,7 @@ public final class FormatUtil {
             "%n%s%n", EMPTY_LINE));
     public static final Collector<CharSequence, ?, String> COLLECTOR_COMMA_SEPARATED = Collectors.joining(", ");
 
-
     private FormatUtil() {
-    }
-
-    public static String extractCommand(String text) {
-        return text.split(" ")[0];
-    }
-
-    public static String extractArguments(String text) {
-        return text.substring(text.indexOf(" ") + 1);
     }
 
     public static String formatDouble(Number value) {

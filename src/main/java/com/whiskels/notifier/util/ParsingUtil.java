@@ -52,4 +52,12 @@ public final class ParsingUtil {
 
         return List.of(hours, minutes);
     }
+
+    public static String extractCommand(String text) {
+        return text.split(" ")[0];
+    }
+
+    public static String extractArguments(String text) {
+        return text.substring(text.indexOf(" ") + 1);
+    }
 }

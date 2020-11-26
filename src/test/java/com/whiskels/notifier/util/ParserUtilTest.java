@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.whiskels.notifier.util.ParsingUtil.getTime;
+import static com.whiskels.notifier.util.ParsingUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -61,5 +61,19 @@ public class ParserUtilTest {
     @Test
     public void invalidDelimiter() {
         assertThrows(IllegalArgumentException.class, () -> getTime("12-00"));
+    }
+
+    private static final String TEST_COMMAND = "/GET";
+    private static final String TEST_ARGUMENTS = "some arguments";
+    private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
+
+    @Test
+    public void getCommand() {
+        assertEquals(TEST_COMMAND, extractCommand(TEST_STRING));
+    }
+
+    @Test
+    public void getArgs() {
+        assertEquals(TEST_ARGUMENTS, extractArguments(TEST_STRING));
     }
 }
