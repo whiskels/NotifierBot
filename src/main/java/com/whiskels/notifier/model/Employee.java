@@ -37,7 +37,6 @@ public class Employee implements Comparable<Employee> {
     public static final String STATUS_SYSTEM_FIRED = "fired";
     public static final String STATUS_DECREE = "Декрет";
 
-
     //    @JsonProperty("id")
 //    private int id;
 //    @JsonProperty("employee_id")
@@ -71,7 +70,6 @@ public class Employee implements Comparable<Employee> {
     private String status;
     @JsonProperty("status_system")
     private String statusSystem;
-
 
     @Override
     public int compareTo(@NotNull Employee o) {

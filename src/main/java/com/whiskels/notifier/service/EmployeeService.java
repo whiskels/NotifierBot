@@ -2,6 +2,7 @@ package com.whiskels.notifier.service;
 
 import com.whiskels.notifier.model.Employee;
 import com.whiskels.notifier.util.JsonUtil;
+import com.whiskels.notifier.util.ReportBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static com.whiskels.notifier.model.Employee.STATUS_DECREE;
 import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
 import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
+import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.util.FormatUtil.*;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
@@ -28,6 +29,9 @@ import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 @Slf4j
 @RequiredArgsConstructor
 public class EmployeeService extends AbstractJSONService {
+    private static final String BIRTHDAY_REPORT_HEADER = "Birthday";
+    private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthday monthly";
+
     @Value("${json.employee.url}")
     private String employeeUrl;
 
@@ -46,26 +50,23 @@ public class EmployeeService extends AbstractJSONService {
     protected void update() {
         log.info("updating employee list");
         employeeList = filterAndSort(readFromJson(employeeUrl),
-                List.of(notDecree(), notFired(), hasBirthday()));
+                List.of(notDecree(), notFired(), isBirthdayNotNull()));
     }
 
     public String dailyMessage() {
-        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
-        final StringBuilder sb = new StringBuilder();
-        sb.append("*Birthdays*\n*" + "Today (")
-                .append(DATE_FORMATTER.format(today))
-                .append(")*:\n")
-                .append(getBirthdayString(isBirthdayOn(today), false))
-                .append("\n*Upcoming week:*\n")
-                .append(getBirthdayString(isBirthdayNextWeekFrom(today), true));
-
-        return sb.toString();
+        final LocalDate today = todayWithOffset(serverHourOffset);
+        return ReportBuilder.withHeader(BIRTHDAY_REPORT_HEADER, today)
+                .line(getBirthdayString(isBirthdayOn(today), false))
+                .line("*Upcoming week:*")
+                .line(getBirthdayString(isBirthdayNextWeekFrom(today), true))
+                .build();
     }
 
     public String monthlyMessage() {
-        final LocalDate today = LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
-        return String.format("*Birthdays this month*%n%s",
-                getBirthdayString(isBirthdaySameMonth(today), true));
+        final LocalDate today = todayWithOffset(serverHourOffset);
+        return ReportBuilder.withHeader(BIRTHDAY_MONTHLY_REPORT_HEADER, today)
+                .line(getBirthdayString(isBirthdaySameMonth(today), true))
+                .build();
     }
 
     private List<Employee> readFromJson(String url) {
@@ -100,13 +101,13 @@ public class EmployeeService extends AbstractJSONService {
                 toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 
-    private Predicate<Employee> isBirthdayOn(LocalDate today) {
-        return employee -> daysBetweenBirthdayAnd(employee, today) == 0;
+    private Predicate<Employee> isBirthdayOn(LocalDate date) {
+        return employee -> daysBetweenBirthdayAnd(employee, date) == 0;
     }
 
-    private Predicate<Employee> isBirthdayNextWeekFrom(LocalDate today) {
+    private Predicate<Employee> isBirthdayNextWeekFrom(LocalDate date) {
         return employee -> {
-            long daysUntilBirthday = daysBetweenBirthdayAnd(employee, today);
+            long daysUntilBirthday = daysBetweenBirthdayAnd(employee, date);
             return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
         };
     }
@@ -123,7 +124,7 @@ public class EmployeeService extends AbstractJSONService {
         return e -> !e.getStatus().equals(STATUS_DECREE);
     }
 
-    private Predicate<Employee> hasBirthday() {
+    private Predicate<Employee> isBirthdayNotNull() {
         return e -> e.getBirthday() != null;
     }
 }

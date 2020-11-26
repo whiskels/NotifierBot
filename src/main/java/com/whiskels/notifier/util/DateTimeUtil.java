@@ -33,7 +33,7 @@ public final class DateTimeUtil {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
 
-    public static LocalDateTime getWithOffset(int serverHourOffset) {
-        return LocalDateTime.now().plusHours(serverHourOffset);
+    public static LocalDate todayWithOffset(int serverHourOffset) {
+        return LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
     }
 }

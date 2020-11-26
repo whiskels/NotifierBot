@@ -1,7 +1,9 @@
 package com.whiskels.notifier.service;
 
 import com.whiskels.notifier.model.CustomerReceivable;
+import com.whiskels.notifier.util.CacheService;
 import com.whiskels.notifier.util.JsonUtil;
+import com.whiskels.notifier.util.ReportBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,15 +12,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 import static com.whiskels.notifier.model.CustomerReceivable.CATEGORY_REVENUE;
-import static com.whiskels.notifier.util.DateTimeUtil.getWithOffset;
 import static com.whiskels.notifier.util.DateTimeUtil.subtractWorkingDays;
-import static com.whiskels.notifier.util.FormatUtil.*;
+import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
+import static com.whiskels.notifier.util.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
@@ -27,20 +27,17 @@ import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 @RequiredArgsConstructor
 public class CustomerReceivableService extends AbstractJSONService {
     private static final int CACHED_DAYS = 2;
-    private static final String REVENUE_REPORT_HEADER = "Revenue";
 
     @Value("${json.customer.receivable.url}")
     private String customerUrl;
 
-    private List<CustomerReceivable> customerReceivables;
+    private CacheService<CustomerReceivable> cache;
 
-    // Storing data for n = CACHED_DAYS of previous days to show only unique receivables
-    private List<List<CustomerReceivable>> customerReceivablesCache;
+    private List<CustomerReceivable> customerReceivables;
 
     @PostConstruct
     private void initCustomerList() {
-        customerReceivablesCache = new ArrayList<>(CACHED_DAYS);
-        IntStream.of(0, CACHED_DAYS - 1).forEach(i -> customerReceivablesCache.add(i, new ArrayList<>()));
+        cache = new CacheService<>(CACHED_DAYS);
         updateCustomerList();
     }
 
@@ -52,22 +49,16 @@ public class CustomerReceivableService extends AbstractJSONService {
 
     private void updateCustomerList() {
         log.info("updating receivable list");
-        LocalDate endDate = LocalDate.now().minusDays(1);
+        LocalDate endDate = todayWithOffset(serverHourOffset).minusDays(1);
         LocalDate startDate = subtractWorkingDays(endDate, CACHED_DAYS);
         final String actualUrl = getUrlBetween(startDate, endDate);
 
-        customerReceivables = filterAndSort(readFromJson(actualUrl), List.of(isRevenue(), notCached()));
+        customerReceivables = filterAndSort(readFromJson(actualUrl), List.of(isRevenue(), cache.notCached()));
     }
 
     private void updateCache() {
         log.info("updating receivable cache");
-        for (int i = CACHED_DAYS - 1; i >= 0; i--) {
-            if (i != 0) {
-                customerReceivablesCache.set(i, customerReceivablesCache.get(i - 1));
-            } else {
-                customerReceivablesCache.set(i, customerReceivables);
-            }
-        }
+        cache.updateCache(customerReceivables);
     }
 
     private String getUrlBetween(LocalDate startDate, LocalDate endDate) {
@@ -86,15 +77,12 @@ public class CustomerReceivableService extends AbstractJSONService {
     public String dailyMessage(Predicate<CustomerReceivable> predicate) {
         log.debug("Preparing customer receivable message");
 
-        return reportHeader(REVENUE_REPORT_HEADER, getWithOffset(serverHourOffset)) +
-                formatList(customerReceivables, predicate);
+        return ReportBuilder.withHeader(CATEGORY_REVENUE, todayWithOffset(serverHourOffset))
+                .list(customerReceivables, predicate)
+                .build();
     }
 
     private Predicate<CustomerReceivable> isRevenue() {
         return c -> c.getCategory().equalsIgnoreCase(CATEGORY_REVENUE);
-    }
-
-    private Predicate<CustomerReceivable> notCached() {
-        return c -> customerReceivablesCache.stream().noneMatch(cache -> cache.contains(c));
     }
 }
