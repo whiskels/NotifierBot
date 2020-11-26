@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.whiskels.notifier.model.CustomerReceivable.CATEGORY_REVENUE;
+import static com.whiskels.notifier.util.CustomerReceivableUtil.IS_REVENUE;
 import static com.whiskels.notifier.util.DateTimeUtil.subtractWorkingDays;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
+import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_NEW_LINE;
 import static com.whiskels.notifier.util.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
@@ -53,7 +55,7 @@ public class CustomerReceivableService extends AbstractJSONService {
         LocalDate startDate = subtractWorkingDays(endDate, CACHED_DAYS);
         final String actualUrl = getUrlBetween(startDate, endDate);
 
-        customerReceivables = filterAndSort(readFromJson(actualUrl), List.of(isRevenue(), cache.notCached()));
+        customerReceivables = filterAndSort(readFromJson(actualUrl), List.of(IS_REVENUE, cache.notCached()));
     }
 
     private void updateCache() {
@@ -78,11 +80,7 @@ public class CustomerReceivableService extends AbstractJSONService {
         log.debug("Preparing customer receivable message");
 
         return ReportBuilder.withHeader(CATEGORY_REVENUE, todayWithOffset(serverHourOffset))
-                .list(customerReceivables, predicate)
+                .list(customerReceivables, predicate, COLLECTOR_NEW_LINE)
                 .build();
-    }
-
-    private Predicate<CustomerReceivable> isRevenue() {
-        return c -> c.getCategory().equalsIgnoreCase(CATEGORY_REVENUE);
     }
 }

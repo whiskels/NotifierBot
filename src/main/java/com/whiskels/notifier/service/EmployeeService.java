@@ -12,25 +12,23 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.whiskels.notifier.model.Employee.STATUS_DECREE;
-import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
-import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
-import static com.whiskels.notifier.util.FormatUtil.*;
+import static com.whiskels.notifier.util.EmployeeUtil.*;
+import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class EmployeeService extends AbstractJSONService {
-    private static final String BIRTHDAY_REPORT_HEADER = "Birthday";
-    private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthday monthly";
+    private static final String BIRTHDAY_REPORT_HEADER = "Birthdays";
+    private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";
+    private static final String NO_DATA = "Nobody";
+    private static final String UPCOMING_WEEK = "*Upcoming week:*";
+    private static final List<Predicate<Employee>> EMPLOYEE_FILTERS = List.of(NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL);
 
     @Value("${json.employee.url}")
     private String employeeUrl;
@@ -49,82 +47,29 @@ public class EmployeeService extends AbstractJSONService {
     @Scheduled(cron = "${json.employee.cron}")
     protected void update() {
         log.info("updating employee list");
-        employeeList = filterAndSort(readFromJson(employeeUrl),
-                List.of(notDecree(), notFired(), isBirthdayNotNull()));
+        employeeList = filterAndSort(readFromJson(employeeUrl), EMPLOYEE_FILTERS);
     }
 
     public String dailyMessage() {
         final LocalDate today = todayWithOffset(serverHourOffset);
         return ReportBuilder.withHeader(BIRTHDAY_REPORT_HEADER, today)
-                .line(getBirthdayString(isBirthdayOn(today), false))
-                .line("*Upcoming week:*")
-                .line(getBirthdayString(isBirthdayNextWeekFrom(today), true))
+                .setNoData(NO_DATA)
+                .list(employeeList, isBirthdayOn(today), COLLECTOR_COMMA_SEPARATED)
+                .line()
+                .line(UPCOMING_WEEK)
+                .list(employeeList, isBirthdayNextWeekFrom(today), COLLECTOR_COMMA_SEPARATED)
                 .build();
     }
 
     public String monthlyMessage() {
         final LocalDate today = todayWithOffset(serverHourOffset);
         return ReportBuilder.withHeader(BIRTHDAY_MONTHLY_REPORT_HEADER, today)
-                .line(getBirthdayString(isBirthdaySameMonth(today), true))
+                .setNoData(NO_DATA)
+                .list(employeeList, isBirthdaySameMonth(today), COLLECTOR_COMMA_SEPARATED)
                 .build();
     }
 
     private List<Employee> readFromJson(String url) {
         return JsonUtil.readValuesFromUrl(url, Employee.class);
-    }
-
-    private String getBirthdayString(Predicate<Employee> predicate, boolean withDate) {
-        String birthdayInfo = "";
-        try {
-            Stream<Employee> filteredEmployees = employeeList.stream()
-                    .filter(predicate);
-            if (withDate) {
-                birthdayInfo = filteredEmployees
-                        .map(employee -> String.format("%s (%s)",
-                                employee.getName(),
-                                BIRTHDAY_FORMATTER.format(toLocalDate(employee.getBirthday()))))
-                        .collect(Collectors.joining(", "));
-            } else {
-                birthdayInfo = filteredEmployees
-                        .map(Employee::getName)
-                        .collect(Collectors.joining(", "));
-            }
-        } catch (Exception e) {
-            log.error("Exception while creating message BIRTHDAY: {}", e.getMessage());
-        }
-        return birthdayInfo.isEmpty() ? "Nobody" : birthdayInfo;
-    }
-
-    private long daysBetweenBirthdayAnd(Employee employee, LocalDate today) {
-        return ChronoUnit.DAYS.between(
-                today.atStartOfDay(),
-                toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
-    }
-
-    private Predicate<Employee> isBirthdayOn(LocalDate date) {
-        return employee -> daysBetweenBirthdayAnd(employee, date) == 0;
-    }
-
-    private Predicate<Employee> isBirthdayNextWeekFrom(LocalDate date) {
-        return employee -> {
-            long daysUntilBirthday = daysBetweenBirthdayAnd(employee, date);
-            return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
-        };
-    }
-
-    private Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
-        return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
-    }
-
-    private Predicate<Employee> notFired() {
-        return e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
-    }
-
-    private Predicate<Employee> notDecree() {
-        return e -> !e.getStatus().equals(STATUS_DECREE);
-    }
-
-    private Predicate<Employee> isBirthdayNotNull() {
-        return e -> e.getBirthday() != null;
     }
 }

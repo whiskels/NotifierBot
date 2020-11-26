@@ -1,7 +1,5 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.model.CustomerDebt;
-import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.CustomerDebtService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
@@ -15,10 +13,9 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 
 import static com.whiskels.notifier.model.Role.*;
+import static com.whiskels.notifier.util.CustomerDebtUtil.isValid;
 
 /**
  * Sends current customer overdue debts information
@@ -30,10 +27,10 @@ import static com.whiskels.notifier.model.Role.*;
 @BotCommand(command = "/GET", message = "Get customer overdue debts")
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
 @Profile({"telegram", "telegram-test"})
-public class GetHandler extends AbstractBaseHandler {
+public class CustomerDebtHandler extends AbstractBaseHandler {
     private final CustomerDebtService customerDebtService;
 
-    public GetHandler(CustomerDebtService customerDebtService) {
+    public CustomerDebtHandler(CustomerDebtService customerDebtService) {
         this.customerDebtService = customerDebtService;
     }
 
@@ -45,19 +42,5 @@ public class GetHandler extends AbstractBaseHandler {
                 .line(customerDebtService.dailyMessage(isValid(user)));
 
         return List.of(builder.build());
-    }
-
-    /**
-     * Checks if user is verified to get information about selected customer
-     * <p>
-     * true - if user is head or admin or is customer's account manager
-     */
-    private Predicate<CustomerDebt> isValid(User user) {
-        return customerDebt -> {
-            final Set<Role> roles = user.getRoles();
-            return roles.contains(ADMIN)
-                    || roles.contains(HEAD)
-                    || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(customerDebt.getAccountManager());
-        };
     }
 }

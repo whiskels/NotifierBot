@@ -10,6 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.Date;
 
+import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
+import static com.whiskels.notifier.util.FormatUtil.BIRTHDAY_FORMATTER;
+
 /**
  * Employee data is received from JSON of the following syntax:
  * [{"row_number":1,
@@ -70,6 +73,11 @@ public class Employee implements Comparable<Employee> {
     private String status;
     @JsonProperty("status_system")
     private String statusSystem;
+
+    @Override
+    public String toString() {
+        return String.format("%s %s", name, BIRTHDAY_FORMATTER.format(toLocalDate(birthday)));
+    }
 
     @Override
     public int compareTo(@NotNull Employee o) {

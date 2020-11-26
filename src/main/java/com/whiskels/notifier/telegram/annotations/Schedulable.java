@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>
  * Used on inheritors of {@link com.whiskels.notifier.telegram.handler.AbstractBaseHandler}
  *
- * @see com.whiskels.notifier.telegram.handler.GetHandler example of annotation implementation
+ * @see com.whiskels.notifier.telegram.handler.CustomerDebtHandler example of annotation implementation
  * @see com.whiskels.notifier.telegram.MessageScheduler example of scheduling (handle(User, String) method of
  * AbstractBaseHandler
  */

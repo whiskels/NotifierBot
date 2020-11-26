@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public final class FormatUtil {
     public static final String EMPTY_LINE = "---------------------------";
@@ -12,6 +14,13 @@ public final class FormatUtil {
     public static final DateTimeFormatter YEAR_MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMMM", Locale.ENGLISH);
     public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
+
+    public static final Collector<CharSequence, ?, String> COLLECTOR_NEW_LINE = Collectors.joining(String.format(
+            "%n"));
+    public static final Collector<CharSequence, ?, String> COLLECTOR_EMPTY_LINE = Collectors.joining(String.format(
+            "%n%s%n", EMPTY_LINE));
+    public static final Collector<CharSequence, ?, String> COLLECTOR_COMMA_SEPARATED = Collectors.joining(", ");
+
 
     private FormatUtil() {
     }

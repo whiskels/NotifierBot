@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.whiskels.notifier.util.CustomerDebtUtil.totalDebtRoubleHigherThan;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
+import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_EMPTY_LINE;
 import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 
 @Service
@@ -23,6 +25,7 @@ import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 public class CustomerDebtService extends AbstractJSONService {
     private static final int MIN_RUB_VALUE = 500;
     private static final String DEBT_REPORT_HEADER = "Overdue debts";
+    private static final String JSON_NODE = "content";
 
     @Value("${json.customer.debt.url}")
     private String customerUrl;
@@ -46,7 +49,7 @@ public class CustomerDebtService extends AbstractJSONService {
         log.debug("Preparing customer debts message");
 
         return ReportBuilder.withHeader(DEBT_REPORT_HEADER, todayWithOffset(serverHourOffset))
-                .listWithLine(customerDebts, predicate)
+                .list(customerDebts, predicate, COLLECTOR_EMPTY_LINE)
                 .build();
     }
 
@@ -63,7 +66,7 @@ public class CustomerDebtService extends AbstractJSONService {
     }
 
     private List<CustomerDebt> readFromJson(String url) {
-        return JsonUtil.readValuesFromNode(url, CustomerDebt.class, "content");
+        return JsonUtil.readValuesFromNode(url, CustomerDebt.class, JSON_NODE);
     }
 
     private List<CustomerDebt> filterByMinRubValue(List<CustomerDebt> customerDebtList) {
@@ -74,9 +77,5 @@ public class CustomerDebtService extends AbstractJSONService {
                 .filter(totalDebtRoubleHigherThan(MIN_RUB_VALUE))
                 .sorted()
                 .collect(Collectors.toList());
-    }
-
-    private Predicate<CustomerDebt> totalDebtRoubleHigherThan(int amount) {
-        return customerDebt -> customerDebt.getTotalDebtRouble() > amount;
     }
 }

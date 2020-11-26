@@ -3,13 +3,13 @@ package com.whiskels.notifier.util;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Collector;
 
 import static com.whiskels.notifier.util.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
-import static com.whiskels.notifier.util.FormatUtil.EMPTY_LINE;
 
 public final class ReportBuilder {
     private final StringBuilder sb = new StringBuilder();
+    private String noData = "Nothing";
 
     private ReportBuilder() {
     }
@@ -19,35 +19,32 @@ public final class ReportBuilder {
     }
 
     private ReportBuilder header(String name, LocalDate date) {
-        sb.append(String.format("*%s report on %s:*%n", name, DAY_MONTH_YEAR_FORMATTER.format(date)));
+        sb.append(String.format("*%s on %s:*%n", name, DAY_MONTH_YEAR_FORMATTER.format(date)));
+        return this;
+    }
+
+    public ReportBuilder setNoData(String noData) {
+        this.noData = noData;
         return this;
     }
 
     public ReportBuilder line(String line) {
-        sb.append(String.format("%s%n", line));
+        sb.append(String.format("%n%s%n", line));
         return this;
     }
 
-    public <T> ReportBuilder listWithLine(List<T> list, Predicate<T> predicate) {
-        final String result = list.stream()
-                .filter(predicate)
-                .map(T::toString)
-                .collect(Collectors.joining(String.format(
-                        "%n%s%n", EMPTY_LINE)));
-
-
-        sb.append(result.isEmpty() ? "Nothing" : result);
+    public ReportBuilder line() {
+        sb.append(String.format("%n"));
         return this;
     }
 
-    public <T> ReportBuilder list(List<T> list, Predicate<T> predicate) {
+    public <T> ReportBuilder list(List<T> list, Predicate<T> predicate, Collector<CharSequence, ?, String> collector) {
         final String result = list.stream()
                 .filter(predicate)
                 .map(T::toString)
-                .collect(Collectors.joining(String.format("%n")));
+                .collect(collector);
 
-
-        sb.append(result.isEmpty() ? "Nothing" : result);
+        sb.append(result.isEmpty() ? noData : result);
         return this;
     }
 
