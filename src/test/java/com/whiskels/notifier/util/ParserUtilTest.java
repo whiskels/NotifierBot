@@ -1,5 +1,3 @@
-
-
 package com.whiskels.notifier.util;
 
 import org.junit.Test;

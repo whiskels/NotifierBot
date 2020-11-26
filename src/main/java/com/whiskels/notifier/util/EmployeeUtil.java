@@ -11,6 +11,12 @@ import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
 import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
 
 public final class EmployeeUtil {
+    public static final Predicate<Employee> NOT_FIRED = e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
+
+    public static final Predicate<Employee> NOT_DECREE = e -> !e.getStatus().equals(STATUS_DECREE);
+
+    public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
+
     private EmployeeUtil() {
     }
 
@@ -34,10 +40,4 @@ public final class EmployeeUtil {
     public static Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
         return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
     }
-
-    public static final Predicate<Employee> NOT_FIRED = e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
-
-    public static final Predicate<Employee> NOT_DECREE = e -> !e.getStatus().equals(STATUS_DECREE);
-
-    public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
 }

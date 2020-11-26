@@ -2,7 +2,8 @@ package com.whiskels.notifier.util;
 
 import org.junit.Test;
 
-import static com.whiskels.notifier.util.FormatUtil.*;
+import static com.whiskels.notifier.util.FormatUtil.extractArguments;
+import static com.whiskels.notifier.util.FormatUtil.extractCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FormatUtilTest {
