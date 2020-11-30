@@ -9,13 +9,18 @@ import java.util.List;
 import static com.whiskels.notifier.util.JacksonObjectMapper.getMapper;
 
 public class JsonUtil {
+    private JsonUtil() {
+    }
+
+    public static final String ERROR = "Invalid read array from: ";
+
     public static <T> List<T> readValuesFromNode(String url, Class<T> clazz, String node) {
         ObjectReader reader = getMapper().readerFor(clazz);
         try {
             String json = getMapper().readTree(new URL(url)).get("content").toString();
             return reader.<T>readValues(json).readAll();
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid read array from URL:\n'" + url + "'", e);
+            throw new IllegalArgumentException(ERROR + url + "'", e);
         }
     }
 
@@ -24,7 +29,7 @@ public class JsonUtil {
         try {
             return reader.<T>readValues(new URL(url)).readAll();
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid read array from URL:\n'" + url + "'", e);
+            throw new IllegalArgumentException(ERROR + url + "'", e);
         }
     }
 
@@ -33,7 +38,7 @@ public class JsonUtil {
         try {
             return reader.<T>readValues(json).readAll();
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid read array from URL:\n'" + json + "'", e);
+            throw new IllegalArgumentException(ERROR + json + "'", e);
         }
     }
 }

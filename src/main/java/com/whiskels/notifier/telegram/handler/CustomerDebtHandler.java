@@ -39,7 +39,7 @@ public class CustomerDebtHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)
-                .line(customerDebtService.dailyMessage(isValid(user)));
+                .line(customerDebtService.dailyReport(isValid(user)));
 
         return List.of(builder.build());
     }

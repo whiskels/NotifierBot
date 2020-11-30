@@ -39,7 +39,7 @@ public class BirthdayHandler extends AbstractBaseHandler {
         log.debug("Preparing /BIRTHDAY");
 
         MessageBuilder builder = MessageBuilder.create(user)
-                .line(employeeService.dailyMessage());
+                .line(employeeService.dailyReport());
 
         return List.of(builder.build());
     }

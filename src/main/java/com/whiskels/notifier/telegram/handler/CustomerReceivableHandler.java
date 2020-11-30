@@ -36,7 +36,7 @@ public class CustomerReceivableHandler extends AbstractBaseHandler {
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET_RECEIVABLE");
         MessageBuilder builder = MessageBuilder.create(user)
-                .line(customerReceivableService.dailyMessage());
+                .line(customerReceivableService.dailyReport());
 
         return List.of(builder.build());
     }

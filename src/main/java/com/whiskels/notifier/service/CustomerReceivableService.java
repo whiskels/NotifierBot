@@ -27,7 +27,7 @@ import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerReceivableService extends AbstractJSONService {
+public class CustomerReceivableService extends AbstractJSONService implements DailyReport<CustomerReceivable> {
     private static final int CACHED_DAYS = 2;
 
     @Value("${json.customer.receivable.url}")
@@ -72,11 +72,7 @@ public class CustomerReceivableService extends AbstractJSONService {
         return JsonUtil.readValuesFromUrl(url, CustomerReceivable.class);
     }
 
-    public String dailyMessage() {
-        return dailyMessage(alwaysTruePredicate());
-    }
-
-    public String dailyMessage(Predicate<CustomerReceivable> predicate) {
+    public String dailyReport(Predicate<CustomerReceivable> predicate) {
         log.debug("Preparing customer receivable message");
 
         return ReportBuilder.withHeader(CATEGORY_REVENUE, todayWithOffset(serverHourOffset))

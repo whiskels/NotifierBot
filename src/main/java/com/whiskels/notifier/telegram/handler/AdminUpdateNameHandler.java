@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 
 import static com.whiskels.notifier.model.Role.ADMIN;
-import static com.whiskels.notifier.util.FormatUtil.extractArguments;
+import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
 
 /**
  * Allows bot admin to change user name by sending bot a chat command

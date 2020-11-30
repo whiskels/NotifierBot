@@ -23,7 +23,7 @@ import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EmployeeService extends AbstractJSONService {
+public class EmployeeService extends AbstractJSONService implements DailyReport<Employee>, MonthlyReport<Employee> {
     private static final String BIRTHDAY_REPORT_HEADER = "Birthdays";
     private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";
     private static final String NO_DATA = "Nobody";
@@ -51,22 +51,26 @@ public class EmployeeService extends AbstractJSONService {
         employeeList = filterAndSort(readFromJson(employeeUrl), EMPLOYEE_FILTERS);
     }
 
-    public String dailyMessage() {
+    public String dailyReport(Predicate<Employee> predicate) {
         final LocalDate today = todayWithOffset(serverHourOffset);
+        final List<Employee> filteredList = filterAndSort(employeeList, predicate);
+
         return ReportBuilder.withHeader(BIRTHDAY_REPORT_HEADER, today)
                 .setNoData(NO_DATA)
-                .list(employeeList, isBirthdayOn(today), COLLECTOR_COMMA_SEPARATED)
+                .list(filteredList, isBirthdayOn(today), COLLECTOR_COMMA_SEPARATED)
                 .line()
                 .line(UPCOMING_WEEK)
-                .list(employeeList, isBirthdayNextWeekFrom(today), COLLECTOR_COMMA_SEPARATED)
+                .list(filteredList, isBirthdayNextWeekFrom(today), COLLECTOR_COMMA_SEPARATED)
                 .build();
     }
 
-    public String monthlyMessage() {
+    public String monthlyReport(Predicate<Employee> predicate) {
         final LocalDate today = todayWithOffset(serverHourOffset);
+        final List<Employee> filteredList = filterAndSort(employeeList, predicate);
+
         return ReportBuilder.withHeader(BIRTHDAY_MONTHLY_REPORT_HEADER, today)
                 .setNoData(NO_DATA)
-                .list(employeeList, isBirthdaySameMonth(today), COLLECTOR_COMMA_SEPARATED)
+                .list(filteredList, isBirthdaySameMonth(today), COLLECTOR_COMMA_SEPARATED)
                 .build();
     }
 

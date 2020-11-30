@@ -16,13 +16,12 @@ import java.util.function.Predicate;
 import static com.whiskels.notifier.util.CustomerDebtUtil.totalDebtRoubleHigherThan;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_EMPTY_LINE;
-import static com.whiskels.notifier.util.StreamUtil.alwaysTruePredicate;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerDebtService extends AbstractJSONService {
+public class CustomerDebtService extends AbstractJSONService implements DailyReport<CustomerDebt> {
     private static final int MIN_RUB_VALUE = 500;
     private static final String DEBT_REPORT_HEADER = "Overdue debts";
     private static final String JSON_NODE = "content";
@@ -45,16 +44,12 @@ public class CustomerDebtService extends AbstractJSONService {
         updateCustomerList();
     }
 
-    public String dailyMessage(Predicate<CustomerDebt> predicate) {
+    public String dailyReport(Predicate<CustomerDebt> predicate) {
         log.debug("Preparing customer debts message");
 
         return ReportBuilder.withHeader(DEBT_REPORT_HEADER, todayWithOffset(serverHourOffset))
                 .list(customerDebts, predicate, COLLECTOR_EMPTY_LINE)
                 .build();
-    }
-
-    public String dailyMessage() {
-        return dailyMessage(alwaysTruePredicate());
     }
 
     private void updateCustomerList() {
