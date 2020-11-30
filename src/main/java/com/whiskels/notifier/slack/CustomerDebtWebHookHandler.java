@@ -17,11 +17,11 @@ public class CustomerDebtWebHookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.debt.webhook}")
     private String webHook;
 
-    private final CustomerDebtService customerDebtService;
+    private final CustomerDebtService service;
 
     @Scheduled(cron = "${slack.customer.debt.cron}")
     public void dailyPayload() {
-        String result = createAndSendPayload(webHook, customerDebtService.dailyReport());
+        final String result = dailyReport(webHook, service);
         log.info(result);
     }
 }

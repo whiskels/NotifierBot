@@ -2,6 +2,8 @@ package com.whiskels.notifier.slack;
 
 import com.slack.api.Slack;
 import com.slack.api.webhook.WebhookResponse;
+import com.whiskels.notifier.service.DailyReport;
+import com.whiskels.notifier.service.MonthlyReport;
 
 import java.io.IOException;
 
@@ -25,5 +27,13 @@ public interface SlackWebHookHandler {
         } catch (IOException e) {
             return String.format("Error while sending %s to webhook: %s", message, webHook);
         }
+    }
+
+    default <T> String dailyReport(String webHook, DailyReport<T> provider) {
+        return createAndSendPayload(webHook, provider.dailyReport());
+    }
+
+    default <T> String monthlyReport(String webHook, MonthlyReport<T> provider) {
+        return createAndSendPayload(webHook, provider.monthlyReport());
     }
 }

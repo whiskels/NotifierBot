@@ -16,10 +16,11 @@ public class CustomerReceivableWebhookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.receivable.webhook}")
     private String webHook;
 
-    private final CustomerReceivableService customerReceivableService;
+    private final CustomerReceivableService service;
 
     @Scheduled(cron = "${slack.customer.receivable.cron}")
     public void dailyPayload() {
-        log.info(createAndSendPayload(webHook, customerReceivableService.dailyReport()));
+        final String result = dailyReport(webHook, service);
+        log.info(result);
     }
 }
