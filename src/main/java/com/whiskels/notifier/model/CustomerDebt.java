@@ -8,8 +8,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
 
-import java.util.Comparator;
-
+import static com.whiskels.notifier.util.CustomerDebtUtil.TOTAL_DEBT_COMPARATOR;
 import static com.whiskels.notifier.util.FormatUtil.formatDouble;
 
 /**
@@ -95,8 +94,7 @@ public class CustomerDebt implements Comparable<CustomerDebt> {
 
     @Override
     public int compareTo(@NotNull CustomerDebt o) {
-        return Comparator.comparing(CustomerDebt::getTotalDebtRouble)
-                .thenComparing(CustomerDebt::getContractor).reversed()
+        return TOTAL_DEBT_COMPARATOR
                 .compare(this, o);
     }
 }

@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.Date;
 
 import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
+import static com.whiskels.notifier.util.EmployeeUtil.BIRTHDAY_COMPARATOR;
 import static com.whiskels.notifier.util.FormatUtil.BIRTHDAY_FORMATTER;
 
 /**
@@ -81,8 +81,7 @@ public class Employee implements Comparable<Employee> {
 
     @Override
     public int compareTo(@NotNull Employee o) {
-        return Comparator.comparing(Employee::getBirthday)
-                .thenComparing(Employee::getName).reversed()
+        return BIRTHDAY_COMPARATOR
                 .compare(this, o);
     }
 }

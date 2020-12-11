@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.Date;
 
+import static com.whiskels.notifier.util.CustomerReceivableUtil.AMOUNT_COMPARATOR;
 import static com.whiskels.notifier.util.FormatUtil.formatDouble;
 
 /**
@@ -74,8 +74,7 @@ public class CustomerReceivable implements Comparable<CustomerReceivable> {
 
     @Override
     public int compareTo(@NotNull CustomerReceivable o) {
-        return Comparator.comparing(CustomerReceivable::getAmountRub)
-                .thenComparing(CustomerReceivable::getContractor)
+        return AMOUNT_COMPARATOR
                 .compare(this, o);
     }
 }
