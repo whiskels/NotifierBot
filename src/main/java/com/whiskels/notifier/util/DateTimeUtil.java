@@ -1,15 +1,16 @@
 package com.whiskels.notifier.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateTimeUtil {
-    private DateTimeUtil() {
-    }
-
     // https://stackoverflow.com/a/33943576/13716599
     public static LocalDate subtractWorkingDays(LocalDate date, int amount) {
         if (amount < 1) {

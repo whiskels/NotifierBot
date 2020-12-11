@@ -1,5 +1,8 @@
 package com.whiskels.notifier.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
@@ -7,12 +10,10 @@ import java.util.stream.Collector;
 
 import static com.whiskels.notifier.util.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReportBuilder {
     private final StringBuilder sb = new StringBuilder();
     private String noData = "Nothing";
-
-    private ReportBuilder() {
-    }
 
     public static ReportBuilder withHeader(String name, LocalDate date) {
         return new ReportBuilder().header(name, date);

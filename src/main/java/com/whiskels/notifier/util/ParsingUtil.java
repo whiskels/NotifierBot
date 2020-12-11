@@ -1,10 +1,12 @@
 package com.whiskels.notifier.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ParsingUtil {
-    private ParsingUtil() {
-    }
 
     /**
      * Parses input text into hours and minutes

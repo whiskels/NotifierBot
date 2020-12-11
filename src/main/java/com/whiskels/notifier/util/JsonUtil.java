@@ -1,6 +1,8 @@
 package com.whiskels.notifier.util;
 
 import com.fasterxml.jackson.databind.ObjectReader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,11 +10,9 @@ import java.util.List;
 
 import static com.whiskels.notifier.util.JacksonObjectMapper.getMapper;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtil {
     public static final String ERROR = "Invalid read array from: %s (%s)";
-
-    private JsonUtil() {
-    }
 
     public static <T> List<T> readValuesFromNode(String url, Class<T> clazz, String node) {
         ObjectReader reader = getMapper().readerFor(clazz);
