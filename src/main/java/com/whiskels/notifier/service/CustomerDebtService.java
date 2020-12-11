@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.whiskels.notifier.util.CustomerDebtUtil.calculateOverallDebt;
 import static com.whiskels.notifier.util.CustomerDebtUtil.totalDebtRoubleHigherThan;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_EMPTY_LINE;
@@ -63,8 +64,10 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
     }
 
     private List<CustomerDebt> calculateTotalDebt(List<CustomerDebt> customerDebtList) {
-        customerDebtList.forEach(customerDebt -> customerDebt.calculateOverallDebt(
-                moexService.getUsdRate(), moexService.getEurRate()));
+        final double usdRate = moexService.getUsdRate();
+        final double eurRate = moexService.getEurRate();
+        customerDebtList.forEach(customerDebt ->
+                customerDebt.setTotalDebtRouble(calculateOverallDebt(customerDebt, usdRate, eurRate)));
 
         return customerDebtList;
     }
