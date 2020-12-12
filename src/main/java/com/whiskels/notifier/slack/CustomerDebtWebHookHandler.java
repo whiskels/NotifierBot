@@ -21,7 +21,7 @@ public class CustomerDebtWebHookHandler implements SlackWebHookHandler {
 
     @Scheduled(cron = "${slack.customer.debt.cron}")
     public void dailyPayload() {
-        final String result = dailyReport(webHook, service);
+        final String result = sendDailyReport(webHook, service);
         log.info(result);
     }
 }

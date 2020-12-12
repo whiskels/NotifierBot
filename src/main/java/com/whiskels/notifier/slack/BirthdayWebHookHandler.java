@@ -21,13 +21,13 @@ public class BirthdayWebHookHandler implements SlackWebHookHandler {
 
     @Scheduled(cron = "${slack.employee.birthday.dailyCron}")
     public void dailyPayload() {
-        final String result = dailyReport(webHook, service);
+        final String result = sendDailyReport(webHook, service);
         log.info(result);
     }
 
     @Scheduled(cron = "${slack.employee.birthday.monthlyCron}")
     public void monthlyPayload() {
-        final String result = monthlyReport(webHook, service);
+        final String result = sendMonthlyReport(webHook, service);
         log.info(result);
     }
 }

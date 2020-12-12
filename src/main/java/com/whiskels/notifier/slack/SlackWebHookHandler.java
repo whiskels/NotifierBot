@@ -29,11 +29,11 @@ public interface SlackWebHookHandler {
         }
     }
 
-    default <T> String dailyReport(String webHook, DailyReport<T> provider) {
+    default <T> String sendDailyReport(String webHook, DailyReport<T> provider) {
         return createAndSendPayload(webHook, provider.dailyReport());
     }
 
-    default <T> String monthlyReport(String webHook, MonthlyReport<T> provider) {
+    default <T> String sendMonthlyReport(String webHook, MonthlyReport<T> provider) {
         return createAndSendPayload(webHook, provider.monthlyReport());
     }
 }
