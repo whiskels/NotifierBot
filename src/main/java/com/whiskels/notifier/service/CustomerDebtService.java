@@ -13,8 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.util.CustomerDebtUtil.calculateOverallDebt;
-import static com.whiskels.notifier.util.CustomerDebtUtil.totalDebtRoubleHigherThan;
+import static com.whiskels.notifier.util.CustomerDebtUtil.*;
 import static com.whiskels.notifier.util.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.util.FormatUtil.COLLECTOR_EMPTY_LINE;
 import static com.whiskels.notifier.util.StreamUtil.filterAndSort;
@@ -55,7 +54,7 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
 
     private void updateCustomerList() {
         log.info("updating customer debt list");
-        customerDebts = filterAndSort(calculateTotalDebt(readFromJson(customerUrl)),
+        customerDebts = filterAndSort(calculateTotalDebtFor(readFromJson(customerUrl)),
                 totalDebtRoubleHigherThan(MIN_RUB_VALUE));
     }
 
@@ -63,11 +62,13 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
         return JsonUtil.readValuesFromNode(url, CustomerDebt.class, JSON_NODE);
     }
 
-    private List<CustomerDebt> calculateTotalDebt(List<CustomerDebt> customerDebtList) {
+    private List<CustomerDebt> calculateTotalDebtFor(List<CustomerDebt> customerDebtList) {
         final double usdRate = moexService.getUsdRate();
         final double eurRate = moexService.getEurRate();
-        customerDebtList.forEach(customerDebt ->
-                customerDebt.setTotalDebtRouble(calculateOverallDebt(customerDebt, usdRate, eurRate)));
+        customerDebtList.forEach(customerDebt -> {
+            customerDebt.setTotalDebt(calculateTotalDebt(customerDebt));
+            customerDebt.setTotalDebtRouble(calculateTotalDebtRouble(customerDebt, usdRate, eurRate));
+        });
 
         return customerDebtList;
     }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +36,6 @@ import static com.whiskels.notifier.util.FormatUtil.formatDouble;
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerDebt implements Comparable<CustomerDebt> {
-
     private String contractor;
     @JsonProperty("finance_subject")
     private String financeSubject;
@@ -61,15 +59,10 @@ public class CustomerDebt implements Comparable<CustomerDebt> {
     @JsonProperty("debtor_delay_current")
     private String debtorDelayCurrent;
 
-    @Getter
     private double totalDebt;
 
-    @Getter
     @Setter
     private double totalDebtRouble = Double.NaN;
-
-
-
 
     @Override
     public String toString() {

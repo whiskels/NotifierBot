@@ -36,12 +36,16 @@ public class CustomerDebtUtil {
         return customerDebt -> customerDebt.getTotalDebtRouble() > amount;
     }
 
+    public static double calculateTotalDebt(CustomerDebt customerDebt) {
+        return customerDebt.getDelay0() + customerDebt.getDelay30() + customerDebt.getDelay60()
+                + customerDebt.getDelay90() + customerDebt.getDelay180();
+    }
+
     /*
      * Calculates overall customer debt with delay more than 0 days
      */
-    public static double calculateOverallDebt(CustomerDebt customerDebt, double usdRate, double eurRate) {
-        final double totalDebt = customerDebt.getDelay0() + customerDebt.getDelay30() + customerDebt.getDelay60()
-                + customerDebt.getDelay90() + customerDebt.getDelay180();
+    public static double calculateTotalDebtRouble(CustomerDebt customerDebt, double usdRate, double eurRate) {
+        final double totalDebt = customerDebt.getTotalDebt();
         final String currency = customerDebt.getCurrency();
         if (!StringUtils.isEmpty(currency)) {
             if (currency.equalsIgnoreCase("USD")) {
