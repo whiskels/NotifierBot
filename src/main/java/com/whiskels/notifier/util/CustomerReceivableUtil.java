@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.model.CustomerReceivable.CATEGORY_REVENUE;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CustomerReceivableUtil {
+    public static final String CATEGORY_REVENUE = "Revenue";
+
     public static final Predicate<CustomerReceivable> IS_REVENUE =
             c -> c.getCategory().equalsIgnoreCase(CATEGORY_REVENUE);
 

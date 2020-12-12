@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Value;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -34,37 +34,35 @@ import static com.whiskels.notifier.util.FormatUtil.formatDouble;
  * "description":""}
  */
 
-@Data
+@Value
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerReceivable implements Comparable<CustomerReceivable> {
-    public static final String CATEGORY_REVENUE = "Revenue";
-
-    private double id;
+    double id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
-    private Date date;
-    private String currency;
-    private double amount;
+    Date date;
+    String currency;
+    double amount;
     @JsonProperty("amount_usd")
-    private double amountUsd;
+    double amountUsd;
     @JsonProperty("amount_rub")
-    private double amountRub;
-    private String bank;
+    double amountRub;
+    String bank;
     @JsonProperty("bank_account")
-    private String bankAccount;
+    String bankAccount;
     @JsonProperty("legal_name")
-    private String legalName;
-    private String contractor;
-    private String type;
+    String legalName;
+    String contractor;
+    String type;
     @JsonProperty("contractor_account")
-    private String contractorAccount;
+    String contractorAccount;
     @JsonProperty("contractor_legal_name")
-    private String contractorLegalName;
-    private String category;
-    private String subcategory;
-    private String project;
-    private String office;
-    private String description;
+    String contractorLegalName;
+    String category;
+    String subcategory;
+    String project;
+    String office;
+    String description;
 
     @Override
     public String toString() {

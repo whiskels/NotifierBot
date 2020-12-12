@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Value;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -33,46 +33,17 @@ import static com.whiskels.notifier.util.FormatUtil.BIRTHDAY_FORMATTER;
  * "office":"Moscow",
  * "is_new_employee":false},...
  */
-@Data
+@Value
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee implements Comparable<Employee> {
-    public static final String STATUS_SYSTEM_FIRED = "fired";
-    public static final String STATUS_DECREE = "Декрет";
-
-    //    @JsonProperty("id")
-//    private int id;
-//    @JsonProperty("employee_id")
-//    private int employeeId;
-//    @JsonProperty("full_name")
-//    private String fullName;
-//    @JsonProperty("email")
-//    private String email;
-//    @JsonProperty("appointment_date")
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-//    private LocalDate appointmentDate;
-//    @JsonProperty("removal_date")
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-//    private LocalDate removalDate;
-//    @JsonProperty("phone")
-//    private String phone;
-//    @JsonProperty("department")
-//    private String department;
-//    @JsonProperty("position")
-//    private String position;
-//    @JsonProperty("grade")
-//    private String grade;
-//    @JsonProperty("office")
-//    private String office;
-//    @JsonProperty("is_new_employee")
-//    private boolean isNew;
-    private String name;
+    String name;
     @JsonProperty("birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
-    private Date birthday;
-    private String status;
+    Date birthday;
+    String status;
     @JsonProperty("status_system")
-    private String statusSystem;
+    String statusSystem;
 
     @Override
     public String toString() {

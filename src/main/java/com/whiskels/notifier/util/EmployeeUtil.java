@@ -9,12 +9,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.model.Employee.STATUS_DECREE;
-import static com.whiskels.notifier.model.Employee.STATUS_SYSTEM_FIRED;
 import static com.whiskels.notifier.util.DateTimeUtil.toLocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EmployeeUtil {
+    public static final String STATUS_SYSTEM_FIRED = "fired";
+    public static final String STATUS_DECREE = "Декрет";
+
     public static final Predicate<Employee> NOT_FIRED = e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
     public static final Predicate<Employee> NOT_DECREE = e -> !e.getStatus().equals(STATUS_DECREE);
     public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
