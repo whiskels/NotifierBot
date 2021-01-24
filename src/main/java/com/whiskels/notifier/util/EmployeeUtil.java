@@ -16,11 +16,11 @@ public final class EmployeeUtil {
     public static final String STATUS_SYSTEM_FIRED = "fired";
     public static final String STATUS_DECREE = "Декрет";
 
-    public static final Predicate<Employee> NOT_FIRED = e -> !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
-    public static final Predicate<Employee> NOT_DECREE = e -> !e.getStatus().equals(STATUS_DECREE);
+    public static final Predicate<Employee> NOT_FIRED = e -> e.getStatusSystem() != null && !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
+    public static final Predicate<Employee> NOT_DECREE = e -> e.getStatus() != null && !e.getStatus().equals(STATUS_DECREE);
     public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
     public static final Comparator<Employee> BIRTHDAY_COMPARATOR = Comparator.comparing(Employee::getBirthday)
-            .thenComparing(Employee::getName).reversed();
+            .thenComparing(Employee::getName);
 
     public static long daysBetweenBirthdayAnd(Employee employee, LocalDate today) {
         return ChronoUnit.DAYS.between(
