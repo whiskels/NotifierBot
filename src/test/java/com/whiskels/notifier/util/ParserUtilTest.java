@@ -1,6 +1,6 @@
 package com.whiskels.notifier.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ParserUtilTest {
+    private static final String TEST_COMMAND = "/GET";
+    private static final String TEST_ARGUMENTS = "some arguments";
+    private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
 
     @Test
     public void oneArgument() {
@@ -62,10 +65,6 @@ public class ParserUtilTest {
     public void invalidDelimiter() {
         assertThrows(IllegalArgumentException.class, () -> getTime("12-00"));
     }
-
-    private static final String TEST_COMMAND = "/GET";
-    private static final String TEST_ARGUMENTS = "some arguments";
-    private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
 
     @Test
     public void getCommand() {

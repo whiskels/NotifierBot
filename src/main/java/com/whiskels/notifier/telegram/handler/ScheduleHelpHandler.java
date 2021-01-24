@@ -2,7 +2,6 @@ package com.whiskels.notifier.telegram.handler;
 
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -21,12 +20,11 @@ import static com.whiskels.notifier.model.Role.*;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/SCHEDULE_HELP")
+@BotCommand(command = "/SCHEDULE_HELP", requiredRoles = {MANAGER, HEAD, ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN, HR})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_HELP");
         return List.of(MessageBuilder.create(user)

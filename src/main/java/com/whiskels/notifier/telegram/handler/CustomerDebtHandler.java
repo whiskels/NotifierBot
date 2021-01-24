@@ -3,7 +3,6 @@ package com.whiskels.notifier.telegram.handler;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.CustomerDebtService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import static com.whiskels.notifier.util.CustomerDebtUtil.isValid;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/GET", message = "Get customer overdue debts")
+@BotCommand(command = "/GET", message = "Get customer overdue debts", requiredRoles = {MANAGER, HEAD, ADMIN})
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class CustomerDebtHandler extends AbstractBaseHandler {
@@ -35,7 +34,6 @@ public class CustomerDebtHandler extends AbstractBaseHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET");
         MessageBuilder builder = MessageBuilder.create(user)

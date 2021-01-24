@@ -3,7 +3,6 @@ package com.whiskels.notifier.telegram.handler;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.CustomerReceivableService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -22,7 +21,7 @@ import static com.whiskels.notifier.model.Role.ADMIN;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/GET_RECEIVABLE", message = "Get customer receivables")
+@BotCommand(command = "/GET_RECEIVABLE", message = "Get customer receivables", requiredRoles = {ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class CustomerReceivableHandler extends AbstractBaseHandler {
     private final CustomerReceivableService customerReceivableService;
@@ -32,7 +31,6 @@ public class CustomerReceivableHandler extends AbstractBaseHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /GET_RECEIVABLE");
         MessageBuilder builder = MessageBuilder.create(user)

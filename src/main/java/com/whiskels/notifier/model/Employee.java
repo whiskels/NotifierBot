@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Value;
+import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -33,7 +33,7 @@ import static com.whiskels.notifier.util.FormatUtil.BIRTHDAY_FORMATTER;
  * "office":"Moscow",
  * "is_new_employee":false},...
  */
-@Value
+@Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee implements Comparable<Employee> {
