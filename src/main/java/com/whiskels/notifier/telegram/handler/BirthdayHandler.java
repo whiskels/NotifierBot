@@ -3,7 +3,6 @@ package com.whiskels.notifier.telegram.handler;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.EmployeeService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ import static com.whiskels.notifier.model.Role.*;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays")
+@BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays", requiredRoles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
 @Schedulable(roles = HR)
 @Profile({"telegram", "telegram-test"})
 public class BirthdayHandler extends AbstractBaseHandler {
@@ -34,7 +33,6 @@ public class BirthdayHandler extends AbstractBaseHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         log.debug("Preparing /BIRTHDAY");
 

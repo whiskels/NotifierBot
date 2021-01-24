@@ -3,7 +3,6 @@ package com.whiskels.notifier.telegram.handler;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.UserService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -24,7 +23,7 @@ import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/ADMIN_NAME")
+@BotCommand(command = "/ADMIN_NAME", requiredRoles = {ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class AdminUpdateNameHandler extends AbstractUserHandler {
 
@@ -33,7 +32,6 @@ public class AdminUpdateNameHandler extends AbstractUserHandler {
     }
 
     @Override
-    @RequiredRoles(roles = ADMIN)
     protected List<BotApiMethod<Message>> handle(User admin, String message) {
         log.debug("Preparing /ADMIN_NAME");
         final String arguments = extractArguments(message);
