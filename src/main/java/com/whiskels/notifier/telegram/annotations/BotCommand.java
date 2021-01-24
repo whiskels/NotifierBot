@@ -1,8 +1,11 @@
 package com.whiskels.notifier.telegram.annotations;
 
+import com.whiskels.notifier.model.Role;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static com.whiskels.notifier.model.Role.UNAUTHORIZED;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -29,4 +32,12 @@ public @interface BotCommand {
      * @return help message for the command
      */
     String message() default "";
+
+    /**
+     * Returns an array of user roles that have access to the handler
+     * Default: {@link Role#UNAUTHORIZED} - every user can call this handler
+     *
+     * @return an array of user roles that have access to the handler
+     */
+    Role[] requiredRoles() default UNAUTHORIZED;
 }

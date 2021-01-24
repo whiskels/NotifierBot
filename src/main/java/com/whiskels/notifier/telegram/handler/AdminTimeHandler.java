@@ -2,7 +2,6 @@ package com.whiskels.notifier.telegram.handler;
 
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,14 +22,13 @@ import static com.whiskels.notifier.model.Role.ADMIN;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/ADMIN_TIME", message = "Show bot server time")
+@BotCommand(command = "/ADMIN_TIME", message = "Show bot server time", requiredRoles = {ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class AdminTimeHandler extends AbstractBaseHandler {
     @Value("${heroku.server.hour.offset}")
     private int serverHourOffset;
 
     @Override
-    @RequiredRoles(roles = ADMIN)
     public List<BotApiMethod<Message>> handle(User admin, String message) {
         log.debug("Preparing /ADMIN_TIME");
         return List.of(MessageBuilder.create(admin)

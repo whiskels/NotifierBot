@@ -1,7 +1,8 @@
 package com.whiskels.notifier.telegram.security;
 
+import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.User;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
+import com.whiskels.notifier.telegram.annotations.BotCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -18,23 +19,29 @@ import java.util.stream.Stream;
 @Profile({"telegram", "telegram-test"})
 public class AuthorizationService {
     /**
-     * Checks user's permissions if class has method annotated with {@link RequiredRoles}
+     * Checks user's permissions if class is annotated with {@link BotCommand}
      *
      * @param user
      * @return authorization result
      */
     public final boolean authorize(Class<?> clazz, User user) {
-        log.debug("Authorizing {} to use {}", user, clazz.getSimpleName());
         try {
-            final RequiredRoles annotation = Stream.of(clazz.getDeclaredMethods())
-                    .filter(method -> method.isAnnotationPresent(RequiredRoles.class))
-                    .findFirst()
-                    .orElseThrow(NoSuchMethodException::new)
-                    .getDeclaredAnnotation(RequiredRoles.class);
-            log.debug("User roles: {}\nRequired roles: {}", user.getRoles(), annotation.roles());
-            return !Collections.disjoint(user.getRoles(), List.of(annotation.roles()));
-        } catch (NoSuchMethodException e) {
-            log.debug("No secured methods in class {}", clazz.getSimpleName());
+            log.debug("Authorizing {} to use {}", user, clazz.getSimpleName());
+            final List<Role> requiredRoles = List.of(
+                    Stream.of(clazz)
+                            .filter(cls -> cls.isAnnotationPresent(BotCommand.class))
+                            .findFirst()
+                            .orElseThrow(UnsupportedOperationException::new)
+                            .getDeclaredAnnotation(BotCommand.class)
+                            .requiredRoles());
+            log.debug("User roles: {}\nRequired roles: {}", user.getRoles(), requiredRoles);
+            if (requiredRoles.contains(Role.UNAUTHORIZED)) {
+                return true;
+            }
+            return !Collections.disjoint(user.getRoles(), requiredRoles);
+        } catch (UnsupportedOperationException e) {
+            log.error("Attempting to check security on class that is no annotated with @BotCommand: {}",
+                    clazz.getSimpleName());
             return true;
         }
     }

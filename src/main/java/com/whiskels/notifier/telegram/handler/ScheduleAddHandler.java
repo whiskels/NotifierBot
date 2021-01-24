@@ -4,7 +4,6 @@ import com.whiskels.notifier.model.Schedule;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.ScheduleService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -27,7 +26,7 @@ import static com.whiskels.notifier.util.ParsingUtil.getTime;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/SCHEDULE", message = "Manage schedule")
+@BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class ScheduleAddHandler extends AbstractScheduleHandler {
 
@@ -36,7 +35,6 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
     }
 
     @Override
-    @RequiredRoles(roles = {MANAGER, HEAD, ADMIN, HR})
     public List<BotApiMethod<Message>> handle(User user, String message) {
         if (!message.contains(" ")) {
             log.debug("Preparing /SCHEDULE (no args)");

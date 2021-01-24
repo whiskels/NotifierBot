@@ -4,7 +4,6 @@ import com.whiskels.notifier.model.Role;
 import com.whiskels.notifier.model.User;
 import com.whiskels.notifier.service.UserService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.RequiredRoles;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -27,7 +26,7 @@ import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/ADMIN_PROMOTE")
+@BotCommand(command = "/ADMIN_PROMOTE", requiredRoles = {ADMIN})
 @Profile({"telegram", "telegram-test"})
 public class AdminPromoteHandler extends AbstractUserHandler {
     public AdminPromoteHandler(UserService userService) {
@@ -35,7 +34,6 @@ public class AdminPromoteHandler extends AbstractUserHandler {
     }
 
     @Override
-    @RequiredRoles(roles = ADMIN)
     protected List<BotApiMethod<Message>> handle(User admin, String message) {
         log.debug("Preparing /ADMIN_PROMOTE");
         final String[] arguments = extractArguments(message).split(" ");
