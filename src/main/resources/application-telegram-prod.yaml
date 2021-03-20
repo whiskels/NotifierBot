@@ -1,3 +1,5 @@
+spring:
+  profiles.include: telegram-common
 telegram:
   bot:
     name: ${BOT_NAME}
