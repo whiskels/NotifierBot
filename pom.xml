@@ -30,6 +30,7 @@
 
         <!--DB-->
         <postgresql.version>42.2.19.jre7</postgresql.version>
+        <flyway.version>6.5.7</flyway.version>
 
         <jackson-json.version>2.12.1</jackson-json.version>
     </properties>
@@ -141,6 +142,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
 
         <!--Test-->
