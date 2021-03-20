@@ -20,9 +20,9 @@ import java.util.List;
 @Component
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class HelpHandler extends AbstractBaseHandler {
-    @Value("${telegram.bot.name}")
+    @Value("${telegram.bot.name:TelegramNotifierBot}")
     private String botUsername;
 
     private final List<AbstractBaseHandler> handlers;

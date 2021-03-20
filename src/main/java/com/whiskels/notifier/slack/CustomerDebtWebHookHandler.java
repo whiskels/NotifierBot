@@ -1,7 +1,6 @@
-package com.whiskels.slack;
+package com.whiskels.notifier.slack;
 
 import com.whiskels.notifier.service.CustomerDebtService;
-import com.whiskels.notifier.slack.SlackWebHookHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile({"slack", "slack-test"})
+@Profile("slack-common")
 @Slf4j
 public class CustomerDebtWebHookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.debt.webhook}")

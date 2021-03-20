@@ -25,7 +25,7 @@ import static com.whiskels.notifier.util.ParsingUtil.extractCommand;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class UpdateReceiver {
     private final List<AbstractBaseHandler> handlers;
     private final UserService userService;

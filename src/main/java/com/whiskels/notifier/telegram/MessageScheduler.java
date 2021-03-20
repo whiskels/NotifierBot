@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class MessageScheduler {
-    @Value("${heroku.server.hour.offset}")
+    @Value("${heroku.server.hour.offset:3}")
     private int serverHourOffset;
 
     private final Bot bot;

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class UserService {
     private final JpaUserRepository userRepository;
 

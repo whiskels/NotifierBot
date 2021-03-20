@@ -25,7 +25,7 @@ import static com.whiskels.notifier.util.CustomerDebtUtil.isValid;
 @Slf4j
 @BotCommand(command = "/GET", message = "Get customer overdue debts", requiredRoles = {MANAGER, HEAD, ADMIN})
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class CustomerDebtHandler extends AbstractBaseHandler {
     private final CustomerDebtService customerDebtService;
 

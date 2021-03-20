@@ -24,7 +24,7 @@ import static com.whiskels.notifier.model.Role.*;
 @Slf4j
 @BotCommand(command = "/BIRTHDAY", message = "Upcoming birthdays", requiredRoles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
 @Schedulable(roles = HR)
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class BirthdayHandler extends AbstractBaseHandler {
     private final EmployeeService employeeService;
 

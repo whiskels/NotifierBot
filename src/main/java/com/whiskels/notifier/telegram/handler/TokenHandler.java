@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 @Slf4j
 @BotCommand(command = "/TOKEN", message = "Show your token")
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class TokenHandler extends AbstractBaseHandler {
     @Override
     public List<BotApiMethod<Message>> handle(User user, String message) {

@@ -22,7 +22,7 @@ import static com.whiskels.notifier.model.Role.ADMIN;
 @Component
 @Slf4j
 @BotCommand(command = "/GET_RECEIVABLE", message = "Get customer receivables", requiredRoles = {ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class CustomerReceivableHandler extends AbstractBaseHandler {
     private final CustomerReceivableService customerReceivableService;
 
