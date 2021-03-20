@@ -27,7 +27,7 @@ import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
 @Component
 @Slf4j
 @BotCommand(command = "/ADMIN_PROMOTE", requiredRoles = {ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class AdminPromoteHandler extends AbstractUserHandler {
     public AdminPromoteHandler(UserService userService) {
         super(userService);

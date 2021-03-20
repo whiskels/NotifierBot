@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class AuthorizationService {
     /**
      * Checks user's permissions if class is annotated with {@link BotCommand}

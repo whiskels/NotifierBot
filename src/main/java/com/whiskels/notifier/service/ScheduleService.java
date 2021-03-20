@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class ScheduleService {
     private final JpaScheduleRepository scheduleRepository;
     private final JpaUserRepository userRepository;

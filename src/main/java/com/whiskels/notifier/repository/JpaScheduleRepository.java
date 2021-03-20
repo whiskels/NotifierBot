@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public interface JpaScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.user.chatId=:chatId ORDER BY s.hour ASC")
     List<Schedule> getAll(@Param("chatId") int chatId);

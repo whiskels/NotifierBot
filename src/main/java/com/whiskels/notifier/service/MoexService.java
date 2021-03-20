@@ -18,10 +18,10 @@ public class MoexService {
     @Value("${moex.url}")
     private String moexUrl;
 
-    @Value("${moex.usd}")
+    @Value("${moex.usd:CBRF_USD_LAST (double)}")
     private String moexUsd;
 
-    @Value("${moex.eur}")
+    @Value("${moex.eur:CBRF_EUR_LAST (double)}")
     private String moexEur;
 
     @Getter

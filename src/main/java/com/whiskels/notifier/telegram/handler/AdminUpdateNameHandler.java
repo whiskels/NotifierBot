@@ -24,7 +24,7 @@ import static com.whiskels.notifier.util.ParsingUtil.extractArguments;
 @Component
 @Slf4j
 @BotCommand(command = "/ADMIN_NAME", requiredRoles = {ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class AdminUpdateNameHandler extends AbstractUserHandler {
 
     public AdminUpdateNameHandler(UserService userService) {

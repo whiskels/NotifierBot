@@ -21,7 +21,7 @@ import static com.whiskels.notifier.model.Role.*;
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE_HELP", requiredRoles = {MANAGER, HEAD, ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override

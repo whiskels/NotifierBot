@@ -22,7 +22,7 @@ import static com.whiskels.notifier.model.Role.*;
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE_CLEAR", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class ScheduleClearHandler extends AbstractScheduleHandler {
     public ScheduleClearHandler(ScheduleService scheduleService) {
         super(scheduleService);

@@ -27,7 +27,7 @@ import static com.whiskels.notifier.util.ParsingUtil.getTime;
 @Component
 @Slf4j
 @BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class ScheduleAddHandler extends AbstractScheduleHandler {
 
     public ScheduleAddHandler(ScheduleService scheduleService) {

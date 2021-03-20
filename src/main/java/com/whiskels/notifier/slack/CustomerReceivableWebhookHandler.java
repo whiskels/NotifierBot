@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile({"slack", "slack-test"})
+@Profile("slack-common")
 @Slf4j
 public class CustomerReceivableWebhookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.receivable.webhook}")

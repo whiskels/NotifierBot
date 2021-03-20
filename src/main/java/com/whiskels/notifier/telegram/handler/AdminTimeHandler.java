@@ -23,9 +23,9 @@ import static com.whiskels.notifier.model.Role.ADMIN;
 @Component
 @Slf4j
 @BotCommand(command = "/ADMIN_TIME", message = "Show bot server time", requiredRoles = {ADMIN})
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class AdminTimeHandler extends AbstractBaseHandler {
-    @Value("${heroku.server.hour.offset}")
+    @Value("${heroku.server.hour.offset:3}")
     private int serverHourOffset;
 
     @Override
