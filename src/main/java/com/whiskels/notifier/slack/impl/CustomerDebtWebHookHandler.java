@@ -1,6 +1,7 @@
-package com.whiskels.notifier.slack;
+package com.whiskels.notifier.slack.impl;
 
-import com.whiskels.notifier.external.receivable.service.ReceivableService;
+import com.whiskels.notifier.external.debt.service.CustomerDebtService;
+import com.whiskels.notifier.slack.SlackWebHookHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Profile("slack-common")
 @Slf4j
-public class CustomerReceivableWebhookHandler implements SlackWebHookHandler {
-    @Value("${slack.customer.receivable.webhook}")
+public class CustomerDebtWebHookHandler implements SlackWebHookHandler {
+    @Value("${slack.customer.debt.webhook}")
     private String webHook;
 
-    private final ReceivableService service;
+    private final CustomerDebtService service;
 
-    @Scheduled(cron = "${slack.customer.receivable.cron}")
+    @Scheduled(cron = "${slack.customer.debt.cron}")
     public void dailyPayload() {
         final String result = sendDailyReport(webHook, service);
         log.info(result);

@@ -1,4 +1,4 @@
-package com.whiskels.notifier.telegram.domain;
+package com.whiskels.notifier;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,13 +4,20 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import com.whiskels.notifier.AbstractBaseEntity;
+import com.whiskels.notifier.common.LocalDatePersistenceConverter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Date;
-
-import static com.whiskels.notifier.external.receivable.util.ReceivableUtil.AMOUNT_COMPARATOR;
-import static com.whiskels.notifier.common.FormatUtil.formatDouble;
 
 /**
  * Customer receivable data is received from JSON of the following syntax:
@@ -34,11 +41,17 @@ import static com.whiskels.notifier.common.FormatUtil.formatDouble;
  * "description":""}
  */
 
-@Data
+@Entity
+@Table(name = "receivable")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Receivable implements Comparable<Receivable> {
-    double id;
+public class Receivable extends AbstractBaseEntity implements Comparable<Receivable> {
+    @JsonProperty("id")
+    int crmId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     Date date;
     String currency;
@@ -63,16 +76,12 @@ public class Receivable implements Comparable<Receivable> {
     String project;
     String office;
     String description;
-
-    @Override
-    public String toString() {
-        return String.format("%s — %s %s",
-                contractor, formatDouble(amount), currency);
-    }
+    @Convert(converter = LocalDatePersistenceConverter.class)
+    LocalDate loadDate = LocalDate.now();
 
     @Override
     public int compareTo(@NotNull Receivable o) {
-        return AMOUNT_COMPARATOR
-                .compare(this, o);
+        return Comparator.comparing(Receivable::getAmount)
+                .thenComparing(Receivable::getContractor).compare(this, o);
     }
 }

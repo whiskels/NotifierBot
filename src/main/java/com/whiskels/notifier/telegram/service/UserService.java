@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.service;
 
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.repository.JpaUserRepository;
+import com.whiskels.notifier.telegram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Profile("telegram-common")
 public class UserService {
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
 
     public User getOrCreate(int chatId) {
         return get(chatId)
