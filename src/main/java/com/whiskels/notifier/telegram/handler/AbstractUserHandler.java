@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.service.UserService;
+import com.whiskels.notifier.telegram.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
