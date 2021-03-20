@@ -1,12 +1,12 @@
 package com.whiskels.notifier;
 
-import com.whiskels.notifier.model.Role;
-import com.whiskels.notifier.model.User;
+import com.whiskels.notifier.telegram.domain.Role;
+import com.whiskels.notifier.telegram.domain.User;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Set;
 
-import static com.whiskels.notifier.model.AbstractBaseEntity.START_SEQ;
+import static com.whiskels.notifier.telegram.domain.AbstractBaseEntity.START_SEQ;
 
 @PropertySource("classpath:bot/bot.properties")
 public class UserTestData {

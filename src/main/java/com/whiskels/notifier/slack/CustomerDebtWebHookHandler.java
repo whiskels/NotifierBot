@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack;
 
-import com.whiskels.notifier.service.CustomerDebtService;
+import com.whiskels.notifier.external.debt.service.CustomerDebtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

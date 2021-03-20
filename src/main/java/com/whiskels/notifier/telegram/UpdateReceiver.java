@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.service.UserService;
+import com.whiskels.notifier.telegram.service.UserService;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.util.ParsingUtil.extractCommand;
+import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
 
 /**
  * Main class used to handle incoming Updates.

@@ -1,11 +1,12 @@
 package com.whiskels.notifier.telegram.annotations;
 
-import com.whiskels.notifier.model.Role;
+import com.whiskels.notifier.telegram.domain.Role;
+import com.whiskels.notifier.telegram.handler.impl.CustomerDebtHandler;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static com.whiskels.notifier.model.Role.UNAUTHORIZED;
+import static com.whiskels.notifier.telegram.domain.Role.UNAUTHORIZED;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -14,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>
  * Used on inheritors of {@link com.whiskels.notifier.telegram.handler.AbstractBaseHandler}
  *
- * @see com.whiskels.notifier.telegram.handler.CustomerDebtHandler example of implementation
+ * @see CustomerDebtHandler example of implementation
  */
 @Retention(RUNTIME)
 @Target(TYPE)
