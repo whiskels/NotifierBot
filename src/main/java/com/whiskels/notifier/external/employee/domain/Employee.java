@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 import static com.whiskels.notifier.common.DateTimeUtil.toLocalDate;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY_COMPARATOR;
 import static com.whiskels.notifier.common.FormatUtil.BIRTHDAY_FORMATTER;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY_COMPARATOR;
 
 /**
  * Employee data is received from JSON of the following syntax:

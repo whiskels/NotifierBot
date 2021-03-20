@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram.service;
 
 import com.whiskels.notifier.telegram.domain.Schedule;
-import com.whiskels.notifier.telegram.repository.JpaScheduleRepository;
-import com.whiskels.notifier.telegram.repository.JpaUserRepository;
+import com.whiskels.notifier.telegram.repository.ScheduleRepository;
+import com.whiskels.notifier.telegram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Profile("telegram-common")
 public class ScheduleService {
-    private final JpaScheduleRepository scheduleRepository;
-    private final JpaUserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     public List<Schedule> isAnyScheduled(LocalTime ldt) {
         return scheduleRepository.getAllByHourAndMinute(ldt.getHour(), ldt.getMinute());

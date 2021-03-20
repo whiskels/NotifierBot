@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 @Profile("telegram-common")
-public interface JpaUserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> getByChatId(int chatId);
 }
