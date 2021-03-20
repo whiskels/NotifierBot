@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.builder;
 
 
-import com.whiskels.notifier.model.User;
+import com.whiskels.notifier.telegram.domain.User;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

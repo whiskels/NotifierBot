@@ -2,8 +2,8 @@ package com.whiskels.notifier.slack;
 
 import com.slack.api.Slack;
 import com.slack.api.webhook.WebhookResponse;
-import com.whiskels.notifier.service.DailyReport;
-import com.whiskels.notifier.service.MonthlyReport;
+import com.whiskels.notifier.external.DailyReport;
+import com.whiskels.notifier.external.MonthlyReport;
 
 import java.io.IOException;
 
