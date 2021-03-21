@@ -106,7 +106,7 @@
         <dependency>
             <groupId>com.slack.api</groupId>
             <artifactId>slack-api-client</artifactId>
-            <version>1.4.2</version>
+            <version>1.6.1</version>
         </dependency>
 
         <!-- Spring Boot Data JPA -->
