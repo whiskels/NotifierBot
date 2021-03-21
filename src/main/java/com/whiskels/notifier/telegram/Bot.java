@@ -24,9 +24,9 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class Bot extends TelegramLongPollingBot {
-    @Value("${telegram.bot.name}")
+    @Value("${telegram.bot.name:TelegramNotifierBot}")
     @Getter
     private String botUsername;
 

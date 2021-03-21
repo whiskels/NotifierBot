@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.security;
 
-import com.whiskels.notifier.model.Role;
-import com.whiskels.notifier.model.User;
+import com.whiskels.notifier.telegram.domain.Role;
+import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class AuthorizationService {
     /**
      * Checks user's permissions if class is annotated with {@link BotCommand}

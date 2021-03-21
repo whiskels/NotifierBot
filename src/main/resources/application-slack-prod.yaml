@@ -1,0 +1,10 @@
+spring:
+  profiles.include: slack-common
+slack:
+  # Webhook of chat that receives customer debt info
+  customer:
+    debt.webhook: ${CUSTOMER_DEBT_SLACK_WEBHOOK}
+    # Webhook of chat that receives customer payment info
+    receivable.webhook: ${CUSTOMER_PAYMENT_SLACK_WEBHOOK}
+  # Webhook of chat that receives birthday info
+  employee.birthday.webhook: ${EMPLOYEE_BIRTHDAY_SLACK_WEBHOOK}

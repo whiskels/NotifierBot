@@ -1,9 +1,9 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.model.Role;
-import com.whiskels.notifier.model.Schedule;
-import com.whiskels.notifier.model.User;
-import com.whiskels.notifier.service.ScheduleService;
+import com.whiskels.notifier.telegram.domain.Role;
+import com.whiskels.notifier.telegram.domain.Schedule;
+import com.whiskels.notifier.telegram.domain.User;
+import com.whiskels.notifier.telegram.service.ScheduleService;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class MessageScheduler {
-    @Value("${heroku.server.hour.offset}")
+    @Value("${heroku.server.hour.offset:3}")
     private int serverHourOffset;
 
     private final Bot bot;

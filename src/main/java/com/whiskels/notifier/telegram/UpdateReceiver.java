@@ -1,6 +1,8 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.service.UserService;
+import com.whiskels.notifier.telegram.service.UserService;
+import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -12,17 +14,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
+
+import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
 
 /**
  * Main class used to handle incoming Updates.
+ * Chooses suitable inheritor of AbstractBaseHandler to handle the input
  */
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile({"telegram", "telegram-test"})
+@Profile("telegram-common")
 public class UpdateReceiver {
+    private final List<AbstractBaseHandler> handlers;
     private final UserService userService;
-    private final HandlerProvider handlerProvider;
 
     /**
      * Analyzes received update and chooses correct handler if possible
@@ -48,7 +54,7 @@ public class UpdateReceiver {
             }
 
             if (text != null && userId != 0) {
-                return handlerProvider.getHandler(text).authorizeAndHandle(userService.getOrCreate(userId), text);
+                return getHandler(text).authorizeAndHandle(userService.getOrCreate(userId), text);
             }
 
             throw new UnsupportedOperationException();
@@ -58,6 +64,23 @@ public class UpdateReceiver {
         }
     }
 
+    /**
+     * Selects handler which can handle received command
+     *
+     * @param text content of received message
+     * @return handler suitable for command
+     */
+    private AbstractBaseHandler getHandler(String text) {
+        return handlers.stream()
+                .filter(h -> h.getClass()
+                        .isAnnotationPresent(BotCommand.class))
+                .filter(h -> Stream.of(h.getClass()
+                        .getAnnotation(BotCommand.class)
+                        .command())
+                        .anyMatch(c -> c.equalsIgnoreCase(extractCommand(text))))
+                .findAny()
+                .orElseThrow(UnsupportedOperationException::new);
+    }
 
     private boolean isMessageWithText(Update update) {
         return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();

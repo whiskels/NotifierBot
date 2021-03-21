@@ -1,0 +1,11 @@
+spring:
+  profiles.include: telegram-dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/telegram_bot_test
+    username: user
+    password: password
+json:
+  customer:
+    debt.url:
+    receivable.url:
+  employee.url:
