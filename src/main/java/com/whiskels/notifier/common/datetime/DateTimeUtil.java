@@ -31,6 +31,6 @@ public final class DateTimeUtil {
     }
 
     public static LocalDate toLocalDate(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.of("Europe/Moscow")).toLocalDate();
     }
 }
