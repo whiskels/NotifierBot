@@ -1,4 +1,4 @@
-package com.whiskels.notifier.common;
+package com.whiskels.notifier.common.datetime;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,9 +32,5 @@ public final class DateTimeUtil {
 
     public static LocalDate toLocalDate(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
-    }
-
-    public static LocalDate todayWithOffset(int serverHourOffset) {
-        return LocalDateTime.now().plusHours(serverHourOffset).toLocalDate();
     }
 }

@@ -14,7 +14,7 @@ public final class ReceivableUtil {
     public static final String CATEGORY_REVENUE = "Revenue";
 
     public static final Comparator<ReceivableDto> AMOUNT_COMPARATOR = Comparator.comparing(ReceivableDto::getAmount)
-            .thenComparing(ReceivableDto::getContractor);
+            .thenComparing(ReceivableDto::getContractor).reversed();
 
     public static Predicate<Receivable> NEW_CRM_ID(List<Integer> ids) {
         return c -> !ids.contains(c.getCrmId());

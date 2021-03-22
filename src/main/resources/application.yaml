@@ -11,24 +11,22 @@ spring:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
-# Offset of Heroku European server from Moscow
-heroku.server.hour.offset: 3
 json:
   customer:
     debt:
       # URL to customer debt JSON
       url: ${CUSTOMER_DEBT_JSON_URL}
-      # Workdays at 8:55 - update
-      cron: 0 55 8 * * MON-FRI
+      # Workdays at 11:55 - update
+      cron: 0 55 11 * * MON-FRI
     receivable:
       # URL to customer receivable JSON
       url: ${CUSTOMER_RECEIVABLE_JSON_URL}
-      # Workdays at 8:55 - update
-      cron: 0 55 8 * * MON-FRI
+      # Workdays at 11:55 - update
+      cron: 0 55 11 * * MON-FRI
   employee:
     url: ${EMPLOYEE_URL}
-    # Workdays at 3:30 - update
-    cron: 0 30 3 * * MON-FRI
+    # Workdays at 6:30 - update
+    cron: 0 30 6 * * MON-FRI
 moex:
   # MOEX RUB/USD and RUB/EUR exchange data
   url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates

@@ -1,11 +1,11 @@
 package com.whiskels.notifier.external.debt.service;
 
+import com.whiskels.notifier.common.JsonUtil;
+import com.whiskels.notifier.common.ReportBuilder;
 import com.whiskels.notifier.external.AbstractJSONService;
 import com.whiskels.notifier.external.DailyReport;
 import com.whiskels.notifier.external.debt.domain.Debt;
 import com.whiskels.notifier.external.moex.MoexService;
-import com.whiskels.notifier.common.JsonUtil;
-import com.whiskels.notifier.common.ReportBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,13 +13,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.Clock;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.external.debt.util.DebtUtil.*;
-import static com.whiskels.notifier.common.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_EMPTY_LINE;
 import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.external.debt.util.DebtUtil.*;
+import static java.time.LocalDate.now;
 
 @Service
 @Slf4j
@@ -35,6 +36,7 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
     private List<Debt> debts;
 
     private final MoexService moexService;
+    private final Clock clock;
 
     @PostConstruct
     private void initCustomerList() {
@@ -50,7 +52,7 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
     public String dailyReport(Predicate<Debt> predicate) {
         log.debug("Preparing customer debts message");
 
-        return ReportBuilder.withHeader(DEBT_REPORT_HEADER, todayWithOffset(serverHourOffset))
+        return ReportBuilder.withHeader(DEBT_REPORT_HEADER, now(clock))
                 .list(debts, predicate, COLLECTOR_EMPTY_LINE)
                 .build();
     }

@@ -1,11 +1,11 @@
 package com.whiskels.notifier.external.employee.service;
 
+import com.whiskels.notifier.common.JsonUtil;
+import com.whiskels.notifier.common.ReportBuilder;
 import com.whiskels.notifier.external.AbstractJSONService;
 import com.whiskels.notifier.external.DailyReport;
 import com.whiskels.notifier.external.MonthlyReport;
 import com.whiskels.notifier.external.employee.domain.Employee;
-import com.whiskels.notifier.common.JsonUtil;
-import com.whiskels.notifier.common.ReportBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +14,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.DateTimeUtil.todayWithOffset;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
 import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static java.time.LocalDate.now;
 
 @Service
 @Slf4j
@@ -33,6 +34,8 @@ public class EmployeeService extends AbstractJSONService implements DailyReport<
     private static final String UPCOMING_WEEK = "*Upcoming week:*";
     private static final Predicate<Employee>[] EMPLOYEE_FILTERS = new Predicate[]{
             NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL};
+
+    private final Clock clock;
 
     @Value("${json.employee.url}")
     private String employeeUrl;
@@ -55,7 +58,7 @@ public class EmployeeService extends AbstractJSONService implements DailyReport<
     }
 
     public String dailyReport(Predicate<Employee> predicate) {
-        final LocalDate today = todayWithOffset(serverHourOffset);
+        final LocalDate today = now(clock);
         final List<Employee> filteredList = filterAndSort(employeeList, predicate);
 
         return ReportBuilder.withHeader(BIRTHDAY_REPORT_HEADER, today)
@@ -68,7 +71,7 @@ public class EmployeeService extends AbstractJSONService implements DailyReport<
     }
 
     public String monthlyReport(Predicate<Employee> predicate) {
-        final LocalDate today = todayWithOffset(serverHourOffset);
+        final LocalDate today = now(clock);
         final List<Employee> filteredList = filterAndSort(employeeList, predicate);
 
         return ReportBuilder.withHeader(BIRTHDAY_MONTHLY_REPORT_HEADER, today)

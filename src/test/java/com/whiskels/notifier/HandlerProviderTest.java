@@ -1,14 +1,15 @@
 package com.whiskels.notifier;
 
 import com.whiskels.notifier.telegram.HandlerProvider;
-import com.whiskels.notifier.telegram.handler.*;
+import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
+import com.whiskels.notifier.telegram.handler.impl.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class HandlerProviderTest {
+class HandlerProviderTest {
     private static final int HANDLER_COUNT = 12;
     private static final String[] TEST_COMMANDS = new String[]{"/ADMIN_PROMOTE", "/ADMIN_TIME", "/ADMIN_NAME",
     "/BIRTHDAY", "/GET", "/GET_RECEIVABLE", "/HELP", "/SCHEDULE", "/SCHEDULE_CLEAR", "/SCHEDULE_HELP",

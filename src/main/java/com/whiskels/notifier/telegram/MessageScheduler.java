@@ -1,19 +1,19 @@
 package com.whiskels.notifier.telegram;
 
+import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.service.ScheduleService;
-import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
+import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -27,11 +27,10 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Profile("telegram-common")
 public class MessageScheduler {
-    @Value("${heroku.server.hour.offset:3}")
-    private int serverHourOffset;
-
     private final Bot bot;
     private final ScheduleService scheduleService;
+    private final Clock clock;
+
     private final List<AbstractBaseHandler> handlers;
 
     /**
@@ -39,7 +38,7 @@ public class MessageScheduler {
      */
     @Scheduled(cron = "${telegram.bot.schedule.cron}")
     private void processScheduledTasks() {
-        final LocalDateTime ldt = LocalDateTime.now().plusHours(serverHourOffset);
+        final LocalDateTime ldt = LocalDateTime.now(clock);
         log.debug("Checking for scheduled messages: {}", ldt);
         List<Schedule> scheduledUsers = scheduleService.isAnyScheduled(ldt.toLocalTime());
         if (!scheduledUsers.isEmpty()) {

@@ -14,17 +14,20 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.Clock;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.DateTimeUtil.subtractWorkingDays;
-import static com.whiskels.notifier.common.DateTimeUtil.todayWithOffset;
 import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_NEW_LINE;
 import static com.whiskels.notifier.common.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.subtractWorkingDays;
 import static com.whiskels.notifier.external.receivable.util.ReceivableUtil.CATEGORY_REVENUE;
 import static com.whiskels.notifier.external.receivable.util.ReceivableUtil.NEW_CRM_ID;
+import static java.time.DayOfWeek.SATURDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.now;
 
 @Service
@@ -41,6 +44,7 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
     private String customerUrl;
 
     private final ReceivableRepository receivableRepository;
+    private final Clock clock;
 
     @PostConstruct
     private void initCustomerList() {
@@ -54,7 +58,7 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
     }
 
     private void loadReceivables() {
-        LocalDate endDate = todayWithOffset(serverHourOffset).minusDays(1);
+        LocalDate endDate = now(clock).minusDays(1);
         LocalDate startDate = subtractWorkingDays(endDate, workingDaysToLoad);
         log.info("loading receivables for range of: {} to {}", startDate, endDate);
         final String actualUrl = getUrlBetween(startDate, endDate);
@@ -65,7 +69,7 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
     }
 
     private void deleteOldEntries() {
-        LocalDate deleteBeforeDate = subtractWorkingDays(now(), workingDaysToDeleteAfter);
+        LocalDate deleteBeforeDate = subtractWorkingDays(now(clock), workingDaysToDeleteAfter);
         log.info("deleted {} old entries with load date before {}",
                 receivableRepository.deleteByDateBefore(deleteBeforeDate),
                 deleteBeforeDate);
@@ -82,9 +86,10 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
 
     public String dailyReport(Predicate<ReceivableDto> predicate) {
         log.debug("Preparing customer receivable message");
+        final LocalDate reportDate = now(clock);
 
-        return ReportBuilder.withHeader(CATEGORY_REVENUE, todayWithOffset(serverHourOffset))
-                .list(receivableRepository.getRevenueByDate(now()),
+        return ReportBuilder.withHeader(CATEGORY_REVENUE, reportDate)
+                .list(receivableRepository.getRevenueByDate(reportDate),
                         predicate, COLLECTOR_NEW_LINE)
                 .build();
     }

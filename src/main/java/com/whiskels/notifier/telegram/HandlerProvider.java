@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.util.ParsingUtil.extractCommand;
+import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
 
 /**
  * Chooses suitable inheritor of AbstractBaseHandler to handle the input
