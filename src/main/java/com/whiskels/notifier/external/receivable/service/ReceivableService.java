@@ -53,8 +53,11 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
 
     @Scheduled(cron = "${json.customer.receivable.cron}")
     protected void update() {
-        loadReceivables();
-        deleteOldEntries();
+        DayOfWeek today = now(clock).getDayOfWeek();
+        if (today != SATURDAY && today != SUNDAY) {
+            loadReceivables();
+            deleteOldEntries();
+        }
     }
 
     private void loadReceivables() {
