@@ -28,7 +28,7 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnProperty("json.employee.url}")
+@ConditionalOnProperty("json.employee.url")
 public class EmployeeService extends AbstractJSONService implements DailyReport<Employee>, MonthlyReport<Employee> {
     private static final String BIRTHDAY_REPORT_HEADER = "Birthdays";
     private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";

@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -47,11 +46,6 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
 
     private final ReceivableRepository receivableRepository;
     private final Clock clock;
-
-    @PostConstruct
-    private void initCustomerList() {
-        update();
-    }
 
     @Scheduled(cron = "${json.customer.receivable.cron}", zone = "${common.timezone}")
     protected void update() {

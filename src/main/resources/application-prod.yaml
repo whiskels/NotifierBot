@@ -1,5 +1,5 @@
 spring:
-  profiles.include: slack-prod
+  profiles.include: slack-prod, telegram-prod
 json:
   customer:
     debt:

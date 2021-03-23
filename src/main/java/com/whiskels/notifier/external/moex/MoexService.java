@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -29,11 +27,6 @@ public class MoexService {
     private double usdRate;
     @Getter
     private double eurRate;
-
-    @PostConstruct
-    private void initExchangeRates() {
-        update();
-    }
 
     public void update() {
         updateExchangeRates();
