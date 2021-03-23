@@ -38,7 +38,6 @@ import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee implements Comparable<Employee> {
     String name;
-    @JsonProperty("birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
     Date birthday;
     String status;

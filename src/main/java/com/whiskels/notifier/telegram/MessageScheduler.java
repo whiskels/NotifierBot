@@ -1,13 +1,12 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.annotations.Schedulable;
-import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,8 +15,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * Allows bot to send scheduled messages
@@ -26,25 +23,26 @@ import java.util.stream.Stream;
 @Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
+@ConditionalOnBean(annotation = Schedulable.class)
 public class MessageScheduler {
     private final Bot bot;
     private final ScheduleService scheduleService;
     private final Clock clock;
 
-    private final List<AbstractBaseHandler> handlers;
+    private final HandlerProvider handlerProvider;
 
     /**
      * Checks if there is any job scheduled and processes it
      */
-    @Scheduled(cron = "${telegram.bot.schedule.cron}")
-    private void processScheduledTasks() {
+    @Scheduled(cron = "${telegram.bot.schedule.cron}", zone = "${common.timezone}")
+    public void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now(clock);
         log.debug("Checking for scheduled messages: {}", ldt);
         List<Schedule> scheduledUsers = scheduleService.isAnyScheduled(ldt.toLocalTime());
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 final User user = schedule.getUser();
-                getHandler(user).authorizeAndHandle(user, null)
+                handlerProvider.getSchedulableHandler(user.getRoles()).authorizeAndHandle(user, null)
                         .forEach(m -> bot.executeWithExceptionCheck((SendMessage) m));
                 log.debug("Scheduled message for {} sent at {}:{}",
                         user.getChatId(), ldt.getHour(), ldt.getMinute());
@@ -52,25 +50,4 @@ public class MessageScheduler {
         }
     }
 
-    /**
-     * Searches for an {@link AbstractBaseHandler} that supports {@link Schedulable} annotation where
-     * any of defined roles are presented in the set of {@link User} roles
-     * <p>
-     * Note: current realization suggests that any user role can schedule no more than one handler
-     *
-     * @param user {@link User} that scheduled an event
-     * @return {@link AbstractBaseHandler} that was scheduled by user
-     */
-    private AbstractBaseHandler getHandler(User user) {
-        final Set<Role> userRoles = user.getRoles();
-        return handlers.stream()
-                .filter(h -> h.getClass()
-                        .isAnnotationPresent(Schedulable.class))
-                .filter(h -> Stream.of(h.getClass()
-                        .getAnnotation(Schedulable.class)
-                        .roles())
-                        .anyMatch(userRoles::contains))
-                .findAny()
-                .orElseThrow(UnsupportedOperationException::new);
-    }
 }

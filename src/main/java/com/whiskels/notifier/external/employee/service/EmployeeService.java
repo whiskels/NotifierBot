@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty("json.employee.url}")
 public class EmployeeService extends AbstractJSONService implements DailyReport<Employee>, MonthlyReport<Employee> {
     private static final String BIRTHDAY_REPORT_HEADER = "Birthdays";
     private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";
@@ -51,7 +53,7 @@ public class EmployeeService extends AbstractJSONService implements DailyReport<
     /**
      * Reads JSON data from URL and creates Customer list
      */
-    @Scheduled(cron = "${json.employee.cron}")
+    @Scheduled(cron = "${json.employee.cron}", zone = "${common.timezone}")
     protected void update() {
         log.info("updating employee list");
         employeeList = filterAndSort(readFromJson(employeeUrl), EMPLOYEE_FILTERS);

@@ -9,6 +9,7 @@ import com.whiskels.notifier.external.moex.MoexService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty("json.customer.debt.url")
 public class CustomerDebtService extends AbstractJSONService implements DailyReport<Debt> {
     private static final int MIN_RUB_VALUE = 500;
     private static final String DEBT_REPORT_HEADER = "Overdue debts";
@@ -43,7 +45,7 @@ public class CustomerDebtService extends AbstractJSONService implements DailyRep
         update();
     }
 
-    @Scheduled(cron = "${json.customer.debt.cron}")
+    @Scheduled(cron = "${json.customer.debt.cron}", zone = "${common.timezone}")
     protected void update() {
         moexService.update();
         updateCustomerList();

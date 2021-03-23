@@ -6,8 +6,6 @@ import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -22,10 +20,8 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * <p>
  * Available to: Admin
  */
-@Component
 @Slf4j
 @BotCommand(command = "/ADMIN_TIME", message = "Show bot server time", requiredRoles = {ADMIN})
-@Profile("telegram-common")
 @RequiredArgsConstructor
 public class AdminTimeHandler extends AbstractBaseHandler {
     private final Clock clock;

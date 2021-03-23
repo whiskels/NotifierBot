@@ -1,2 +1,10 @@
 spring:
   profiles.include: slack-prod
+json:
+  customer:
+    debt:
+      url: ${CUSTOMER_DEBT_JSON_URL}
+    receivable:
+      url: ${CUSTOMER_RECEIVABLE_JSON_URL}
+  employee:
+    url: ${EMPLOYEE_URL}

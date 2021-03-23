@@ -1,7 +1,6 @@
 slack:
   customer:
     # Workdays at 13:00 - send customer info to slack
-    # eg. 10:00 cron with server offset of 3 is 13:00 Moscow time
     debt.cron: 0 0 13 * * MON-FRI
     receivable.cron: 0 0 13 * * MON-FRI
   employee:

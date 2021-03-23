@@ -17,9 +17,6 @@ import java.util.List;
  * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotations.BotCommand} annotation to define
  * supported command.
  * <p>
- * Call to {@link #handle(User, String)} can be secured with
- * {@link com.whiskels.notifier.telegram.annotations.RequiredRoles} annotation
- * <p>
  * Scheduling of {@link #handle(User, String)} call is possible with
  * {@link com.whiskels.notifier.telegram.annotations.Schedulable} annotation
  */

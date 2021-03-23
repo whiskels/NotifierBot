@@ -6,6 +6,7 @@ import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -20,10 +21,9 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * <p>
  * Available to: Admin
  */
-@Component
 @Slf4j
 @BotCommand(command = "/GET_RECEIVABLE", message = "Get customer receivables", requiredRoles = {ADMIN})
-@Profile("telegram-common")
+@ConditionalOnBean(ReceivableService.class)
 public class CustomerReceivableHandler extends AbstractBaseHandler {
     private final ReceivableService receivableService;
 

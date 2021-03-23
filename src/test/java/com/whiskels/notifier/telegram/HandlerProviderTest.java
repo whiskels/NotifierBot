@@ -1,15 +1,20 @@
-package com.whiskels.notifier;
+package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.telegram.HandlerProvider;
+import com.whiskels.notifier.DisabledDataSourceConfiguration;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.telegram.handler.impl.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Set;
+
+import static com.whiskels.notifier.telegram.domain.Role.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
-class HandlerProviderTest {
+class HandlerProviderTest extends DisabledDataSourceConfiguration {
     private static final int HANDLER_COUNT = 12;
     private static final String[] TEST_COMMANDS = new String[]{"/ADMIN_PROMOTE", "/ADMIN_TIME", "/ADMIN_NAME",
     "/BIRTHDAY", "/GET", "/GET_RECEIVABLE", "/HELP", "/SCHEDULE", "/SCHEDULE_CLEAR", "/SCHEDULE_HELP",
@@ -27,16 +32,22 @@ class HandlerProviderTest {
 
     @Test
     void areAllHandlersAdded() {
-        Assertions.assertEquals(handlerProvider.getHandlers().size(), HANDLER_COUNT);
+        assertEquals(HANDLER_COUNT, handlerProvider.getHandlers().size(), "Different number of handlers is present");
     }
 
     @Test
     void isRightHandlerCalled() {
         final int commandsSize = TEST_COMMANDS.length;
-        Assertions.assertTrue(commandsSize == HANDLERS.length);
+        assertTrue(commandsSize == HANDLERS.length);
         for (int i = 0; i < commandsSize; i++) {
-            Assertions.assertEquals(getHandlerClass(TEST_COMMANDS[i]), HANDLERS[i]);
+            assertEquals(HANDLERS[i], getHandlerClass(TEST_COMMANDS[i]), "Wrong handler");
         }
+
+        assertEquals(BirthdayHandler.class, handlerProvider.getSchedulableHandler(Set.of(HR)).getClass());
+        assertEquals(CustomerDebtHandler.class, handlerProvider.getSchedulableHandler(Set.of(MANAGER)).getClass());
+        assertEquals(CustomerDebtHandler.class, handlerProvider.getSchedulableHandler(Set.of(HEAD)).getClass());
+        assertEquals(CustomerDebtHandler.class, handlerProvider.getSchedulableHandler(Set.of(ADMIN)).getClass());
+
     }
 
     private Class<? extends AbstractBaseHandler> getHandlerClass(String text) {

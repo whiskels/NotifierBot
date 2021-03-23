@@ -5,6 +5,7 @@ import com.whiskels.notifier.slack.SlackWebHookHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Profile("slack-common")
 @Slf4j
+@ConditionalOnBean(ReceivableService.class)
 public class CustomerReceivableWebhookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.receivable.webhook}")
     private String webHook;
 
     private final ReceivableService service;
 
-    @Scheduled(cron = "${slack.customer.receivable.cron}")
+    @Scheduled(cron = "${slack.customer.receivable.cron}", zone = "${common.timezone}")
     public void dailyPayload() {
         final String result = sendDailyReport(webHook, service);
         log.info(result);

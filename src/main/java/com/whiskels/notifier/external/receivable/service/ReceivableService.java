@@ -10,6 +10,7 @@ import com.whiskels.notifier.external.receivable.repository.ReceivableRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty("json.customer.receivable.url")
 public class ReceivableService extends AbstractJSONService implements DailyReport<ReceivableDto> {
     @Value("${json.customer.receivable.workingDaysToLoad:2}")
     private int workingDaysToLoad;
@@ -51,7 +53,7 @@ public class ReceivableService extends AbstractJSONService implements DailyRepor
         update();
     }
 
-    @Scheduled(cron = "${json.customer.receivable.cron}")
+    @Scheduled(cron = "${json.customer.receivable.cron}", zone = "${common.timezone}")
     protected void update() {
         DayOfWeek today = now(clock).getDayOfWeek();
         if (today != SATURDAY && today != SUNDAY) {
