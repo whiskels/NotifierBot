@@ -52,7 +52,6 @@ public class ReceivableDataProvider implements ExternalDataProvider<ReceivableDt
         return receivableRepository.getRevenueByDate(now(clock));
     }
 
-    @PostConstruct
     @Scheduled(cron = "${external.customer.receivable.cron}", zone = "${common.timezone}")
     public void update() {
         DayOfWeek today = now(clock).getDayOfWeek();
