@@ -13,7 +13,7 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
 common:
   timezone: Europe/Moscow
-json:
+external:
   customer:
     debt:
       cron: 0 55 11 * * MON-FRI

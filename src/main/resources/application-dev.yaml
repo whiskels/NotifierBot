@@ -4,7 +4,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/telegram_bot_test
     username: user
     password: password
-json:
+external:
   customer:
     debt.url:
     receivable.url:

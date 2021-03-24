@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Profile("telegram-common")
-@ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;

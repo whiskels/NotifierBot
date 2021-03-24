@@ -1,6 +1,6 @@
 spring:
   profiles.include: slack-prod, telegram-prod
-json:
+external:
   customer:
     debt:
       url: ${CUSTOMER_DEBT_JSON_URL}

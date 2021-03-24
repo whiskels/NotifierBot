@@ -1,6 +1,7 @@
 package com.whiskels.notifier.slack.impl;
 
-import com.whiskels.notifier.external.debt.service.CustomerDebtService;
+import com.whiskels.notifier.external.DailyReporter;
+import com.whiskels.notifier.external.debt.domain.Debt;
 import com.whiskels.notifier.slack.SlackWebHookHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +15,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Profile("slack-common")
 @Slf4j
-@ConditionalOnBean(CustomerDebtService.class)
+@ConditionalOnBean(value = Debt.class, parameterizedContainer = DailyReporter.class)
 public class CustomerDebtWebHookHandler implements SlackWebHookHandler {
     @Value("${slack.customer.debt.webhook}")
     private String webHook;
 
-    private final CustomerDebtService service;
+    private final DailyReporter<Debt> debtDailyReporter;
 
     @Scheduled(cron = "${slack.customer.debt.cron}", zone = "${common.timezone}")
     public void dailyPayload() {
-        final String result = sendDailyReport(webHook, service);
+        final String result = sendDailyReport(webHook, debtDailyReporter);
         log.info(result);
     }
 }

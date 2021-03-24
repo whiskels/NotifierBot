@@ -19,4 +19,15 @@ public final class ReceivableUtil {
     public static Predicate<Receivable> NEW_CRM_ID(List<Integer> ids) {
         return c -> !ids.contains(c.getCrmId());
     }
+
+    public static double calculateRoubleAmount(Receivable receivable, double usdRate, double eurRate) {
+        final double amount = receivable.getAmount();
+        final String currency = receivable.getCurrency();
+            if (currency.equalsIgnoreCase("USD")) {
+                return amount * usdRate;
+            } else if (currency.equalsIgnoreCase("EUR")) {
+                return amount * eurRate;
+            }
+        return amount;
+    }
 }

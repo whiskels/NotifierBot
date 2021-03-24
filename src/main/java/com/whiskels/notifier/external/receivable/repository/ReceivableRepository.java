@@ -15,10 +15,10 @@ import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
-@ConditionalOnProperty("json.customer.receivable.url")
+@ConditionalOnProperty("external.customer.receivable.url")
 public interface ReceivableRepository extends JpaRepository<Receivable, Integer> {
     @Query("select new com.whiskels.notifier.external.receivable.dto.ReceivableDto(r.currency, r.amount, r.contractor) " +
-            "from Receivable r where r.loadDate = :date and r.category='Revenue' order by r.amount desc ")
+            "from Receivable r where r.loadDate = :date and r.category='Revenue' order by r.amountRub desc ")
     List<ReceivableDto> getRevenueByDate(@Param("date") LocalDate date);
 
     @Transactional

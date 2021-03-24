@@ -1,20 +1,15 @@
 package com.whiskels.notifier.external.employee.service;
 
-import com.whiskels.notifier.common.JsonUtil;
 import com.whiskels.notifier.common.ReportBuilder;
-import com.whiskels.notifier.external.AbstractJSONService;
-import com.whiskels.notifier.external.DailyReport;
-import com.whiskels.notifier.external.MonthlyReport;
+import com.whiskels.notifier.external.DailyReporter;
+import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.MonthlyReporter;
 import com.whiskels.notifier.external.employee.domain.Employee;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,43 +20,22 @@ import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
 import static java.time.LocalDate.now;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnProperty("json.employee.url")
-public class EmployeeService extends AbstractJSONService implements DailyReport<Employee>, MonthlyReport<Employee> {
+@ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
+public class EmployeeReporter implements DailyReporter<Employee>, MonthlyReporter<Employee> {
     private static final String BIRTHDAY_REPORT_HEADER = "Birthdays";
     private static final String BIRTHDAY_MONTHLY_REPORT_HEADER = "Birthdays monthly status";
     private static final String NO_DATA = "Nobody";
     private static final String UPCOMING_WEEK = "*Upcoming week:*";
-    private static final Predicate<Employee>[] EMPLOYEE_FILTERS = new Predicate[]{
-            NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL};
 
     private final Clock clock;
-
-    @Value("${json.employee.url}")
-    private String employeeUrl;
-
-    @Getter
-    private List<Employee> employeeList;
-
-    @PostConstruct
-    private void initEmployeeList() {
-        update();
-    }
-
-    /**
-     * Reads JSON data from URL and creates Customer list
-     */
-    @Scheduled(cron = "${json.employee.cron}", zone = "${common.timezone}")
-    protected void update() {
-        log.info("updating employee list");
-        employeeList = filterAndSort(readFromJson(employeeUrl), EMPLOYEE_FILTERS);
-    }
+    private final DataProvider<Employee> provider;
 
     public String dailyReport(Predicate<Employee> predicate) {
         final LocalDate today = now(clock);
-        final List<Employee> filteredList = filterAndSort(employeeList, predicate);
+        final List<Employee> filteredList = filterAndSort(provider.get(), predicate);
 
         return ReportBuilder.withHeader(BIRTHDAY_REPORT_HEADER, today)
                 .setNoData(NO_DATA)
@@ -74,15 +48,11 @@ public class EmployeeService extends AbstractJSONService implements DailyReport<
 
     public String monthlyReport(Predicate<Employee> predicate) {
         final LocalDate today = now(clock);
-        final List<Employee> filteredList = filterAndSort(employeeList, predicate);
+        final List<Employee> filteredList = filterAndSort(provider.get(), predicate);
 
         return ReportBuilder.withHeader(BIRTHDAY_MONTHLY_REPORT_HEADER, today)
                 .setNoData(NO_DATA)
                 .list(filteredList, isBirthdaySameMonth(today), COLLECTOR_COMMA_SEPARATED)
                 .build();
-    }
-
-    private List<Employee> readFromJson(String url) {
-        return JsonUtil.readValuesFromUrl(url, Employee.class);
     }
 }

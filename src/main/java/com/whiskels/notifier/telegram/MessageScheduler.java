@@ -28,12 +28,8 @@ public class MessageScheduler {
     private final Bot bot;
     private final ScheduleService scheduleService;
     private final Clock clock;
-
     private final HandlerProvider handlerProvider;
 
-    /**
-     * Checks if there is any job scheduled and processes it
-     */
     @Scheduled(cron = "${telegram.bot.schedule.cron}", zone = "${common.timezone}")
     public void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now(clock);
@@ -49,5 +45,4 @@ public class MessageScheduler {
             });
         }
     }
-
 }

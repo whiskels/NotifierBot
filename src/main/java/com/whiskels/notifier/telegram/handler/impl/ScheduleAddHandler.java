@@ -29,7 +29,6 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleAddHandler extends AbstractScheduleHandler {
-
     public ScheduleAddHandler(ScheduleService scheduleService) {
         super(scheduleService);
     }
