@@ -2,8 +2,8 @@ package com.whiskels.notifier.slack;
 
 import com.slack.api.Slack;
 import com.slack.api.webhook.WebhookResponse;
-import com.whiskels.notifier.external.DailyReport;
-import com.whiskels.notifier.external.MonthlyReport;
+import com.whiskels.notifier.external.DailyReporter;
+import com.whiskels.notifier.external.MonthlyReporter;
 
 import java.io.IOException;
 
@@ -29,11 +29,11 @@ public interface SlackWebHookHandler {
         }
     }
 
-    default <T> String sendDailyReport(String webHook, DailyReport<T> provider) {
+    default <T> String sendDailyReport(String webHook, DailyReporter<T> provider) {
         return createAndSendPayload(webHook, provider.dailyReport());
     }
 
-    default <T> String sendMonthlyReport(String webHook, MonthlyReport<T> provider) {
+    default <T> String sendMonthlyReport(String webHook, MonthlyReporter<T> provider) {
         return createAndSendPayload(webHook, provider.monthlyReport());
     }
 }

@@ -16,8 +16,11 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
+
+import static java.time.LocalDate.now;
 
 /**
  * Customer receivable data is received from JSON of the following syntax:
@@ -77,11 +80,13 @@ public class Receivable extends AbstractBaseEntity implements Comparable<Receiva
     String office;
     String description;
     @Convert(converter = LocalDatePersistenceConverter.class)
-    LocalDate loadDate = LocalDate.now();
+    LocalDate loadDate = now(ZoneId.of("Europe/Moscow"));
 
     @Override
     public int compareTo(@NotNull Receivable o) {
         return Comparator.comparing(Receivable::getAmount)
-                .thenComparing(Receivable::getContractor).compare(this, o);
+                .thenComparing(Receivable::getContractor)
+                .reversed()
+                .compare(this, o);
     }
 }

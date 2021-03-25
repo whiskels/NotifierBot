@@ -150,6 +150,12 @@
             <version>${flyway.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

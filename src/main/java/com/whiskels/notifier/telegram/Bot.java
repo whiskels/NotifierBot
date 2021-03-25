@@ -45,8 +45,11 @@ public class Bot extends TelegramLongPollingBot {
      * - send start up report to bot admin
      */
     @PostConstruct
-    public void startBot() {
-        sendStartReport();
+    public void report() {
+        executeWithExceptionCheck(new SendMessage()
+                .setChatId(botAdmin)
+                .setText("Bot start up is successful"));
+        log.debug("Start report sent to Admin");
     }
 
     /**
@@ -77,15 +80,5 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             log.error("Exception while sending message {} to user: {}", sendMessage, e.getMessage());
         }
-    }
-
-    /**
-     * Creates message to notify admin that bot has successfully started
-     */
-    public void sendStartReport() {
-        executeWithExceptionCheck(new SendMessage()
-                .setChatId(botAdmin)
-                .setText("Bot start up is successful"));
-        log.debug("Start report sent to Admin");
     }
 }

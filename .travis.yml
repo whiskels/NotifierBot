@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk14
+stages:
+  - name: deploy
+    if: branch = master AND type = push
+  - name: deploy
+jobs:
+  include:
+    - stage: deploy
+      script: mvn clean heroku:deploy
+      after_script: heroku ps:scale worker=1 -a telegramnotifierbot

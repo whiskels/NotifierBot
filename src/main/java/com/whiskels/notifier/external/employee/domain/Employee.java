@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
-import static com.whiskels.notifier.common.DateTimeUtil.toLocalDate;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.toLocalDate;
 import static com.whiskels.notifier.common.FormatUtil.BIRTHDAY_FORMATTER;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY_COMPARATOR;
 
@@ -38,7 +38,6 @@ import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee implements Comparable<Employee> {
     String name;
-    @JsonProperty("birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
     Date birthday;
     String status;

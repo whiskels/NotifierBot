@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
+import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,6 @@ import java.util.List;
  * <p>
  * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotations.BotCommand} annotation to define
  * supported command.
- * <p>
- * Call to {@link #handle(User, String)} can be secured with
- * {@link com.whiskels.notifier.telegram.annotations.RequiredRoles} annotation
  * <p>
  * Scheduling of {@link #handle(User, String)} call is possible with
  * {@link com.whiskels.notifier.telegram.annotations.Schedulable} annotation

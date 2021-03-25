@@ -1,4 +1,4 @@
-package com.whiskels.notifier.common;
+package com.whiskels.notifier.external.json;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;

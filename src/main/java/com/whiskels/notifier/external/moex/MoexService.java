@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -30,18 +31,8 @@ public class MoexService {
     private double eurRate;
 
     @PostConstruct
-    private void initExchangeRates() {
-        update();
-    }
-
+    @Scheduled(cron = "0 0 0 * * *", zone = "${common.timezone}")
     public void update() {
-        updateExchangeRates();
-    }
-
-    /**
-     * Updates USD/RUB and EUR/RUB exchange rates using MOEX data
-     */
-    private void updateExchangeRates() {
         log.info("updating exchange rates");
         // Getting moex exchange rates string
         try {
