@@ -2,7 +2,7 @@ package com.whiskels.notifier.telegram.annotations;
 
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.handler.impl.CustomerDebtHandler;
+import com.whiskels.notifier.telegram.handler.impl.DebtHandler;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>
  * Used on inheritors of {@link com.whiskels.notifier.telegram.handler.AbstractBaseHandler}
  *
- * @see CustomerDebtHandler example of annotation implementation
+ * @see DebtHandler example of annotation implementation
  * @see com.whiskels.notifier.telegram.MessageScheduler example of scheduling (handle(User, String) method of
  * AbstractBaseHandler
  */

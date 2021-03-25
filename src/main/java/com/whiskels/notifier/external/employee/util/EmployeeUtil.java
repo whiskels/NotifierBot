@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.DateTimeUtil.toLocalDate;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.toLocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EmployeeUtil {

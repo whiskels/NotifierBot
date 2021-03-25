@@ -1,7 +1,5 @@
 package com.whiskels.notifier.common;
 
-import org.springframework.stereotype.Service;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Date;

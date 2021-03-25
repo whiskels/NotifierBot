@@ -1,7 +1,9 @@
 package com.whiskels.notifier.telegram.annotations;
 
 import com.whiskels.notifier.telegram.domain.Role;
-import com.whiskels.notifier.telegram.handler.impl.CustomerDebtHandler;
+import com.whiskels.notifier.telegram.handler.impl.DebtHandler;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -15,8 +17,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>
  * Used on inheritors of {@link com.whiskels.notifier.telegram.handler.AbstractBaseHandler}
  *
- * @see CustomerDebtHandler example of implementation
+ * @see DebtHandler example of implementation
  */
+
+@Profile("telegram-common")
+@Component
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface BotCommand {

@@ -18,10 +18,8 @@ import java.util.List;
  * <p>
  * Available to: everyone
  */
-@Component
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
-@Profile("telegram-common")
 public class HelpHandler extends AbstractBaseHandler {
     @Value("${telegram.bot.name:TelegramNotifierBot}")
     private String botUsername;

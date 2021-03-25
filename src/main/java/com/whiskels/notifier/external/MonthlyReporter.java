@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import static com.whiskels.notifier.common.StreamUtil.alwaysTruePredicate;
 
-public interface MonthlyReport<T> {
+public interface MonthlyReporter<T> {
     default String monthlyReport() {
         return monthlyReport(alwaysTruePredicate());
     }
