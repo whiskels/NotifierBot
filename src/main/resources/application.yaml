@@ -9,8 +9,6 @@ spring:
       hibernate:
         ddl-auto: update
     url: ${JDBC_DATABASE_URL}
-    username: ${JDBC_DATABASE_USERNAME}
-    password: ${JDBC_DATABASE_PASSWORD}
 common:
   timezone: Europe/Moscow
 external:
@@ -25,3 +23,12 @@ moex:
   url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates
   usd: CBRF_USD_LAST (double)
   eur: CBRF_EUR_LAST (double)
+---
+spring:
+  profiles: demo
+  profiles.include: telegram-common
+  datasource:
+    # PostgreSQL syntax is not recommended in general - see https://stackoverflow.com/a/24235439/13716599
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driverClassName: org.h2.Driver
+telegram.bot.token:

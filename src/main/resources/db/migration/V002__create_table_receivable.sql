@@ -1,6 +1,6 @@
 CREATE TABLE receivable
 (
-    id                   INTEGER PRIMARY KEY       DEFAULT nextval('global_seq'),
+    id                   INTEGER DEFAULT nextval('global_seq') PRIMARY KEY,
     crm_id               INTEGER          NOT NULL,
     date                 DATE             NOT NULL,
     currency             VARCHAR          NOT NULL,

@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Sends user his token
@@ -23,6 +24,7 @@ public class TokenHandler extends AbstractBaseHandler {
         log.debug("Preparing /TOKEN");
         return List.of(MessageBuilder.create(user)
                 .line("Your token is *%s*", user.getChatId())
+                .line("Your roles are: {}", user.getRoles().stream().map(Enum::toString).collect(Collectors.joining(", ")))
                 .build());
     }
 }

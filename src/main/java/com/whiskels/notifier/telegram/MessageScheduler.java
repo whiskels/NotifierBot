@@ -30,7 +30,7 @@ public class MessageScheduler {
     private final Clock clock;
     private final HandlerProvider handlerProvider;
 
-    @Scheduled(cron = "${telegram.bot.schedule.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${telegram.bot.schedule.cron:0 * * * * MON-FRI}", zone = "${common.timezone}")
     public void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now(clock);
         log.debug("Checking for scheduled messages: {}", ldt);

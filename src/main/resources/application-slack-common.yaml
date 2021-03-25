@@ -2,7 +2,7 @@ slack:
   customer:
     # Workdays at 13:00 - send customer info to slack
     debt.cron: 0 0 13 * * MON-FRI
-    receivable.cron: 0 0 13 * * MON-FRI
+    payment.cron: 0 0 13 * * MON-FRI
   employee:
     birthday:
       # Workdays at 9:00 - send daily birthday info to slack

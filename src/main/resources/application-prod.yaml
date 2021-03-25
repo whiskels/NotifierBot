@@ -1,5 +1,8 @@
 spring:
   profiles.include: slack-prod, telegram-prod
+  database:
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
 external:
   customer:
     debt:
