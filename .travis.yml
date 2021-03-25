@@ -1,11 +1,12 @@
 language: java
 jdk:
   - oraclejdk14
-deploy:
-  provider: heroku
-  api-key:
-    secure: $HEROKU_API_KEY
-  app: telegramnotifierbot
-  run:
-    - sleep 120
-    - "heroku ps:scale worker=1 -a telegramnotifierbot"
+stages:
+  - name: deploy
+    if: branch = master AND type = push
+  - name: deploy
+jobs:
+  include:
+    - stage: deploy
+      script: mvn clean heroku:deploy
+      after_script: heroku ps:scale worker=1 -a telegramnotifierbot

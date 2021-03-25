@@ -1,1 +1,1 @@
-worker: java $JAVA_OPTS -jar target/*.jar -Dspring.profiles.active=prod
+worker: sh target/bin/TelegramNotifierBot
