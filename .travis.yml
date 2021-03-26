@@ -4,7 +4,6 @@ jdk:
 stages:
   - name: deploy
     if: branch = master AND type = push
-  - name: deploy
 jobs:
   include:
     - stage: deploy
