@@ -2,11 +2,12 @@ package com.whiskels.notifier.telegram.handler;
 
 import com.whiskels.notifier.telegram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Base class for handlers that affect users
  */
-@RequiredArgsConstructor
 public abstract class AbstractUserHandler extends AbstractBaseHandler {
-    protected final UserService userService;
+    @Autowired
+    protected UserService userService;
 }

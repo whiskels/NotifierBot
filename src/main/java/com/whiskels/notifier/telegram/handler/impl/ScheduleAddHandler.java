@@ -6,18 +6,15 @@ import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractScheduleHandler;
-import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.common.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.common.ParsingUtil.getTime;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 /**
@@ -29,20 +26,17 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleAddHandler extends AbstractScheduleHandler {
-    public ScheduleAddHandler(ScheduleService scheduleService) {
-        super(scheduleService);
-    }
-
     @Override
-    public List<BotApiMethod<Message>> handle(User user, String message) {
+    protected void handle(User user, String message) {
         if (!message.contains(" ")) {
             log.debug("Preparing /SCHEDULE (no args)");
-            return List.of(inlineKeyboardMessage(user));
+            inlineKeyboardMessage(user);
+            return;
         }
 
         log.debug("Preparing /SCHEDULE (with args)");
 
-        MessageBuilder builder = MessageBuilder.create(user);
+        MessageBuilder builder = create(user);
         try {
             List<Integer> time = getTime(extractArguments(message));
             final int hours = time.get(0);
@@ -59,13 +53,13 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
             log.debug("Incorrect schedule time {}", message);
         }
 
-        return List.of(builder.build());
+        publish(builder.build());
     }
 
     /**
      * Returns predefined list of options and information on empty command
      */
-    private SendMessage inlineKeyboardMessage(User user) {
+    private void inlineKeyboardMessage(User user) {
         String currentSchedule = "No messages scheduled";
 
         final List<Schedule> schedule = scheduleService.getSchedule(user.getChatId());
@@ -75,7 +69,7 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
                     .collect(Collectors.joining(", "));
         }
 
-        return MessageBuilder.create(user)
+        publish(create(user)
                 .line("*Your current schedule:*")
                 .line(currentSchedule)
                 .line()
@@ -87,6 +81,6 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
                 .row()
                 .button("Clear schedule", "/SCHEDULE_CLEAR")
                 .button("Help", "/SCHEDULE_HELP")
-                .build();
+                .build());
     }
 }

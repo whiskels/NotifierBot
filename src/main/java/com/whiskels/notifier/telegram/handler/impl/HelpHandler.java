@@ -1,15 +1,12 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
+import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 
@@ -20,18 +17,14 @@ import java.util.List;
  */
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
+@RequiredArgsConstructor
 public class HelpHandler extends AbstractBaseHandler {
     @Value("${telegram.bot.name:TelegramNotifierBot}")
     private String botUsername;
-
     private final List<AbstractBaseHandler> handlers;
 
-    public HelpHandler(List<AbstractBaseHandler> handlers) {
-        this.handlers = handlers;
-    }
-
     @Override
-    public List<BotApiMethod<Message>> handle(User user, String message) {
+    protected void handle(User user, String message) {
         log.debug("Preparing /HELP");
         MessageBuilder builder = MessageBuilder.create(user)
                 .line("Hello. I'm *%s*", botUsername)
@@ -48,6 +41,6 @@ public class HelpHandler extends AbstractBaseHandler {
             }
         }
 
-        return List.of(builder.build());
+        publish(builder.build());
     }
 }
