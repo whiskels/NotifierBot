@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -25,7 +24,6 @@ import java.util.List;
 @Profile("telegram-common")
 @ConditionalOnBean(annotation = Schedulable.class)
 public class MessageScheduler {
-    private final Bot bot;
     private final ScheduleService scheduleService;
     private final Clock clock;
     private final HandlerProvider handlerProvider;
@@ -38,8 +36,8 @@ public class MessageScheduler {
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 final User user = schedule.getUser();
-                handlerProvider.getSchedulableHandler(user.getRoles()).authorizeAndHandle(user, null)
-                        .forEach(m -> bot.executeWithExceptionCheck((SendMessage) m));
+                handlerProvider.getSchedulableHandler(user.getRoles())
+                        .authorizeAndHandle(user, null);
                 log.debug("Scheduled message for {} sent at {}:{}",
                         user.getChatId(), ldt.getHour(), ldt.getMinute());
             });

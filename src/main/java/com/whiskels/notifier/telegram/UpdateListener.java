@@ -1,22 +1,16 @@
 package com.whiskels.notifier.telegram;
 
+import com.whiskels.notifier.common.CreationEvent;
+import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
 import com.whiskels.notifier.telegram.service.UserService;
-import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
 
 /**
  * Main class used to handle incoming Updates.
@@ -26,17 +20,13 @@ import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
 @Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
-public class UpdateReceiver {
-    private final List<AbstractBaseHandler> handlers;
+public class UpdateListener {
+    private final HandlerProvider handlerProvider;
     private final UserService userService;
 
-    /**
-     * Analyzes received update and chooses correct handler if possible
-     *
-     * @param update received from user
-     * @return list of SendMessages to execute
-     */
-    public List<BotApiMethod<Message>> handle(Update update) {
+    @EventListener(classes = {UpdateCreationEvent.class})
+    public void handleUpdate(CreationEvent<Update> updateCreationEvent) {
+        final Update update = updateCreationEvent.get();
         try {
             int userId = 0;
             String text = null;
@@ -54,32 +44,14 @@ public class UpdateReceiver {
             }
 
             if (text != null && userId != 0) {
-                return getHandler(text).authorizeAndHandle(userService.getOrCreate(userId), text);
+                handlerProvider.getHandler(text)
+                        .authorizeAndHandle(userService.getOrCreate(userId), text);
+            } else {
+                throw new UnsupportedOperationException();
             }
-
-            throw new UnsupportedOperationException();
         } catch (UnsupportedOperationException e) {
             log.debug("Command: {} is unsupported", update.toString());
-            return Collections.emptyList();
         }
-    }
-
-    /**
-     * Selects handler which can handle received command
-     *
-     * @param text content of received message
-     * @return handler suitable for command
-     */
-    private AbstractBaseHandler getHandler(String text) {
-        return handlers.stream()
-                .filter(h -> h.getClass()
-                        .isAnnotationPresent(BotCommand.class))
-                .filter(h -> Stream.of(h.getClass()
-                        .getAnnotation(BotCommand.class)
-                        .command())
-                        .anyMatch(c -> c.equalsIgnoreCase(extractCommand(text))))
-                .findAny()
-                .orElseThrow(UnsupportedOperationException::new);
     }
 
     private boolean isMessageWithText(Update update) {

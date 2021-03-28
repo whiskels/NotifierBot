@@ -2,16 +2,12 @@ package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.annotations.Schedulable;
-import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
-
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 /**
@@ -23,11 +19,10 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = "/SCHEDULE_HELP", requiredRoles = {MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleHelpHandler extends AbstractBaseHandler {
-
     @Override
-    public List<BotApiMethod<Message>> handle(User user, String message) {
+    protected void handle(User user, String message) {
         log.debug("Preparing /SCHEDULE_HELP");
-        return List.of(MessageBuilder.create(user)
+        publish(create(user)
                 .line("*Help message for /schedule command*")
                 .line()
                 .line("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")
