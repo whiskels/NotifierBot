@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -15,8 +16,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Main Telegram bot class
@@ -41,12 +40,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private final ApplicationEventPublisher publisher;
 
-    /**
-     * After initialization actions:
-     * - start task scheduler thread
-     * - send start up report to bot admin
-     */
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void report() {
         publisher.publishEvent(new SendMessageCreationEvent(
                 new SendMessage().setChatId(botAdmin)
@@ -54,11 +48,6 @@ public class Bot extends TelegramLongPollingBot {
         log.debug("Start report sent to Admin");
     }
 
-    /**
-     * Main bot method. Delegates update handling to update receiver and executes resulting messages
-     *
-     * @param update received by bot from user
-     */
     @Override
     public void onUpdateReceived(Update update) {
         publisher.publishEvent(new UpdateCreationEvent(update));
