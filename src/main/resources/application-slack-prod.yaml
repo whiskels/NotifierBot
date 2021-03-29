@@ -3,4 +3,4 @@ spring:
 slack:
   customer:
     debt.webhook: ${CUSTOMER_DEBT_SLACK_WEBHOOK}
-    receivable.webhook: ${CUSTOMER_PAYMENT_SLACK_WEBHOOK}
+    payment.webhook: ${CUSTOMER_PAYMENT_SLACK_WEBHOOK}
