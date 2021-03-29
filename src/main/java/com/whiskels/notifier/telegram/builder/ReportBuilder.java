@@ -1,4 +1,4 @@
-package com.whiskels.notifier.common;
+package com.whiskels.notifier.telegram.builder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

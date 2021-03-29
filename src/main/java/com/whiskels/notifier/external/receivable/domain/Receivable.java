@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whiskels.notifier.AbstractBaseEntity;
-import com.whiskels.notifier.common.LocalDatePersistenceConverter;
+import com.whiskels.notifier.telegram.repository.LocalDatePersistenceConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

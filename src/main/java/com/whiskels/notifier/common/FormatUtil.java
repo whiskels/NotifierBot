@@ -18,8 +18,11 @@ public final class FormatUtil {
     public static final DateTimeFormatter YEAR_MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
 
+
     public static final Collector<CharSequence, ?, String> COLLECTOR_NEW_LINE = Collectors.joining(String.format(
             "%n"));
+    public static final Collector<CharSequence, ?, String> COLLECTOR_TWO_NEW_LINES = Collectors.joining(String.format(
+            "%n%n"));
     public static final Collector<CharSequence, ?, String> COLLECTOR_EMPTY_LINE = Collectors.joining(String.format(
             "%n%s%n", EMPTY_LINE));
     public static final Collector<CharSequence, ?, String> COLLECTOR_COMMA_SEPARATED = Collectors.joining(", ");

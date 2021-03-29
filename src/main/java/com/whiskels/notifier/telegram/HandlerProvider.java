@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.whiskels.notifier.common.ParsingUtil.extractCommand;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractCommand;
 
 /**
  * Chooses suitable inheritor of AbstractBaseHandler to handle the input

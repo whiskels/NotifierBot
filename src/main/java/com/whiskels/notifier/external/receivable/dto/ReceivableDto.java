@@ -11,6 +11,7 @@ public class ReceivableDto implements Comparable<ReceivableDto> {
     String currency;
     double amount;
     String contractor;
+    double amountRub;
 
     @Override
     public String toString() {

@@ -4,9 +4,10 @@ import com.whiskels.notifier.telegram.annotations.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
-import lombok.RequiredArgsConstructor;
+import com.whiskels.notifier.telegram.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -17,11 +18,17 @@ import java.util.List;
  */
 @Slf4j
 @BotCommand(command = {"/HELP", "/START"})
-@RequiredArgsConstructor
 public class HelpHandler extends AbstractBaseHandler {
     @Value("${telegram.bot.name:TelegramNotifierBot}")
     private String botUsername;
     private final List<AbstractBaseHandler> handlers;
+
+    public HelpHandler(AuthorizationService authorizationService,
+                       ApplicationEventPublisher publisher,
+                       List<AbstractBaseHandler> handlers) {
+        super(authorizationService, publisher);
+        this.handlers = handlers;
+    }
 
     @Override
     protected void handle(User user, String message) {
