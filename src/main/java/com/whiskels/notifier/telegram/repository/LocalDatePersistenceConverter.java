@@ -1,4 +1,4 @@
-package com.whiskels.notifier.common;
+package com.whiskels.notifier.telegram.repository;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

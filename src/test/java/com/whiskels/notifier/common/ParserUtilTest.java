@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.whiskels.notifier.common.ParsingUtil.*;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
