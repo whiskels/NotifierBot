@@ -4,8 +4,8 @@ import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.events.SendMessageCreationEvent;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,15 +20,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
  * {@link com.whiskels.notifier.telegram.annotations.Schedulable} annotation
  */
 @Slf4j
+@RequiredArgsConstructor
 public abstract class AbstractBaseHandler {
     @Value("${telegram.bot.admin}")
     protected String botAdmin;
 
-    @Autowired
-    protected AuthorizationService authorizationService;
-
-    @Autowired
-    protected ApplicationEventPublisher publisher;
+    protected final AuthorizationService authorizationService;
+    protected final ApplicationEventPublisher publisher;
 
     public final void publish(SendMessage message) {
         this.publisher.publishEvent(new SendMessageCreationEvent(message));

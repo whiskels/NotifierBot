@@ -1,5 +1,5 @@
 spring:
-  profiles.active: dev
+  profiles.active: prod
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never

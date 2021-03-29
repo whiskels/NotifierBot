@@ -5,9 +5,7 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
 external:
   customer:
-    debt:
-      url: ${CUSTOMER_DEBT_JSON_URL}
-    receivable:
-      url: ${CUSTOMER_RECEIVABLE_JSON_URL}
+    debt.url: ${CUSTOMER_DEBT_JSON_URL}
+    receivable.url: ${CUSTOMER_RECEIVABLE_JSON_URL}
   employee:
     url: ${EMPLOYEE_URL}

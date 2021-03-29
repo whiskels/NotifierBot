@@ -6,14 +6,17 @@ import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractScheduleHandler;
+import com.whiskels.notifier.telegram.security.AuthorizationService;
+import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.common.ParsingUtil.extractArguments;
-import static com.whiskels.notifier.common.ParsingUtil.getTime;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.getTime;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
@@ -26,6 +29,12 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleAddHandler extends AbstractScheduleHandler {
+    public ScheduleAddHandler(AuthorizationService authorizationService,
+                              ApplicationEventPublisher publisher,
+                              ScheduleService scheduleService) {
+        super(authorizationService, publisher, scheduleService);
+    }
+
     @Override
     protected void handle(User user, String message) {
         if (!message.contains(" ")) {
