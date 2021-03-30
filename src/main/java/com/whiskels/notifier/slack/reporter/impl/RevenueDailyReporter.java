@@ -30,7 +30,7 @@ import static java.util.Map.entry;
 @ConditionalOnProperty("slack.customer.payment.webhook")
 @ConditionalOnBean(value = ReceivableDto.class, parameterizedContainer = DataProvider.class)
 public class RevenueDailyReporter extends SlackReporter<ReceivableDto> {
-    private static final String NAME = "Receivable";
+    private static final String NAME = "Payment";
     private static final String GOOD_PIC_URL = "https://i.imgur.com/bDiTy7t.jpeg";
     private static final String GREAT_PIC_URL = "https://i.imgur.com/AD3MbBi.jpeg";
     private static final Map<Double, String> FUNNY_PICS = Map.ofEntries(
