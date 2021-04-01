@@ -29,7 +29,9 @@ public class TokenHandler extends AbstractBaseHandler {
         log.debug("Preparing /TOKEN");
         publish(create(user)
                 .line("Your token is *%s*", user.getChatId())
-                .line("Your roles are: {}", user.getRoles().stream().map(Enum::toString).collect(Collectors.joining(", ")))
+                .line("Your roles are: %s", user.getRoles().stream()
+                        .map(Enum::toString)
+                        .collect(Collectors.joining(", ")))
                 .build());
     }
 }
