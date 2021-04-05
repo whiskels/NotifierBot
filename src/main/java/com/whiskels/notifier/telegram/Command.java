@@ -13,6 +13,7 @@ public enum Command {
     SCHEDULE_HELP,
     HELP,
     START,
+    ADMIN_SLACK,
     TOKEN("Show your token");
 
     private final String description;
