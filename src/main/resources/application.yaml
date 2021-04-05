@@ -20,7 +20,7 @@ external:
   employee:
     cron: 0 30 6 * * MON-FRI
 moex:
-  url: https://iss.moex.com//iss/statistics/engines/currency/markets/selt/rates
+  url: https://iss.moex.com/iss/statistics/engines/currency/markets/selt/rates
   usd: CBRF_USD_LAST (double)
   eur: CBRF_EUR_LAST (double)
 ---

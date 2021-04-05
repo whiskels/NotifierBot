@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.stream.Collectors;
 
+import static com.whiskels.notifier.telegram.Command.TOKEN;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 
 /**
@@ -17,7 +18,7 @@ import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
  * Available to: everyone
  */
 @Slf4j
-@BotCommand(command = "/TOKEN", message = "Show your token")
+@BotCommand(command = TOKEN)
 public class TokenHandler extends AbstractBaseHandler {
     public TokenHandler(AuthorizationService authorizationService,
                         ApplicationEventPublisher publisher) {

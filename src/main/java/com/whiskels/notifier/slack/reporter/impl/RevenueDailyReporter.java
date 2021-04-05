@@ -1,62 +1,76 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.receivable.dto.ReceivableDto;
-import com.whiskels.notifier.slack.SlackPayload;
+import com.whiskels.notifier.external.operation.dto.FinancialOperationDto;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
+import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_NEW_LINE;
-import static java.time.LocalDate.now;
-import static java.util.Map.entry;
 
 @Component
 @Profile("slack-common")
 @Slf4j
 @ConditionalOnProperty("slack.customer.payment.webhook")
-@ConditionalOnBean(value = ReceivableDto.class, parameterizedContainer = DataProvider.class)
-public class RevenueDailyReporter extends SlackReporter<ReceivableDto> {
+
+@ConditionalOnBean(value = FinancialOperationDto.class, parameterizedContainer = DataProvider.class)
+@ConfigurationProperties(prefix = "slack.customer.payment")
+public class RevenueDailyReporter extends SlackReporter<FinancialOperationDto> {
     private static final String NAME = "Payment";
-    private static final String GOOD_PIC_URL = "https://i.imgur.com/bDiTy7t.jpeg";
-    private static final String GREAT_PIC_URL = "https://i.imgur.com/AD3MbBi.jpeg";
-    private static final Map<Double, String> FUNNY_PICS = Map.ofEntries(
-            entry(0d, SAD_PIC_URL),
-            entry(100000d, GOOD_PIC_URL),
-            entry(1000000d, GREAT_PIC_URL)
-    );
-    private static final Function<List<ReceivableDto>, Double> RECEIVABLE_SUM = x -> x.stream()
-            .collect(Collectors.summarizingDouble(ReceivableDto::getAmountRub))
+    private static final ToDoubleFunction<List<FinancialOperationDto>> RECEIVABLE_SUM = x -> x.stream()
+            .collect(Collectors.summarizingDouble(FinancialOperationDto::getAmountRub))
             .getSum();
 
+    @Setter
+    private Map<String, List<String>> pics;
 
     public RevenueDailyReporter(@Value("${slack.customer.payment.webhook}") String webHook,
-                                DataProvider<ReceivableDto> provider,
-                                ApplicationEventPublisher publisher,
-                                Clock clock) {
-        super(webHook, provider, clock, publisher);
+                                DataProvider<FinancialOperationDto> provider,
+                                ApplicationEventPublisher publisher) {
+        super(webHook, publisher, provider);
     }
 
     @Scheduled(cron = "${slack.customer.payment.cron}", zone = "${common.timezone}")
-    protected void report() {
-        Payload payload = Payload.builder()
-                .text(String.format(REPORT_HEADER, NAME, now(clock)))
-                .blocks(List.of(headerBlock(NAME), contentBlock(COLLECTOR_NEW_LINE, RECEIVABLE_SUM, FUNNY_PICS)))
-                .build();
+    public void report() {
+        List<FinancialOperationDto> data = provider.get();
 
-        publish(new SlackPayload(webHook, payload));
+        publish(SlackPayloadBuilder.builder()
+                .hook(webHook)
+                .notifyChannel()
+                .header(NAME, provider.lastUpdate())
+                .collector(COLLECTOR_NEW_LINE)
+                .block(data, reportPic(data))
+                .build());
+    }
+
+    private String reportPic(List<FinancialOperationDto> data) {
+        if (data.isEmpty()) {
+            return randomElementFromList(pics.get(Collections.min(pics.keySet())));
+        } else {
+            double conditionResult = RECEIVABLE_SUM.applyAsDouble(data);
+            return randomElementFromList(pics.entrySet().stream()
+                    .min(Comparator.comparingDouble(entry -> Math.abs(Double.parseDouble(entry.getKey()) - conditionResult)))
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Exception while trying to find match for condition " + RECEIVABLE_SUM))
+                    .getValue());
+        }
+    }
+
+    private String randomElementFromList(List<String> list) {
+        Random rnd = new Random();
+        return list.get(rnd.nextInt(list.size()));
     }
 }

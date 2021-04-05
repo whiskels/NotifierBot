@@ -1,0 +1,2 @@
+ALTER TABLE receivable RENAME TO financial_operation;
+ALTER INDEX receivable_unique_crm_id_idx RENAME TO financial_operation_unique_crm_id_idx;

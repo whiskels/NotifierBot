@@ -1,4 +1,4 @@
-package com.whiskels.notifier.external.receivable.domain;
+package com.whiskels.notifier.external.operation.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -45,14 +45,14 @@ import static java.time.LocalDate.now;
  */
 
 @Entity
-@Table(name = "receivable")
+@Table(name = "financial_operation")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Receivable extends AbstractBaseEntity implements Comparable<Receivable> {
+public class FinancialOperation extends AbstractBaseEntity implements Comparable<FinancialOperation> {
     @JsonProperty("id")
     int crmId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
@@ -83,9 +83,9 @@ public class Receivable extends AbstractBaseEntity implements Comparable<Receiva
     LocalDate loadDate = now(ZoneId.of("Europe/Moscow"));
 
     @Override
-    public int compareTo(@NotNull Receivable o) {
-        return Comparator.comparing(Receivable::getAmount)
-                .thenComparing(Receivable::getContractor)
+    public int compareTo(@NotNull FinancialOperation o) {
+        return Comparator.comparing(FinancialOperation::getAmount)
+                .thenComparing(FinancialOperation::getContractor)
                 .reversed()
                 .compare(this, o);
     }

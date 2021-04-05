@@ -39,6 +39,15 @@ public final class ReportBuilder {
         return this;
     }
 
+    public <T> ReportBuilder list(List<T> list, Collector<CharSequence, ?, String> collector) {
+        final String result = list.stream()
+                .map(T::toString)
+                .collect(collector);
+
+        sb.append(result.isEmpty() ? noData : result);
+        return this;
+    }
+
     public <T> ReportBuilder list(List<T> list, Predicate<T> predicate, Collector<CharSequence, ?, String> collector) {
         final String result = list.stream()
                 .filter(predicate)
