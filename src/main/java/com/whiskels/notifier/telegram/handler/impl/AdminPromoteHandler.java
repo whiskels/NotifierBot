@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
+import static com.whiskels.notifier.telegram.Command.ADMIN_PROMOTE;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
 /**
  * Allows bot admin to change user roles by sending bot a chat command
@@ -25,7 +26,7 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  */
 @Component
 @Slf4j
-@BotCommand(command = "/ADMIN_PROMOTE", requiredRoles = {ADMIN})
+@BotCommand(command = ADMIN_PROMOTE, requiredRoles = {ADMIN})
 public class AdminPromoteHandler extends AbstractUserHandler {
     public AdminPromoteHandler(AuthorizationService authorizationService,
                                ApplicationEventPublisher publisher,

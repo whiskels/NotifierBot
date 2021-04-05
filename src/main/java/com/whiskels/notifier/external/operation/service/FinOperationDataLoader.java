@@ -1,11 +1,10 @@
-package com.whiskels.notifier.external.receivable.service;
+package com.whiskels.notifier.external.operation.service;
 
-import com.whiskels.notifier.external.ExternalDataProvider;
+import com.whiskels.notifier.external.ExternalApiClient;
 import com.whiskels.notifier.external.json.JsonReader;
 import com.whiskels.notifier.external.moex.MoexService;
-import com.whiskels.notifier.external.receivable.domain.Receivable;
-import com.whiskels.notifier.external.receivable.dto.ReceivableDto;
-import com.whiskels.notifier.external.receivable.repository.ReceivableRepository;
+import com.whiskels.notifier.external.operation.domain.FinancialOperation;
+import com.whiskels.notifier.external.operation.repository.FinOperationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -22,8 +20,8 @@ import java.util.List;
 import static com.whiskels.notifier.common.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.subtractWorkingDays;
-import static com.whiskels.notifier.external.receivable.util.ReceivableUtil.NEW_CRM_ID;
-import static com.whiskels.notifier.external.receivable.util.ReceivableUtil.calculateRoubleAmount;
+import static com.whiskels.notifier.external.operation.util.FinOperationUtil.NEW_CRM_ID;
+import static com.whiskels.notifier.external.operation.util.FinOperationUtil.calculateRoubleAmount;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.now;
@@ -32,7 +30,7 @@ import static java.time.LocalDate.now;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty("external.customer.receivable.url")
-public class ReceivableDataProvider implements ExternalDataProvider<ReceivableDto> {
+public class FinOperationDataLoader implements ExternalApiClient<FinancialOperation> {
     @Value("${external.customer.receivable.workingDaysToLoad:2}")
     private int workingDaysToLoad;
 
@@ -42,15 +40,10 @@ public class ReceivableDataProvider implements ExternalDataProvider<ReceivableDt
     @Value("${external.customer.receivable.url}")
     private String customerUrl;
 
-    private final ReceivableRepository receivableRepository;
+    private final FinOperationRepository finOperationRepository;
     private final Clock clock;
     private final MoexService moexService;
     private final JsonReader jsonReader;
-
-    @Override
-    public List<ReceivableDto> get() {
-        return receivableRepository.getRevenueByDate(now(clock));
-    }
 
     @Scheduled(cron = "${external.customer.receivable.cron}", zone = "${common.timezone}")
     public void update() {
@@ -62,32 +55,32 @@ public class ReceivableDataProvider implements ExternalDataProvider<ReceivableDt
     }
 
     private void loadReceivables() {
-        List<Integer> presentIds = receivableRepository.getIdList();
-        List<Receivable> newReceivables = filterAndSort(
-                jsonReader.read(getNewUrl(), Receivable.class), NEW_CRM_ID(presentIds));
-        log.info("found {} new receivables", newReceivables.size());
-        receivableRepository.saveAll(calculateRubAmount(newReceivables));
+        List<Integer> presentIds = finOperationRepository.getIdList();
+        List<FinancialOperation> newFinancialOperations = filterAndSort(
+                jsonReader.read(getNewUrl(), FinancialOperation.class), NEW_CRM_ID(presentIds));
+        log.info("Found {} new receivables", newFinancialOperations.size());
+        finOperationRepository.saveAll(calculateRubAmount(newFinancialOperations));
     }
 
-    private List<Receivable> calculateRubAmount(List<Receivable> receivables) {
+    private List<FinancialOperation> calculateRubAmount(List<FinancialOperation> financialOperations) {
         final double usdRate = moexService.getUsdRate();
         final double eurRate = moexService.getEurRate();
-        receivables.forEach(r -> r.setAmountRub(calculateRoubleAmount(r, usdRate, eurRate)));
+        financialOperations.forEach(r -> r.setAmountRub(calculateRoubleAmount(r, usdRate, eurRate)));
 
-        return receivables;
+        return financialOperations;
     }
 
     private void deleteOldEntries() {
         LocalDate deleteBeforeDate = subtractWorkingDays(now(clock), workingDaysToDeleteAfter);
-        log.info("deleted {} old entries with load date before {}",
-                receivableRepository.deleteByDateBefore(deleteBeforeDate),
+        log.info("Deleted {} old entries with load date before {}",
+                finOperationRepository.deleteByDateBefore(deleteBeforeDate),
                 deleteBeforeDate);
     }
 
     private String getNewUrl() {
         LocalDate endDate = now(clock).minusDays(1);
         LocalDate startDate = subtractWorkingDays(endDate, workingDaysToLoad);
-        log.info("creating receivables url for range of: {} to {}", startDate, endDate);
+        log.info("Creating receivables url for range of: {} to {}", startDate, endDate);
         return customerUrl.replace("startDate", startDate.format(YEAR_MONTH_DAY_FORMATTER))
                 .replace("endDate", endDate.format(YEAR_MONTH_DAY_FORMATTER));
     }

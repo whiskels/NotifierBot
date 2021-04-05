@@ -16,7 +16,7 @@ class HandlerProviderTest extends DisabledDataSourceConfiguration {
     private static final String START_COMMAND = "/START";
     private static final Class<? extends AbstractBaseHandler>[] HANDLERS = new Class[]{
             AdminPromoteHandler.class, AdminTimeHandler.class, AdminUpdateNameHandler.class,
-            BirthdayHandler.class, DebtHandler.class, ReceivableHandler.class,
+            BirthdayHandler.class, DebtHandler.class, PaymentHandler.class,
             HelpHandler.class, ScheduleAddHandler.class, ScheduleClearHandler.class, ScheduleHelpHandler.class,
             TokenHandler.class
     };
