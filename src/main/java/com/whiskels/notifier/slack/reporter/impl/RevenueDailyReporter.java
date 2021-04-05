@@ -25,6 +25,7 @@ import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_NEW_LINE;
 @Profile("slack-common")
 @Slf4j
 @ConditionalOnProperty("slack.customer.payment.webhook")
+
 @ConditionalOnBean(value = FinancialOperationDto.class, parameterizedContainer = DataProvider.class)
 @ConfigurationProperties(prefix = "slack.customer.payment")
 public class RevenueDailyReporter extends SlackReporter<FinancialOperationDto> {
