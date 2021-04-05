@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
 
+import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
@@ -18,7 +19,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
  * Available to: Manager, Head, Admin, HR
  */
 @Slf4j
-@BotCommand(command = "/SCHEDULE_HELP", requiredRoles = {MANAGER, HEAD, ADMIN})
+@BotCommand(command = SCHEDULE_HELP, requiredRoles = {MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleHelpHandler extends AbstractBaseHandler {
     public ScheduleHelpHandler(AuthorizationService authorizationService,

@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
+import static com.whiskels.notifier.telegram.Command.ADMIN_TIME;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 
@@ -19,11 +20,12 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * Available to: Admin
  */
 @Slf4j
-@BotCommand(command = "/ADMIN_TIME", message = "Show bot server time", requiredRoles = {ADMIN})
+@BotCommand(command = ADMIN_TIME, requiredRoles = {ADMIN})
 public class AdminTimeHandler extends AbstractBaseHandler {
     private final Clock clock;
 
-    public AdminTimeHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, Clock clock) {
+    public AdminTimeHandler(AuthorizationService authorizationService,
+                            ApplicationEventPublisher publisher, Clock clock) {
         super(authorizationService, publisher);
         this.clock = clock;
     }

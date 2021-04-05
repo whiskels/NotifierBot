@@ -1,36 +1,17 @@
 package com.whiskels.notifier.external.debt.util;
 
 import com.whiskels.notifier.external.debt.domain.Debt;
-import com.whiskels.notifier.telegram.domain.Role;
-import com.whiskels.notifier.telegram.domain.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.Comparator;
-import java.util.Set;
 import java.util.function.Predicate;
-
-import static com.whiskels.notifier.telegram.domain.Role.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DebtUtil {
     public static final Comparator<Debt> TOTAL_DEBT_COMPARATOR = Comparator.comparing(Debt::getTotalDebtRouble)
             .thenComparing(Debt::getContractor).reversed();
-
-    /**
-     * Checks if user is verified to get information about selected customer
-     * <p>
-     * true - if user is head or admin or is customer's account manager
-     */
-    public static Predicate<Debt> isValid(User user) {
-        return debt -> {
-            final Set<Role> roles = user.getRoles();
-            return roles.contains(ADMIN)
-                    || roles.contains(HEAD)
-                    || roles.contains(MANAGER) && user.getName().equalsIgnoreCase(debt.getAccountManager());
-        };
-    }
 
     public static Predicate<Debt> totalDebtRoubleHigherThan(int amount) {
         return debt -> debt.getTotalDebtRouble() > amount;

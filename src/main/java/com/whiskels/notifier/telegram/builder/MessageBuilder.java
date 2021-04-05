@@ -1,6 +1,7 @@
 package com.whiskels.notifier.telegram.builder;
 
 
+import com.whiskels.notifier.telegram.Command;
 import com.whiskels.notifier.telegram.domain.User;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -96,12 +97,23 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text         button text (and callback argument)
-     * @param callbackData on click callback
+     * @param text         button text
+     * @param command on click callback
      * @return this
      */
-    public MessageBuilder buttonWithArguments(String text, String callbackData) {
-        return button(text, callbackData + " " + text);
+    public MessageBuilder button(String text, Command command) {
+        return button(text, command.toString());
+    }
+
+    /**
+     * Creates new {@link InlineKeyboardButton}
+     *
+     * @param text         button text (and callback argument)
+     * @param command on click callback
+     * @return this
+     */
+    public MessageBuilder buttonWithArguments(String text, Command command) {
+        return button(text, command.toString() + " " + text);
     }
 
     /**

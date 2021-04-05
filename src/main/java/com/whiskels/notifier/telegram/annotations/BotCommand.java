@@ -1,5 +1,6 @@
 package com.whiskels.notifier.telegram.annotations;
 
+import com.whiskels.notifier.telegram.Command;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.handler.impl.DebtHandler;
 import org.springframework.context.annotation.Profile;
@@ -30,14 +31,7 @@ public @interface BotCommand {
      *
      * @return an array of the commands supported by handler
      */
-    String[] command();
-
-    /**
-     * Returns help message for the command
-     *
-     * @return help message for the command
-     */
-    String message() default "";
+    Command[] command();
 
     /**
      * Returns an array of user roles that have access to the handler

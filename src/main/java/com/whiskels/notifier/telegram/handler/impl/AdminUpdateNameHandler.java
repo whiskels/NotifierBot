@@ -8,6 +8,7 @@ import com.whiskels.notifier.telegram.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
+import static com.whiskels.notifier.telegram.Command.ADMIN_NAME;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
@@ -19,7 +20,7 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * Available to: Admin
  */
 @Slf4j
-@BotCommand(command = "/ADMIN_NAME", requiredRoles = {ADMIN})
+@BotCommand(command = ADMIN_NAME, requiredRoles = {ADMIN})
 public class AdminUpdateNameHandler extends AbstractUserHandler {
     public AdminUpdateNameHandler(AuthorizationService authorizationService,
                                   ApplicationEventPublisher publisher,

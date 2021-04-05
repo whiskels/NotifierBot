@@ -15,10 +15,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
-import static com.whiskels.notifier.telegram.util.ParsingUtil.getTime;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE_CLEAR;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
 import static com.whiskels.notifier.telegram.domain.Role.*;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.getTime;
 
 /**
  * Adds schedule to the user and shows current schedule times
@@ -26,7 +28,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
  * Available to: HR, Manager, Head, Admin
  */
 @Slf4j
-@BotCommand(command = "/SCHEDULE", message = "Manage schedule", requiredRoles = {HR, MANAGER, HEAD, ADMIN})
+@BotCommand(command = SCHEDULE, requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleAddHandler extends AbstractScheduleHandler {
     public ScheduleAddHandler(AuthorizationService authorizationService,
@@ -81,15 +83,16 @@ public class ScheduleAddHandler extends AbstractScheduleHandler {
         publish(create(user)
                 .line("*Your current schedule:*")
                 .line(currentSchedule)
+                .line("You can schedule")
                 .line()
                 .line("Choose from available options or add preferred time to [/schedule](/schedule) command:")
                 .row()
-                .buttonWithArguments("9:00", "/SCHEDULE")
-                .buttonWithArguments("12:00", "/SCHEDULE")
-                .buttonWithArguments("15:00", "/SCHEDULE")
+                .buttonWithArguments("9:00", SCHEDULE)
+                .buttonWithArguments("12:00", SCHEDULE)
+                .buttonWithArguments("15:00", SCHEDULE)
                 .row()
-                .button("Clear schedule", "/SCHEDULE_CLEAR")
-                .button("Help", "/SCHEDULE_HELP")
+                .button("Clear schedule", SCHEDULE_CLEAR)
+                .button("Help", SCHEDULE_CLEAR)
                 .build());
     }
 }
