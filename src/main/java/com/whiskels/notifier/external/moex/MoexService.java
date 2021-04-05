@@ -1,6 +1,7 @@
 package com.whiskels.notifier.external.moex;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +16,8 @@ import java.util.HashMap;
 
 @Service
 @Slf4j
-@ConfigurationProperties(prefix = "moex")
+@ConfigurationProperties("moex")
+@Setter
 public class MoexService {
     private String url;
     private String usd;
