@@ -125,7 +125,7 @@ public final class MessageBuilder {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .enableMarkdown(true)
-                .setText(sb.toString());
+                .setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
 

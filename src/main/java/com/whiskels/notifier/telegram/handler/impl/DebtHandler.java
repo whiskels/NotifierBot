@@ -34,14 +34,11 @@ public class DebtHandler extends AbstractBaseHandler {
     private static final String DEBT_REPORT_HEADER = "Overdue debts";
 
     private final DataProvider<Debt> provider;
-    private final Clock clock;
 
     public DebtHandler(AuthorizationService authorizationService,
                        ApplicationEventPublisher publisher,
-                       DataProvider<Debt> provider,
-                       Clock clock) {
+                       DataProvider<Debt> provider) {
         super(authorizationService, publisher);
-        this.clock = clock;
         this.provider = provider;
     }
 
@@ -50,7 +47,7 @@ public class DebtHandler extends AbstractBaseHandler {
         log.debug("Preparing /GET_DEBT");
 
         publish(create(user)
-                .line(withHeader(DEBT_REPORT_HEADER, now(clock))
+                .line(withHeader(DEBT_REPORT_HEADER, provider.lastUpdate())
                         .list(provider.get(), isValid(user), COLLECTOR_EMPTY_LINE)
                         .build())
                 .build());

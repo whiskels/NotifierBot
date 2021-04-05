@@ -38,30 +38,27 @@ public class BirthdayHandler extends AbstractBaseHandler {
     private static final String UPCOMING_WEEK = "*Upcoming week:*";
 
     private final DataProvider<Employee> provider;
-    private final Clock clock;
 
     public BirthdayHandler(AuthorizationService authorizationService,
                            ApplicationEventPublisher publisher,
-                           DataProvider<Employee> provider,
-                           Clock clock) {
+                           DataProvider<Employee> provider) {
         super(authorizationService, publisher);
-        this.clock = clock;
         this.provider = provider;
     }
 
     @Override
     protected void handle(User user, String message) {
-        final LocalDate today = now(clock);
+        final LocalDate reportDate = provider.lastUpdate();
         final List<Employee> filteredList = filterAndSort(provider.get());
 
         log.debug("Preparing /BIRTHDAY");
         publish(create(user)
-                .line(withHeader(BIRTHDAY_REPORT_HEADER, today)
+                .line(withHeader(BIRTHDAY_REPORT_HEADER, reportDate)
                         .setNoData(NO_DATA)
-                        .list(filteredList, isBirthdayOn(today), COLLECTOR_COMMA_SEPARATED)
+                        .list(filteredList, isBirthdayOn(reportDate), COLLECTOR_COMMA_SEPARATED)
                         .line()
                         .line(UPCOMING_WEEK)
-                        .list(filteredList, isBirthdayNextWeekFrom(today), COLLECTOR_COMMA_SEPARATED)
+                        .list(filteredList, isBirthdayNextWeekFrom(reportDate), COLLECTOR_COMMA_SEPARATED)
                         .build())
                 .build());
     }
