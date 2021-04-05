@@ -3,7 +3,7 @@ package com.whiskels.notifier.external.moex;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,11 @@ import java.util.HashMap;
 
 @Service
 @Slf4j
+@ConfigurationProperties(prefix = "moex")
 public class MoexService {
-    @Value("${moex.url}")
-    private String moexUrl;
-
-    @Value("${moex.usd:CBRF_USD_LAST (double)}")
-    private String moexUsd;
-
-    @Value("${moex.eur:CBRF_EUR_LAST (double)}")
-    private String moexEur;
+    private String url;
+    private String usd;
+    private String eur;
 
     @Getter
     private double usdRate;
@@ -33,10 +29,10 @@ public class MoexService {
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * *", zone = "${common.timezone}")
     public void update() {
-        log.info("updating exchange rates");
+        log.info("Updating exchange rates");
         // Getting moex exchange rates string
         try {
-            String moexContent = IOUtils.toString(new URL(moexUrl), StandardCharsets.UTF_8);
+            String moexContent = IOUtils.toString(new URL(url), StandardCharsets.UTF_8);
             // Removing HTML tags
             moexContent = moexContent.replaceAll("\\<.*?\\>", "");
 
@@ -51,8 +47,8 @@ public class MoexService {
             }
 
             if (!ratesMap.isEmpty()) {
-                usdRate = Double.parseDouble(ratesMap.get(moexUsd));
-                eurRate = Double.parseDouble(ratesMap.get(moexEur));
+                usdRate = Double.parseDouble(ratesMap.get(usd));
+                eurRate = Double.parseDouble(ratesMap.get(eur));
             }
         } catch (IOException e) {
             log.error("Exception while trying to get MOEX data: {}", e.toString());
