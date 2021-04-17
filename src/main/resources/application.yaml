@@ -1,5 +1,4 @@
 spring:
-  profiles.active: prod
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -17,6 +16,8 @@ external:
       cron: 0 55 11 * * MON-FRI
     receivable:
       cron: 0 55 11 * * MON-FRI
+  balance:
+    cron: 0 55 11 * * MON-FRI
   employee:
     cron: 0 30 6 * * MON-FRI
 moex:
