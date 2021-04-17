@@ -19,7 +19,10 @@ public final class EmployeeUtil {
     public static final Predicate<Employee> NOT_FIRED = e -> e.getStatusSystem() != null && !e.getStatusSystem().equals(STATUS_SYSTEM_FIRED);
     public static final Predicate<Employee> NOT_DECREE = e -> e.getStatus() != null && !e.getStatus().equals(STATUS_DECREE);
     public static final Predicate<Employee> BIRTHDAY_NOT_NULL = e -> e.getBirthday() != null;
-    public static final Comparator<Employee> BIRTHDAY_COMPARATOR = Comparator.comparing(Employee::getBirthday)
+
+    public static final Comparator<Employee> EMPLOYEE_BIRTHDAY_COMPARATOR = Comparator.comparing(Employee::getBirthday)
+            .thenComparing(Employee::getName);
+    public static final Comparator<Employee> EMPLOYEE_ANNIVERSARY_COMPARATOR = Comparator.comparing(Employee::getAppointmentDate)
             .thenComparing(Employee::getName);
 
     public static long daysBetweenBirthdayAnd(Employee employee, LocalDate today) {
@@ -41,5 +44,12 @@ public final class EmployeeUtil {
 
     public static Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
         return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
+    }
+
+    public static Predicate<Employee> isAnniversarySameMonth(LocalDate today) {
+        return employee -> {
+            final LocalDate appointmentDate = employee.getAppointmentDate();
+            return (appointmentDate != null && appointmentDate.getMonth().equals(today.getMonth()));
+        };
     }
 }

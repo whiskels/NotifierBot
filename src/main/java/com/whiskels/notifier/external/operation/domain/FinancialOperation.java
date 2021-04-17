@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whiskels.notifier.AbstractBaseEntity;
-import com.whiskels.notifier.telegram.repository.LocalDatePersistenceConverter;
+import com.whiskels.notifier.external.operation.repository.LocalDatePersistenceConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -84,7 +84,7 @@ public class FinancialOperation extends AbstractBaseEntity implements Comparable
 
     @Override
     public int compareTo(@NotNull FinancialOperation o) {
-        return Comparator.comparing(FinancialOperation::getAmount)
+        return Comparator.comparing(FinancialOperation::getAmountRub)
                 .thenComparing(FinancialOperation::getContractor)
                 .reversed()
                 .compare(this, o);

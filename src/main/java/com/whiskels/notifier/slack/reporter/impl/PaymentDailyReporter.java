@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.operation.dto.FinancialOperationDto;
+import com.whiskels.notifier.external.operation.dto.PaymentDto;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.Setter;
@@ -19,44 +19,48 @@ import java.util.*;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_NEW_LINE;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
 
 @Component
 @Profile("slack-common")
 @Slf4j
 @ConditionalOnProperty("slack.customer.payment.webhook")
-
-@ConditionalOnBean(value = FinancialOperationDto.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = DataProvider.class)
 @ConfigurationProperties(prefix = "slack.customer.payment")
-public class RevenueDailyReporter extends SlackReporter<FinancialOperationDto> {
-    private static final String NAME = "Payment";
-    private static final ToDoubleFunction<List<FinancialOperationDto>> RECEIVABLE_SUM = x -> x.stream()
-            .collect(Collectors.summarizingDouble(FinancialOperationDto::getAmountRub))
+public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
+    private static final ToDoubleFunction<List<PaymentDto>> RECEIVABLE_SUM = x -> x.stream()
+            .collect(Collectors.summarizingDouble(PaymentDto::getAmountRub))
             .getSum();
+
+    @Value("${slack.customer.payment.report.header:Payment report on")
+    private String header;
 
     @Setter
     private Map<String, List<String>> pics;
 
-    public RevenueDailyReporter(@Value("${slack.customer.payment.webhook}") String webHook,
-                                DataProvider<FinancialOperationDto> provider,
+    private final Random rnd = new Random();
+
+    public PaymentDailyReporter(@Value("${slack.customer.payment.webhook}") String webHook,
+                                DataProvider<PaymentDto> provider,
                                 ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }
 
     @Scheduled(cron = "${slack.customer.payment.cron}", zone = "${common.timezone}")
     public void report() {
-        List<FinancialOperationDto> data = provider.get();
+        List<PaymentDto> data = provider.get();
 
         publish(SlackPayloadBuilder.builder()
                 .hook(webHook)
                 .notifyChannel()
-                .header(NAME, provider.lastUpdate())
+                .header(header + reportDate(provider.lastUpdate()))
                 .collector(COLLECTOR_NEW_LINE)
                 .block(data, reportPic(data))
                 .build());
     }
 
-    private String reportPic(List<FinancialOperationDto> data) {
+    private String reportPic(List<PaymentDto> data) {
         if (data.isEmpty()) {
             return randomElementFromList(pics.get(Collections.min(pics.keySet())));
         } else {
@@ -70,7 +74,6 @@ public class RevenueDailyReporter extends SlackReporter<FinancialOperationDto> {
     }
 
     private String randomElementFromList(List<String> list) {
-        Random rnd = new Random();
         return list.get(rnd.nextInt(list.size()));
     }
 }

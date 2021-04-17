@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.telegram.Command.TOKEN;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 
 /**
  * Sends user his token
@@ -27,8 +27,7 @@ public class TokenHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /TOKEN");
-        publish(create(user)
+        publish(builder(user)
                 .line("Your token is *%s*", user.getChatId())
                 .line("Your roles are: %s", user.getRoles().stream()
                         .map(Enum::toString)

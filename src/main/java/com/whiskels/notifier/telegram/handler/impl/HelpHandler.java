@@ -36,8 +36,7 @@ public class HelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /HELP");
-        MessageBuilder builder = MessageBuilder.create(user)
+        MessageBuilder builder = MessageBuilder.builder(user)
                 .line("Hello. I'm *%s*", botUsername)
                 .line("Here are your available commands")
                 .line("Use [/help] command to display this message");

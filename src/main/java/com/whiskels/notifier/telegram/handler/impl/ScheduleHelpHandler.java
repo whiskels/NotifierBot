@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 /**
@@ -29,8 +29,7 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /SCHEDULE_HELP");
-        publish(create(user)
+        publish(builder(user)
                 .line("*Help message for /schedule command*")
                 .line()
                 .line("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")

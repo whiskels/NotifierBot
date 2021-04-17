@@ -32,7 +32,7 @@ public final class MessageBuilder {
      * @param chatId of user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(String chatId) {
+    public static MessageBuilder builder(String chatId) {
         MessageBuilder builder = new MessageBuilder();
         builder.setChatId(chatId);
         return builder;
@@ -44,8 +44,8 @@ public final class MessageBuilder {
      * @param user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(User user) {
-        return create(String.valueOf(user.getChatId()));
+    public static MessageBuilder builder(User user) {
+        return builder(String.valueOf(user.getChatId()));
     }
 
     /**
