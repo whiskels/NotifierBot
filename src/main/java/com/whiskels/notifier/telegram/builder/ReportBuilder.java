@@ -3,29 +3,37 @@ package com.whiskels.notifier.telegram.builder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.Collection;
+import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static com.whiskels.notifier.common.FormatUtil.DAY_MONTH_YEAR_FORMATTER;
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
+import static com.whiskels.notifier.common.util.StreamUtil.collectToString;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReportBuilder {
     private final StringBuilder sb = new StringBuilder();
     private String noData = "Nothing";
+    private Collector<CharSequence, ?, String> activeCollector = COLLECTOR_NEW_LINE;
 
-    public static ReportBuilder withHeader(String name, LocalDate date) {
-        return new ReportBuilder().header(name, date);
+    public static ReportBuilder builder(String header) {
+        return new ReportBuilder().withHeader(header);
     }
 
-    private ReportBuilder header(String name, LocalDate date) {
-        sb.append(String.format("*%s on %s:*%n", name, DAY_MONTH_YEAR_FORMATTER.format(date)));
-        return this;
+    private ReportBuilder withHeader(String header) {
+        sb.append("*")
+                .append(header)
+                .append("*");
+        return line();
     }
 
     public ReportBuilder setNoData(String noData) {
         this.noData = noData;
+        return this;
+    }
+
+    public ReportBuilder setActiveCollector(Collector<CharSequence, ?, String> collector) {
+        this.activeCollector = collector;
         return this;
     }
 
@@ -39,14 +47,13 @@ public final class ReportBuilder {
         return this;
     }
 
-    public <T> ReportBuilder list(List<T> list, Predicate<T> predicate, Collector<CharSequence, ?, String> collector) {
-        final String result = list.stream()
-                .filter(predicate)
-                .map(T::toString)
-                .collect(collector);
+    public <T> ReportBuilder list(Collection<T> collection) {
+        return list(collection, T::toString);
+    }
 
-        sb.append(result.isEmpty() ? noData : result);
-        return this;
+    public <T> ReportBuilder list(Collection<T> collection, Function<T, String> toString) {
+        sb.append(collection.isEmpty() ? noData : collectToString(collection, toString, activeCollector));
+        return line();
     }
 
     public String build() {

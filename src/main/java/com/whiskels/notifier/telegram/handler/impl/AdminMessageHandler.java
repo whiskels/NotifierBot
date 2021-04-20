@@ -12,8 +12,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.whiskels.notifier.telegram.Command.ADMIN_MESSAGE;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 
 /**
@@ -22,7 +23,7 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * Available to: Admin
  */
 @Slf4j
-@BotCommand(command = "/ADMIN_MESSAGE", requiredRoles = {ADMIN})
+@BotCommand(command = ADMIN_MESSAGE, requiredRoles = {ADMIN})
 public class AdminMessageHandler extends AbstractUserHandler {
     public AdminMessageHandler(AuthorizationService authorizationService,
                                ApplicationEventPublisher publisher,
@@ -32,16 +33,15 @@ public class AdminMessageHandler extends AbstractUserHandler {
 
     @Override
     protected void handle(User admin, String text) {
-        log.debug("Preparing /ADMIN_MESSAGE");
         List<SendMessage> messages = userService.getUsers()
                 .stream()
-                .map(user -> create(user)
+                .map(user -> builder(user)
                         .line(extractArguments(text))
                         .build())
                 .collect(Collectors.toList());
 
         log.debug("Prepared {} messages", messages.size());
-        messages.add(create(admin)
+        messages.add(builder(admin)
                 .line("Notified %d users", messages.size())
                 .build());
 

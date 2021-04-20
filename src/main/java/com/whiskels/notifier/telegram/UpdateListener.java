@@ -2,6 +2,7 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.common.CreationEvent;
 import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.telegram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,9 @@ public class UpdateListener {
             }
 
             if (text != null && userId != 0) {
-                handlerProvider.getHandler(text)
-                        .authorizeAndHandle(userService.getOrCreate(userId), text);
+                final AbstractBaseHandler handler = handlerProvider.getHandler(text);
+                log.debug("Found handler {} for command {}", handler.getClass().getSimpleName(), text);
+                handler.authorizeAndHandle(userService.getOrCreate(userId), text);
             } else {
                 throw new UnsupportedOperationException();
             }

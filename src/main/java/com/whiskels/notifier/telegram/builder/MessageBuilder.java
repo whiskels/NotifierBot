@@ -1,6 +1,7 @@
 package com.whiskels.notifier.telegram.builder;
 
 
+import com.whiskels.notifier.telegram.Command;
 import com.whiskels.notifier.telegram.domain.User;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -31,7 +32,7 @@ public final class MessageBuilder {
      * @param chatId of user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(String chatId) {
+    public static MessageBuilder builder(String chatId) {
         MessageBuilder builder = new MessageBuilder();
         builder.setChatId(chatId);
         return builder;
@@ -43,8 +44,8 @@ public final class MessageBuilder {
      * @param user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(User user) {
-        return create(String.valueOf(user.getChatId()));
+    public static MessageBuilder builder(User user) {
+        return builder(String.valueOf(user.getChatId()));
     }
 
     /**
@@ -96,12 +97,23 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text         button text (and callback argument)
-     * @param callbackData on click callback
+     * @param text         button text
+     * @param command on click callback
      * @return this
      */
-    public MessageBuilder buttonWithArguments(String text, String callbackData) {
-        return button(text, callbackData + " " + text);
+    public MessageBuilder button(String text, Command command) {
+        return button(text, command.toString());
+    }
+
+    /**
+     * Creates new {@link InlineKeyboardButton}
+     *
+     * @param text         button text (and callback argument)
+     * @param command on click callback
+     * @return this
+     */
+    public MessageBuilder buttonWithArguments(String text, Command command) {
+        return button(text, command.toString() + " " + text);
     }
 
     /**
@@ -113,7 +125,7 @@ public final class MessageBuilder {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .enableMarkdown(true)
-                .setText(sb.toString());
+                .setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
 

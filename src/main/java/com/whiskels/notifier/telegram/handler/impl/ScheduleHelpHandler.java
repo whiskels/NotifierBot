@@ -9,7 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
 
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 /**
@@ -18,7 +19,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
  * Available to: Manager, Head, Admin, HR
  */
 @Slf4j
-@BotCommand(command = "/SCHEDULE_HELP", requiredRoles = {MANAGER, HEAD, ADMIN})
+@BotCommand(command = SCHEDULE_HELP, requiredRoles = {MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleHelpHandler extends AbstractBaseHandler {
     public ScheduleHelpHandler(AuthorizationService authorizationService,
@@ -28,8 +29,7 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /SCHEDULE_HELP");
-        publish(create(user)
+        publish(builder(user)
                 .line("*Help message for /schedule command*")
                 .line()
                 .line("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")

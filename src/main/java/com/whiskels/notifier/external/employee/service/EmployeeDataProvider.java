@@ -11,11 +11,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.util.StreamUtil.filter;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static java.time.LocalDate.now;
 
 @Service
 @Slf4j
@@ -28,18 +31,26 @@ public class EmployeeDataProvider implements ExternalDataProvider<Employee> {
     @Value("${external.employee.url}")
     private String employeeUrl;
     private List<Employee> employeeList;
+    private LocalDate lastUpdateDate;
 
     private final JsonReader jsonReader;
+    private final Clock clock;
 
     @Override
     public List<Employee> get() {
         return employeeList;
     }
 
+    @Override
+    public LocalDate lastUpdate() {
+        return lastUpdateDate;
+    }
+
     @PostConstruct
-    @Scheduled(cron = "${external.employee.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.employee.cron:0 30 6 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
-        log.info("updating employee list");
-        employeeList = filterAndSort(jsonReader.read(employeeUrl, Employee.class), EMPLOYEE_FILTERS);
+        log.info("Updating employee list");
+        employeeList = filter(jsonReader.read(employeeUrl, Employee.class), EMPLOYEE_FILTERS);
+        lastUpdateDate = now(clock);
     }
 }

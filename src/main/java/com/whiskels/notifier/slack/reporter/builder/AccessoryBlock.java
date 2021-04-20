@@ -1,4 +1,4 @@
-package com.whiskels.notifier.slack.reporter;
+package com.whiskels.notifier.slack.reporter.builder;
 
 import com.slack.api.model.block.element.BlockElement;
 

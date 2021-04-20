@@ -8,8 +8,9 @@ import com.whiskels.notifier.telegram.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
+import static com.whiskels.notifier.telegram.Command.ADMIN_NAME;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 
 /**
@@ -19,7 +20,7 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  * Available to: Admin
  */
 @Slf4j
-@BotCommand(command = "/ADMIN_NAME", requiredRoles = {ADMIN})
+@BotCommand(command = ADMIN_NAME, requiredRoles = {ADMIN})
 public class AdminUpdateNameHandler extends AbstractUserHandler {
     public AdminUpdateNameHandler(AuthorizationService authorizationService,
                                   ApplicationEventPublisher publisher,
@@ -29,7 +30,6 @@ public class AdminUpdateNameHandler extends AbstractUserHandler {
 
     @Override
     protected void handle(User admin, String message) {
-        log.debug("Preparing /ADMIN_NAME");
         final String arguments = extractArguments(message);
         final int userId = Integer.parseInt(arguments.substring(0, arguments.indexOf(" ")));
 
@@ -39,11 +39,11 @@ public class AdminUpdateNameHandler extends AbstractUserHandler {
             toUpdate.setName(extractArguments(arguments));
             userService.update(toUpdate);
 
-            publish(create(admin)
+            publish(builder(admin)
                     .line("Updated user: %s", toUpdate.toString())
                     .build());
         } else {
-            publish(create(admin)
+            publish(builder(admin)
                     .line("Couldn't find user: %d", userId)
                     .build());
         }

@@ -2,7 +2,6 @@ package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
 import com.whiskels.notifier.external.debt.domain.Debt;
-import com.whiskels.notifier.slack.SlackPayload;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +12,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
-
-import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_TWO_NEW_LINES;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_TWO_NEW_LINES;
+import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.builder;
 
 @Component
 @Profile("slack-common")
@@ -23,17 +22,23 @@ import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_TWO_NEW_LINES;
 @ConditionalOnProperty("slack.customer.debt.webhook")
 @ConditionalOnBean(value = Debt.class, parameterizedContainer = DataProvider.class)
 public class DebtDailyReporter extends SlackReporter<Debt> {
-    private static final String NAME = "Debt";
+    @Value("${slack.customer.debt.report.header:Debt report on")
+    private String header;
 
     public DebtDailyReporter(@Value("${slack.customer.debt.webhook}") String webHook,
                              DataProvider<Debt> provider,
-                             ApplicationEventPublisher publisher,
-                             Clock clock) {
-        super(webHook, provider, clock, publisher);
+                             ApplicationEventPublisher publisher) {
+        super(webHook, publisher, provider);
     }
 
     @Scheduled(cron = "${slack.customer.debt.cron}", zone = "${common.timezone}")
-    protected void report() {
-        publish(new SlackPayload(webHook, payload(NAME, COLLECTOR_TWO_NEW_LINES)));
+    public void report() {
+        publish(builder()
+                .hook(webHook)
+                .collector(COLLECTOR_TWO_NEW_LINES)
+                .header(header + reportDate(provider.lastUpdate()))
+                .notifyChannel()
+                .block(provider.get())
+                .build());
     }
 }

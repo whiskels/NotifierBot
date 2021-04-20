@@ -41,7 +41,7 @@ public class HandlerProvider {
                 .filter(h -> Stream.of(h.getClass()
                         .getAnnotation(BotCommand.class)
                         .command())
-                        .anyMatch(c -> c.equalsIgnoreCase(extractCommand(text))))
+                        .anyMatch(c -> c.toString().equalsIgnoreCase(extractCommand(text))))
                 .findAny()
                 .orElseThrow(UnsupportedOperationException::new);
     }
