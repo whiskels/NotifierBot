@@ -1,6 +1,5 @@
-package com.whiskels.notifier.common;
+package com.whiskels.notifier.telegram.builder;
 
-import com.whiskels.notifier.telegram.builder.ReportBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

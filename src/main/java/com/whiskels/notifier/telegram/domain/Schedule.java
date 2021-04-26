@@ -35,4 +35,11 @@ public class Schedule extends AbstractBaseEntity {
     @OnDelete(action = CASCADE)
     @NotNull
     private User user;
+
+    public Schedule(int id, int hour, int minutes, User user) {
+        this.id = id;
+        this.hour = hour;
+        this.minutes = minutes;
+        this.user = user;
+    }
 }

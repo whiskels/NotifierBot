@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.whiskels.notifier.telegram.UserTestData.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -25,9 +25,8 @@ class UserRepositoryTest extends AbstractRepositoryTest {
         Optional<User> actual = userRepository.getByChatId(1);
 
         //then
-        User expected = new User(1, 1, "Test user 1", Collections.emptySet(), null);
         assertTrue(actual.isPresent());
-        assertEquals(expected, actual.get());
+        assertEquals(USER_1, actual.get());
     }
 
     @Test
@@ -38,6 +37,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
 
         //then
         assertEquals(3, actual.size());
+        assertTrue(actual.containsAll(List.of(USER_1, USER_2, USER_3)));
     }
 
     @Test
