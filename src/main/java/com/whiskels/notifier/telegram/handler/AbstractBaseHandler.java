@@ -57,11 +57,11 @@ public abstract class AbstractBaseHandler {
     private void handleUnauthorized(User user, String message) {
         log.info("Unauthorized access: {} {}", user, message);
         String userChatId = String.valueOf(user.getChatId());
-        publish(MessageBuilder.create(userChatId)
+        publish(MessageBuilder.builder(userChatId)
                 .line("Your token is *%s*", userChatId)
                 .line("Please contact your supervisor to gain access")
                 .build());
-        publish(MessageBuilder.create(botAdmin)
+        publish(MessageBuilder.builder(botAdmin)
                 .line("*Unauthorized access:* %s", userChatId)
                 .line("*Message:* %s", message.replaceAll("_", "-"))
                 .build());

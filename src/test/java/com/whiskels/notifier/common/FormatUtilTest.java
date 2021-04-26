@@ -2,7 +2,7 @@ package com.whiskels.notifier.common;
 
 import org.junit.jupiter.api.Test;
 
-import static com.whiskels.notifier.common.FormatUtil.formatDouble;
+import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FormatUtilTest {

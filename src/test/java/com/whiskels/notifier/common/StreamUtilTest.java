@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.whiskels.notifier.common.StreamUtil.alwaysTruePredicate;
-import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.util.StreamUtil.alwaysTruePredicate;
+import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class StreamUtilTest {

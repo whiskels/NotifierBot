@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.whiskels.notifier.common.FormatUtil.YEAR_MONTH_DAY_FORMATTER;
-import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.subtractWorkingDays;
-import static com.whiskels.notifier.external.operation.util.FinOperationUtil.NEW_CRM_ID;
-import static com.whiskels.notifier.external.operation.util.FinOperationUtil.calculateRoubleAmount;
+import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.external.operation.util.FinOperationUtil.*;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.now;
@@ -45,27 +46,30 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
     private final MoexService moexService;
     private final JsonReader jsonReader;
 
-    @Scheduled(cron = "${external.customer.receivable.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.customer.receivable.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         DayOfWeek today = now(clock).getDayOfWeek();
         if (today != SATURDAY && today != SUNDAY) {
-            loadReceivables();
+            loadNewOperations();
             deleteOldEntries();
         }
     }
 
-    private void loadReceivables() {
-        List<Integer> presentIds = finOperationRepository.getIdList();
+    private void loadNewOperations() {
+        List<Integer> presentIds = finOperationRepository.getPresentCrmIdList();
         List<FinancialOperation> newFinancialOperations = filterAndSort(
                 jsonReader.read(getNewUrl(), FinancialOperation.class), NEW_CRM_ID(presentIds));
         log.info("Found {} new receivables", newFinancialOperations.size());
-        finOperationRepository.saveAll(calculateRubAmount(newFinancialOperations));
+        finOperationRepository.saveAll(calculateCurrencyAmount(newFinancialOperations));
     }
 
-    private List<FinancialOperation> calculateRubAmount(List<FinancialOperation> financialOperations) {
+    private List<FinancialOperation> calculateCurrencyAmount(List<FinancialOperation> financialOperations) {
         final double usdRate = moexService.getUsdRate();
         final double eurRate = moexService.getEurRate();
-        financialOperations.forEach(r -> r.setAmountRub(calculateRoubleAmount(r, usdRate, eurRate)));
+        financialOperations.forEach(r -> {
+            r.setAmountRub(calculateRoubleAmount(r, usdRate, eurRate));
+            r.setAmountUsd(calculateUsdAmount(r, usdRate, eurRate));
+        });
 
         return financialOperations;
     }

@@ -10,18 +10,18 @@ import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.slack.SlackPayload;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static com.whiskels.notifier.common.FormatUtil.COLLECTOR_NEW_LINE;
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
+import static com.whiskels.notifier.common.util.StreamUtil.collectToString;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class SlackPayloadBuilder {
-    private static final String REPORT_HEADER = "%s report on: %s";
-
     private List<LayoutBlock> blocks = new ArrayList<>();
     private String webhook;
     private String notificationMessage;
@@ -54,20 +54,16 @@ public final class SlackPayloadBuilder {
         return this;
     }
 
-    public SlackPayloadBuilder header(String name, LocalDate date) {
-        return header(name, date, true);
+    public SlackPayloadBuilder header(String header) {
+        return header(header, true);
     }
 
-    public SlackPayloadBuilder header(String name, LocalDate date, boolean notificationMessage) {
+    public SlackPayloadBuilder header(String header, boolean notificationMessage) {
         if (!isHeaderAdded) {
-            String headerText = String.format(REPORT_HEADER, name, date);
-            if (notificationMessage) {
-                this.notificationMessage = headerText;
-            }
-            blocks.add(0, new HeaderBlock("0", new PlainTextObject(headerText, false)));
+            blocks.add(0, new HeaderBlock("0", new PlainTextObject(header, false)));
             isHeaderAdded = true;
         }
-        return this;
+        return notificationMessage ? notificationMessage(header) : this;
     }
 
     public SlackPayloadBuilder notifyChannel() {
@@ -82,30 +78,42 @@ public final class SlackPayloadBuilder {
         return this;
     }
 
-    public <T> SlackPayloadBuilder block(List<T> data) {
-        return block(data, activeCollector);
+    public <T> SlackPayloadBuilder block(Collection<T> data) {
+        return block(data, T::toString);
     }
 
-    public <T> SlackPayloadBuilder block(List<T> data, Collector<CharSequence, ?, String> collector) {
-        return block(formatList(data, collector));
+    public <T> SlackPayloadBuilder block(Collection<T> data, Function<T, String> toString) {
+        return block(formatList(data, toString));
     }
 
-    public <T> SlackPayloadBuilder block(List<T> data, String accessory) {
-        return block(data, accessory, activeCollector);
-    }
-
-    public <T> SlackPayloadBuilder block(List<T> data, String accessory, Collector<CharSequence, ?, String> collector) {
+    public <T> SlackPayloadBuilder block(Collection<T> data, String accessory) {
         MarkdownTextObject content = new MarkdownTextObject();
-        content.setText(formatList(data, collector));
+        content.setText(formatList(data, T::toString));
 
         createSectionBlock(content, new AccessoryBlock(accessory));
         return this;
     }
 
-    private <T> String formatList(List<T> data, Collector<CharSequence, ?, String> collector) {
-        return data.isEmpty() ? noData : data.stream()
-                .map(T::toString)
-                .collect(collector);
+    public <T> SlackPayloadBuilder columnBlock(String leftBlock, String rightBlock) {
+        TextObject left = MarkdownTextObject.builder().text(leftBlock).build();
+        TextObject right = MarkdownTextObject.builder().text(rightBlock).build();
+        blocks.add(new SectionBlock(null, blockNum(), List.of(left, right), null));
+        return this;
+    }
+
+    public <T> SlackPayloadBuilder columnBlocks(List<T> data, Function<T, String> leftBlock, Function<T, String> rightBlock) {
+        data.forEach(o -> {
+            MarkdownTextObject left = new MarkdownTextObject();
+            left.setText(leftBlock.apply(o));
+            MarkdownTextObject right = new MarkdownTextObject();
+            right.setText(leftBlock.apply(o));
+            blocks.add(new SectionBlock(null, blockNum(), List.of(left, right), null));
+        });
+        return this;
+    }
+
+    private <T> String formatList(Collection<T> data, Function<T, String> toString) {
+        return data.isEmpty() ? noData : collectToString(data, toString, activeCollector);
     }
 
     private void createSectionBlock(TextObject text) {

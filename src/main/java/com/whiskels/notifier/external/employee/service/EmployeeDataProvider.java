@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.util.StreamUtil.filter;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
 import static java.time.LocalDate.now;
 
@@ -47,10 +47,10 @@ public class EmployeeDataProvider implements ExternalDataProvider<Employee> {
     }
 
     @PostConstruct
-    @Scheduled(cron = "${external.employee.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.employee.cron:0 30 6 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         log.info("Updating employee list");
-        employeeList = filterAndSort(jsonReader.read(employeeUrl, Employee.class), EMPLOYEE_FILTERS);
+        employeeList = filter(jsonReader.read(employeeUrl, Employee.class), EMPLOYEE_FILTERS);
         lastUpdateDate = now(clock);
     }
 }

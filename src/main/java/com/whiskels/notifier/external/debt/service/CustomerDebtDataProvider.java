@@ -16,7 +16,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.whiskels.notifier.common.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
 import static com.whiskels.notifier.external.debt.util.DebtUtil.*;
 import static java.time.LocalDate.now;
 
@@ -25,9 +25,10 @@ import static java.time.LocalDate.now;
 @RequiredArgsConstructor
 @ConditionalOnProperty("external.customer.debt.url")
 public class CustomerDebtDataProvider implements ExternalDataProvider<Debt> {
-    private static final int MIN_RUB_VALUE = 500;
-    private static final String JSON_NODE = "content";
-
+    @Value("${external.customer.debt.jsonNode:content}")
+    private String jsonNode;
+    @Value("${external.customer.debt.minRubValue:500}")
+    private int minRubValue;
     @Value("${external.customer.debt.url}")
     private String customerUrl;
     private List<Debt> debts;
@@ -44,11 +45,11 @@ public class CustomerDebtDataProvider implements ExternalDataProvider<Debt> {
 
     @PostConstruct
     @Override
-    @Scheduled(cron = "${external.customer.debt.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.customer.debt.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         log.info("Updating customer debt list");
-        debts = filterAndSort(calculateTotalDebtFor(jsonReader.read(customerUrl, JSON_NODE, Debt.class)),
-                totalDebtRoubleHigherThan(MIN_RUB_VALUE));
+        debts = filterAndSort(calculateTotalDebtFor(jsonReader.read(customerUrl, jsonNode, Debt.class)),
+                totalDebtRoubleHigherThan(minRubValue));
         lastUpdateDate = now(clock);
     }
 

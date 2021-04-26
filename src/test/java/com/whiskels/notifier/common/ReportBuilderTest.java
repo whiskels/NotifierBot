@@ -4,10 +4,11 @@ import com.whiskels.notifier.telegram.builder.ReportBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.notifier.common.FormatUtil.*;
-import static com.whiskels.notifier.common.StreamUtil.alwaysTruePredicate;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.FormatUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportBuilderTest {
@@ -27,17 +28,21 @@ class ReportBuilderTest {
 
     @Test
     void testReportBuilding() {
-        String actual = ReportBuilder.withHeader("TEST_BUILDER", LocalDate.of(2020, 3, 22))
+        String actual = ReportBuilder.builder("TEST_BUILDER on" + reportDate(LocalDate.of(2020, 3, 22)))
                 .line("first line")
                 .line()
                 .line("third line")
-                .list(List.of(1, 2, 3), alwaysTruePredicate(), COLLECTOR_COMMA_SEPARATED)
+                .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
+                .list(List.of(1, 2, 3))
                 .line()
-                .list(List.of(4, 5, 6), alwaysTruePredicate(), COLLECTOR_EMPTY_LINE)
+                .setActiveCollector(COLLECTOR_EMPTY_LINE)
+                .list(List.of(4, 5, 6))
                 .line()
-                .list(List.of(7, 8, 9), alwaysTruePredicate(), COLLECTOR_NEW_LINE)
+                .setActiveCollector(COLLECTOR_NEW_LINE)
+                .list(List.of(7, 8, 9))
                 .line()
-                .list(List.of(0), x -> false, COLLECTOR_COMMA_SEPARATED)
+                .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
+                .list(Collections.emptyList())
                 .build();
 
         assertEquals(EXPECTED, actual);

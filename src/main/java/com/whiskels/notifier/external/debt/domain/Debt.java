@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import static com.whiskels.notifier.external.debt.util.DebtUtil.TOTAL_DEBT_COMPARATOR;
-import static com.whiskels.notifier.common.FormatUtil.formatDouble;
+import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
 
 /**
  * Customer debt data is received from JSON of the following syntax:
