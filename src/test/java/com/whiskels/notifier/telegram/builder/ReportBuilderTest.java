@@ -11,7 +11,7 @@ import static com.whiskels.notifier.common.util.FormatUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportBuilderTest {
-    private static final String EXPECTED = String.format("*TEST_BUILDER on 22-03-2020:*%n%n" +
+    private static final String EXPECTED = String.format("*TEST_BUILDER on 22-03-2020*%n%n" +
             "first line%n%n%n" +
             "third line%n" +
             "1, 2, 3%n" +
@@ -23,7 +23,7 @@ class ReportBuilderTest {
             "7%n" +
             "8%n" +
             "9%n" +
-            "Nothing");
+            "Nothing%n");
 
     @Test
     void testReportBuilding() {
@@ -33,13 +33,10 @@ class ReportBuilderTest {
                 .line("third line")
                 .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
                 .list(List.of(1, 2, 3))
-                .line()
                 .setActiveCollector(COLLECTOR_EMPTY_LINE)
                 .list(List.of(4, 5, 6))
-                .line()
                 .setActiveCollector(COLLECTOR_NEW_LINE)
                 .list(List.of(7, 8, 9))
-                .line()
                 .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
                 .list(Collections.emptyList())
                 .build();
