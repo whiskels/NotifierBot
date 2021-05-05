@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(classes = {AdminTimeHandler.class, AdminTimeHandlerTest.ClockMockConfiguration.class})
 class AdminTimeHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_BOT_TIME = "2014-12-22T10:15:30Z";
+    private static final String EXPECTED_BOT_TIME_FORMATTED = "2014-12-22 10:15:30";
 
     @Autowired
     private AdminTimeHandler adminTimeHandler;
@@ -38,7 +39,7 @@ class AdminTimeHandlerTest extends AbstractHandlerTest {
         verify(publisher).publishEvent(captor.capture());
         SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
-        assertTrue(actual.getText().contains(EXPECTED_BOT_TIME));
+        assertTrue(actual.getText().contains(EXPECTED_BOT_TIME_FORMATTED));
     }
 
     @Test
@@ -50,7 +51,6 @@ class AdminTimeHandlerTest extends AbstractHandlerTest {
     static class ClockMockConfiguration {
         @Bean
         Clock mockedClock() {
-
             return Clock.fixed(Instant.parse(EXPECTED_BOT_TIME), ZoneId.of("UTC"));
         }
     }

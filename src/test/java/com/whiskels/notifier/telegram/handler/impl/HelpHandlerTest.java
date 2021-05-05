@@ -13,7 +13,7 @@ import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
 
 @Import(ClockConfiguration.class)
-@SpringBootTest(classes = {HelpHandler.class, TokenHandler.class, AdminTimeHandlerTest.class},
+@SpringBootTest(classes = {HelpHandler.class, TokenHandler.class, AdminTimeHandler.class},
 properties = "telegram.bot.name=TESTBOT")
 class HelpHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_TEXT = format("Hello. I'm *TESTBOT*%n" +
