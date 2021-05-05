@@ -11,5 +11,5 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 @EnableJpaRepositories(basePackages = {"com.whiskels.*"})
 @EntityScan("com.whiskels.*")
-public class AbstractRepositoryTest {
+public abstract class AbstractRepositoryTest {
 }

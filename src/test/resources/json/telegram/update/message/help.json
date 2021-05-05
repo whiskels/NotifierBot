@@ -1,0 +1,30 @@
+{
+  "update_id": 1234567,
+  "message": {
+    "message_id": 123,
+    "from": {
+      "id": 1,
+      "is_bot": false,
+      "first_name": "Test",
+      "last_name": "User",
+      "username": "test_user1",
+      "language_code": "ru"
+    },
+    "chat": {
+      "id": 123,
+      "first_name": "Test",
+      "last_name": "User",
+      "username": "test_user1",
+      "type": "private"
+    },
+    "date": 1620126119,
+    "text": "/help",
+    "entities": [
+      {
+        "offset": 0,
+        "length": 12,
+        "type": "bot_command"
+      }
+    ]
+  }
+}

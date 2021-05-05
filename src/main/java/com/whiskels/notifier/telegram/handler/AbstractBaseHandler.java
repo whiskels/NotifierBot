@@ -63,7 +63,9 @@ public abstract class AbstractBaseHandler {
                 .build());
         publish(MessageBuilder.builder(botAdmin)
                 .line("*Unauthorized access:* %s", userChatId)
-                .line("*Message:* %s", message.replaceAll("_", "-"))
+                .line("*Message:* %s", message == null || message.isEmpty()
+                        ? "Empty"
+                        : message.replaceAll("_", "-"))
                 .build());
     }
 }

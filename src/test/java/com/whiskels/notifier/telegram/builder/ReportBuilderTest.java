@@ -8,10 +8,11 @@ import java.util.List;
 
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.*;
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportBuilderTest {
-    private static final String EXPECTED = String.format("*TEST_BUILDER on 22-03-2020*%n%n" +
+    private static final String EXPECTED = format("*TEST_BUILDER on 22-03-2020*%n%n" +
             "first line%n%n%n" +
             "third line%n" +
             "1, 2, 3%n" +
@@ -23,7 +24,7 @@ class ReportBuilderTest {
             "7%n" +
             "8%n" +
             "9%n" +
-            "Nothing%n");
+            "Empty%n");
 
     @Test
     void testReportBuilding() {
@@ -38,6 +39,7 @@ class ReportBuilderTest {
                 .setActiveCollector(COLLECTOR_NEW_LINE)
                 .list(List.of(7, 8, 9))
                 .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
+                .setNoData("Empty")
                 .list(Collections.emptyList())
                 .build();
 

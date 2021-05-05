@@ -5,6 +5,7 @@ import com.whiskels.notifier.telegram.annotations.Schedulable;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
+import com.whiskels.notifier.telegram.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,20 @@ import static com.whiskels.notifier.telegram.util.ParsingUtil.extractCommand;
 @Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
-public class HandlerProvider {
+public class HandlerOrchestrator {
     @Getter
     private final List<AbstractBaseHandler> handlers;
+    private final UserService userService;
+
+    public void operate(int userId, String text) {
+        try {
+            AbstractBaseHandler handler = getHandler(text);
+            log.debug("Found handler {} for command {}", handler.getClass().getSimpleName(), text);
+            handler.authorizeAndHandle(userService.getOrCreate(userId), text);
+        } catch (UnsupportedOperationException e) {
+            log.debug("Command: {} is unsupported", text);
+        }
+    }
 
     /**
      * Selects handler which can handle received command
@@ -34,7 +46,7 @@ public class HandlerProvider {
      * @param text content of received message
      * @return handler suitable for command
      */
-    public AbstractBaseHandler getHandler(String text) {
+    private AbstractBaseHandler getHandler(String text) {
         return handlers.stream()
                 .filter(h -> h.getClass()
                         .isAnnotationPresent(BotCommand.class))
