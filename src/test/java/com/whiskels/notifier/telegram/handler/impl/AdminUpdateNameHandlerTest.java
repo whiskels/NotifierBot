@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
+import static java.lang.String.format;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,7 +41,7 @@ class AdminUpdateNameHandlerTest extends AbstractHandlerTest {
 
         SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
-        assertEquals("Updated user: User{chatId=2, name='updated', roles=[UNAUTHORIZED]}\r\n", actual.getText());
+        assertEquals(format("Updated user: User{chatId=2, name='updated', roles=[UNAUTHORIZED]}%n"), actual.getText());
     }
 
     @Test
@@ -53,11 +54,11 @@ class AdminUpdateNameHandlerTest extends AbstractHandlerTest {
 
         SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
-        assertEquals("Couldn't find user: 4\r\n", actual.getText());
+        assertEquals(format("Couldn't find user: 4%n"), actual.getText());
     }
 
     @Test
-    void testAdminMessageHandler_Unauthorized() {
+    void testAdminUpdateNameHandler_Unauthorized() {
         handler = adminMessageHandler;
         testUnauthorizedInteraction(USER_2);
     }

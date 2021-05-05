@@ -22,7 +22,7 @@ public final class FinOperationUtil {
     public static final Comparator<PaymentDto> AMOUNT_COMPARATOR = Comparator.comparing(PaymentDto::getAmount)
             .thenComparing(PaymentDto::getContractor).reversed();
 
-    public static Predicate<FinancialOperation> NEW_CRM_ID(List<Integer> ids) {
+    public static Predicate<FinancialOperation> newCrmId(List<Integer> ids) {
         return c -> !ids.contains(c.getCrmId());
     }
 

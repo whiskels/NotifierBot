@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.List;
 
 import static com.whiskels.notifier.telegram.UserTestData.*;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -44,7 +45,7 @@ class AdminMessageHandlerTest extends AbstractHandlerTest {
         assertEquals(4, actualMessages.size());
         assertTrue(actualMessages.stream()
                 .filter(m -> m.getText()
-                        .equalsIgnoreCase("test message\r\n"))
+                        .equalsIgnoreCase(format("test message%n")))
                 .map(SendMessage::getChatId)
                 .collect(toList())
                 .containsAll(actualUsers.stream()
@@ -54,7 +55,7 @@ class AdminMessageHandlerTest extends AbstractHandlerTest {
 
         SendMessage adminMsg = actualMessages.get(3);
         assertEquals(String.valueOf(USER_1.getChatId()), adminMsg.getChatId());
-        assertEquals("Notified 3 users\r\n", adminMsg.getText());
+        assertEquals(format("Notified 3 users%n"), adminMsg.getText());
 
     }
 
