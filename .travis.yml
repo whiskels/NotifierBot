@@ -10,7 +10,7 @@ jobs:
   include:
     - stage: compile
       script: mvn clean compile
-    - stage test
+    - stage: test
       script: mvn clean test
     - stage: deploy
       script: mvn clean heroku:deploy
