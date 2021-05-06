@@ -43,8 +43,8 @@ public class CustomerDebtDataProvider implements ExternalDataProvider<Debt> {
         return debts;
     }
 
-    @PostConstruct
     @Override
+    @PostConstruct
     @Scheduled(cron = "${external.customer.debt.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         log.info("Updating customer debt list");
