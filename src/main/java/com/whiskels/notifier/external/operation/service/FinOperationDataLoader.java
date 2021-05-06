@@ -2,7 +2,6 @@ package com.whiskels.notifier.external.operation.service;
 
 import com.whiskels.notifier.external.ExternalApiClient;
 import com.whiskels.notifier.external.json.JsonReader;
-import com.whiskels.notifier.external.moex.MoexService;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.operation.repository.FinOperationRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.YEAR_MONTH_DAY_FORMATTER;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.subtractWorkingDays;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.operation.util.FinOperationUtil.*;
+import static com.whiskels.notifier.external.operation.util.FinOperationUtil.newCrmId;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.now;
@@ -41,7 +40,6 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
 
     private final FinOperationRepository finOperationRepository;
     private final Clock clock;
-    private final MoexService moexService;
     private final JsonReader jsonReader;
 
     @Scheduled(cron = "${external.customer.receivable.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
@@ -58,18 +56,7 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
         List<FinancialOperation> newFinancialOperations = filterAndSort(
                 jsonReader.read(getNewUrl(), FinancialOperation.class), newCrmId(presentIds));
         log.info("Found {} new receivables", newFinancialOperations.size());
-        finOperationRepository.saveAll(calculateCurrencyAmount(newFinancialOperations));
-    }
-
-    private List<FinancialOperation> calculateCurrencyAmount(List<FinancialOperation> financialOperations) {
-        final double usdRate = moexService.getUsdRate();
-        final double eurRate = moexService.getEurRate();
-        financialOperations.forEach(r -> {
-            r.setAmountRub(calculateRoubleAmount(r, usdRate, eurRate));
-            r.setAmountUsd(calculateUsdAmount(r, usdRate, eurRate));
-        });
-
-        return financialOperations;
+        finOperationRepository.saveAll(newFinancialOperations);
     }
 
     private void deleteOldEntries() {
