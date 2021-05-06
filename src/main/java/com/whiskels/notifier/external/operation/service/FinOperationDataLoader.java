@@ -56,6 +56,9 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
         List<FinancialOperation> newFinancialOperations = filterAndSort(
                 jsonReader.read(getNewUrl(), FinancialOperation.class), newCrmId(presentIds));
         log.info("Found {} new receivables", newFinancialOperations.size());
+
+        newFinancialOperations.forEach(o -> o.setLoadDate(now(clock)));
+
         finOperationRepository.saveAll(newFinancialOperations);
     }
 
