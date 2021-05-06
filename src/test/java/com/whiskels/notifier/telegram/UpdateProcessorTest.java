@@ -17,8 +17,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @SpringBootTest(classes = {UpdateProcessor.class})
 @MockBean(classes = {HandlerOrchestrator.class})
 class UpdateProcessorTest {
-    private static final String UNSUPPORTED_COMMAND = "unsupported";
-
     @Autowired
     private HandlerOrchestrator orchestrator;
     @Autowired
