@@ -38,9 +38,12 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
     @Value("${external.customer.receivable.url}")
     private String customerUrl;
 
+
     private final FinOperationRepository finOperationRepository;
     private final Clock clock;
     private final JsonReader jsonReader;
+
+    private LocalDate lastUpdateDate;
 
     @Scheduled(cron = "${external.customer.receivable.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
@@ -49,6 +52,11 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
             loadNewOperations();
             deleteOldEntries();
         }
+    }
+
+    @Override
+    public LocalDate lastUpdate() {
+        return lastUpdateDate;
     }
 
     private void loadNewOperations() {
@@ -60,6 +68,7 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
         newFinancialOperations.forEach(o -> o.setLoadDate(now(clock)));
 
         finOperationRepository.saveAll(newFinancialOperations);
+        lastUpdateDate = now(clock);
     }
 
     private void deleteOldEntries() {

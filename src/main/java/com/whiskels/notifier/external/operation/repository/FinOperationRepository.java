@@ -25,7 +25,4 @@ public interface FinOperationRepository extends JpaRepository<FinancialOperation
 
     @Query("select r.crmId from FinancialOperation r")
     List<Integer> getPresentCrmIdList();
-
-    @Query(value = "select max(load_date) from financial_operation", nativeQuery = true)
-    LocalDate lastUpdateDate();
 }

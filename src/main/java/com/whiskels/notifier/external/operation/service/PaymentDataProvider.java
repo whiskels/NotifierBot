@@ -21,17 +21,18 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @ConditionalOnBean(value = FinancialOperation.class, parameterizedContainer = ExternalApiClient.class)
 public class PaymentDataProvider implements DataProvider<PaymentDto> {
     private final FinOperationRepository repository;
+    private final ExternalApiClient<FinancialOperation> dataLoader;
 
     public List<PaymentDto> get() {
         return map(getDataFromDb(), PaymentDto::fromEntity);
     }
 
     public LocalDate lastUpdate() {
-        return repository.lastUpdateDate();
+        return dataLoader.lastUpdate();
     }
 
     private List<FinancialOperation> getDataFromDb() {
-        return repository.findAll(where(loadDate(repository.lastUpdateDate())
+        return repository.findAll(where(loadDate(dataLoader.lastUpdate())
                 .and(category(DB_CATEGORY_PAYMENT))), SORT_AMOUNT_RUB_DESC);
     }
 }
