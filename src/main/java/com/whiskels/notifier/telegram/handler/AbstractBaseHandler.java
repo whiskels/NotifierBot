@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 /**
  * Abstract class for all handlers
  * <p>
- * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotations.BotCommand} annotation to define
+ * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotation.BotCommand} annotation to define
  * supported command.
  * <p>
  * Scheduling of {@link #handle(User, String)} call is possible with
- * {@link com.whiskels.notifier.telegram.annotations.Schedulable} annotation
+ * {@link com.whiskels.notifier.telegram.annotation.Schedulable} annotation
  */
 @Slf4j
 @RequiredArgsConstructor

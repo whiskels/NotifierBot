@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external.operation.service;
 
-import com.whiskels.notifier.external.ExternalApiClient;
+import com.whiskels.notifier.external.DataLoader;
 import com.whiskels.notifier.external.json.JsonReader;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.operation.repository.FinOperationRepository;
@@ -27,36 +27,30 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnProperty("external.customer.receivable.url")
-public class FinOperationDataLoader implements ExternalApiClient<FinancialOperation> {
-    @Value("${external.customer.receivable.workingDaysToLoad:2}")
+@ConditionalOnProperty("external.customer.operation.url")
+public class FinOperationDataLoader implements DataLoader<FinancialOperation> {
+    @Value("${external.customer.operation.workingDaysToLoad:2}")
     private int workingDaysToLoad;
 
-    @Value("${external.customer.receivable.workingDaysToDeleteAfter:7}")
-    private int workingDaysToDeleteAfter;
-
-    @Value("${external.customer.receivable.url}")
+    @Value("${external.customer.operation.url}")
     private String customerUrl;
 
-
     private final FinOperationRepository finOperationRepository;
-    private final Clock clock;
     private final JsonReader jsonReader;
+    private final Clock clock;
+    private final FinOperationDataLoaderAuditor auditor;
 
-    private LocalDate lastUpdateDate;
-
-    @Scheduled(cron = "${external.customer.receivable.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.customer.operation.cron:0 55 11 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         DayOfWeek today = now(clock).getDayOfWeek();
         if (today != SATURDAY && today != SUNDAY) {
             loadNewOperations();
-            deleteOldEntries();
         }
     }
 
     @Override
     public LocalDate lastUpdate() {
-        return lastUpdateDate;
+        return auditor.lastUpdate();
     }
 
     private void loadNewOperations() {
@@ -65,23 +59,17 @@ public class FinOperationDataLoader implements ExternalApiClient<FinancialOperat
                 jsonReader.read(getNewUrl(), FinancialOperation.class), newCrmId(presentIds));
         log.info("Found {} new receivables", newFinancialOperations.size());
 
-        newFinancialOperations.forEach(o -> o.setLoadDate(now(clock)));
-
-        finOperationRepository.saveAll(newFinancialOperations);
-        lastUpdateDate = now(clock);
-    }
-
-    private void deleteOldEntries() {
-        LocalDate deleteBeforeDate = subtractWorkingDays(now(clock), workingDaysToDeleteAfter);
-        log.info("Deleted {} old entries with load date before {}",
-                finOperationRepository.deleteByDateBefore(deleteBeforeDate),
-                deleteBeforeDate);
+        if (!newFinancialOperations.isEmpty()) {
+            newFinancialOperations.forEach(o -> o.setLoadDate(now(clock)));
+            finOperationRepository.saveAll(newFinancialOperations);
+        }
+        auditor.saveLoadAuditResults(newFinancialOperations);
     }
 
     private String getNewUrl() {
         LocalDate endDate = now(clock).minusDays(1);
         LocalDate startDate = subtractWorkingDays(endDate, workingDaysToLoad);
-        log.info("Creating receivables url for range of: {} to {}", startDate, endDate);
+        log.debug("Creating receivables url for range of: {} to {}", startDate, endDate);
         return customerUrl.replace("startDate", startDate.format(YEAR_MONTH_DAY_FORMATTER))
                 .replace("endDate", endDate.format(YEAR_MONTH_DAY_FORMATTER));
     }

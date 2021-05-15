@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.telegram.Command;
-import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;

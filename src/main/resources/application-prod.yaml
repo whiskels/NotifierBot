@@ -6,6 +6,5 @@ spring:
 external:
   customer:
     debt.url: ${CUSTOMER_DEBT_JSON_URL}
-    receivable.url: ${CUSTOMER_RECEIVABLE_JSON_URL}
-  employee:
-    url: ${EMPLOYEE_URL}
+    operation.url: ${CUSTOMER_RECEIVABLE_JSON_URL}
+  employee.url: ${EMPLOYEE_URL}

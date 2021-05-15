@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
-@ConditionalOnProperty("external.customer.receivable.url")
+@ConditionalOnProperty("external.customer.operation.url")
 public interface FinOperationRepository extends JpaRepository<FinancialOperation, Integer>,
         JpaSpecificationExecutor<FinancialOperation> {
     @Transactional

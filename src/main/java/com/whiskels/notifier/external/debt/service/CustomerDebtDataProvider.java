@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external.debt.service;
 
-import com.whiskels.notifier.external.ExternalDataProvider;
+import com.whiskels.notifier.external.DataLoaderAndProvider;
 import com.whiskels.notifier.external.debt.domain.Debt;
 import com.whiskels.notifier.external.json.JsonReader;
 import com.whiskels.notifier.external.moex.MoexService;
@@ -24,7 +24,7 @@ import static java.time.LocalDate.now;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty("external.customer.debt.url")
-public class CustomerDebtDataProvider implements ExternalDataProvider<Debt> {
+public class CustomerDebtDataProvider implements DataLoaderAndProvider<Debt> {
     @Value("${external.customer.debt.jsonNode:content}")
     private String jsonNode;
     @Value("${external.customer.debt.minRubValue:500}")

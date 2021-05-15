@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.telegram.annotations.Schedulable;
+import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.service.ScheduleService;

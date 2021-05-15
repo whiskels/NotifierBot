@@ -1,4 +1,4 @@
-package com.whiskels.notifier.telegram.annotations;
+package com.whiskels.notifier.telegram.annotation;
 
 import com.whiskels.notifier.telegram.Command;
 import com.whiskels.notifier.telegram.domain.Role;

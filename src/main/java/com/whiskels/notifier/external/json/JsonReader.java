@@ -1,7 +1,7 @@
 package com.whiskels.notifier.external.json;
 
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.whiskels.notifier.external.ExternalApiClient;
+import com.whiskels.notifier.external.DataLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,7 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 @Slf4j
-@ConditionalOnBean(ExternalApiClient.class)
+@ConditionalOnBean(DataLoader.class)
 public class JsonReader {
     private static final String ERROR = "Invalid read array from: %s (%s)";
 

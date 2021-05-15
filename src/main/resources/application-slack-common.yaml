@@ -1,8 +1,6 @@
 slack:
   customer:
-    debt.cron: 0 0 13 * * MON-FRI
     payment:
-      cron: 0 0 13 * * MON-FRI
       pics:
         0d:
           - https://i.imgur.com/Os451Qo.jpeg

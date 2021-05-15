@@ -17,15 +17,23 @@ public final class DateTimeUtil {
     public static final DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
 
     // https://stackoverflow.com/a/33943576/13716599
-    public static LocalDate subtractWorkingDays(LocalDate date, int amount) {
-        if (amount < 1) {
+    public static LocalDate subtractWorkingDays(LocalDate date, int workdays) {
+        return calculateWorkingDays(date, workdays, false);
+    }
+
+    public static LocalDate addWorkingDays(LocalDate date, int workdays) {
+        return calculateWorkingDays(date, workdays, true);
+    }
+
+    private static LocalDate calculateWorkingDays(LocalDate date, int workdays, boolean add) {
+        if (workdays < 1) {
             return date;
         }
 
         LocalDate result = date;
         int addedDays = 0;
-        while (addedDays < amount) {
-            result = result.minusDays(1);
+        while (addedDays < workdays) {
+            result = add ? result.plusDays(1) : result.minusDays(1);
             if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY ||
                     result.getDayOfWeek() == DayOfWeek.SUNDAY)) {
                 ++addedDays;
