@@ -19,8 +19,8 @@ class HelpHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_TEXT = format("Hello. I'm *TESTBOT*%n" +
             "Here are your available commands%n" +
             "Use [/help] command to display this message%n");
-    private static final String REPLY_MARKUP_UNAUTH = "InlineKeyboardMarkup{inline_keyboard=[[InlineKeyboardButton{text='Show your token', url='null', callbackData='/TOKEN', callbackGame=null, switchInlineQuery='null', switchInlineQueryCurrentChat='null', pay=null, loginUrl=null}]]}";
-    private static final String REPLY_MARKUP_ADMIN = "InlineKeyboardMarkup{inline_keyboard=[[InlineKeyboardButton{text='Show your token', url='null', callbackData='/TOKEN', callbackGame=null, switchInlineQuery='null', switchInlineQueryCurrentChat='null', pay=null, loginUrl=null}], [InlineKeyboardButton{text='Show bot server time', url='null', callbackData='/ADMIN_TIME', callbackGame=null, switchInlineQuery='null', switchInlineQueryCurrentChat='null', pay=null, loginUrl=null}]]}";
+    private static final String REPLY_MARKUP_UNAUTH = "InlineKeyboardMarkup(keyboard=[[InlineKeyboardButton(text=Show your token, url=null, callbackData=/TOKEN, callbackGame=null, switchInlineQuery=null, switchInlineQueryCurrentChat=null, pay=null, loginUrl=null)]])";
+    private static final String REPLY_MARKUP_ADMIN = "InlineKeyboardMarkup(keyboard=[[InlineKeyboardButton(text=Show your token, url=null, callbackData=/TOKEN, callbackGame=null, switchInlineQuery=null, switchInlineQueryCurrentChat=null, pay=null, loginUrl=null)], [InlineKeyboardButton(text=Show bot server time, url=null, callbackData=/ADMIN_TIME, callbackGame=null, switchInlineQuery=null, switchInlineQueryCurrentChat=null, pay=null, loginUrl=null)]])";
     @Autowired
     private HelpHandler helpHandler;
 
