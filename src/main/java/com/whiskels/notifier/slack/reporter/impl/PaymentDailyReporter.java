@@ -5,11 +5,13 @@ import com.whiskels.notifier.external.operation.dto.PaymentDto;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,9 @@ import java.util.stream.Collectors;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
 
+@Slf4j
 @Component
+@Profile("slack-common")
 @ConditionalOnProperty("slack.customer.payment.webhook")
 @ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = DataProvider.class)
 @ConfigurationProperties("slack.customer.payment")
@@ -45,6 +49,7 @@ public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
 
     @Scheduled(cron = "${slack.customer.payment.cron:0 1 13 * * MON-FRI}", zone = "${common.timezone}")
     public void report() {
+        log.debug("Creating employee event payload");
         List<PaymentDto> data = provider.get();
 
         publish(SlackPayloadBuilder.builder()

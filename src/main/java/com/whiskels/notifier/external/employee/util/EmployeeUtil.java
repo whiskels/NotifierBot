@@ -31,19 +31,27 @@ public final class EmployeeUtil {
                 toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
     }
 
+    public static long daysBetweenAnniversaryAnd(Employee employee, LocalDate today) {
+        return ChronoUnit.DAYS.between(
+                today.atStartOfDay(),
+                employee.getAppointmentDate().withYear(today.getYear()).atStartOfDay());
+    }
+
     public static Predicate<Employee> isBirthdayOn(LocalDate date) {
         return employee -> daysBetweenBirthdayAnd(employee, date) == 0;
     }
 
-    public static Predicate<Employee> isBirthdayNextWeekFrom(LocalDate date) {
-        return employee -> {
-            long daysUntilBirthday = daysBetweenBirthdayAnd(employee, date);
-            return daysUntilBirthday > 0 && daysUntilBirthday <= 7;
-        };
+    public static Predicate<Employee> isBirthdayBetween(LocalDate startDate, LocalDate endDate) {
+        return employee -> daysBetweenBirthdayAnd(employee, startDate) >= 0
+                && daysBetweenBirthdayAnd(employee, endDate) < 0;
     }
 
     public static Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
         return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
+    }
+
+    public static Predicate<Employee> isBirthdayLaterThan(LocalDate today) {
+        return employee -> toLocalDate(employee.getBirthday()).getDayOfMonth() >= today.getDayOfMonth();
     }
 
     public static Predicate<Employee> isAnniversarySameMonth(LocalDate today) {
@@ -52,4 +60,17 @@ public final class EmployeeUtil {
             return (appointmentDate != null && appointmentDate.getMonth().equals(today.getMonth()));
         };
     }
+
+    public static Predicate<Employee> isAnniversaryLaterThan(LocalDate today) {
+        return employee -> {
+            final LocalDate appointmentDate = employee.getAppointmentDate();
+            return (appointmentDate != null && appointmentDate.getDayOfMonth() >= today.getDayOfMonth());
+        };
+    }
+
+    public static Predicate<Employee> isAnniversaryBetween(LocalDate startDate, LocalDate endDate) {
+        return employee -> daysBetweenAnniversaryAnd(employee, startDate) >= 0
+                && daysBetweenAnniversaryAnd(employee, endDate) < 0;
+    }
+
 }

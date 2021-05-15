@@ -6,10 +6,8 @@ import com.whiskels.notifier.slack.SlackPayloadCreatedEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Profile;
 
 @Slf4j
-@Profile("slack-common")
 @AllArgsConstructor
 public abstract class SlackReporter<T> {
     protected final String webHook;
@@ -19,6 +17,7 @@ public abstract class SlackReporter<T> {
     public abstract void report();
 
     protected final void publish(SlackPayload payload) {
+        log.debug("SlackPayload publishing triggered");
         this.publisher.publishEvent(new SlackPayloadCreatedEvent(payload));
     }
 }

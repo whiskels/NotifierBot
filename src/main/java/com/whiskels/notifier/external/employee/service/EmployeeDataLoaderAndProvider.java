@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external.employee.service;
 
-import com.whiskels.notifier.external.ExternalDataProvider;
+import com.whiskels.notifier.external.DataLoaderAndProvider;
 import com.whiskels.notifier.external.employee.domain.Employee;
 import com.whiskels.notifier.external.json.JsonReader;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ import static java.time.LocalDate.now;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty("external.employee.url")
-public class EmployeeDataProvider implements ExternalDataProvider<Employee> {
+public class EmployeeDataLoaderAndProvider implements DataLoaderAndProvider<Employee> {
     private static final Predicate<Employee>[] EMPLOYEE_FILTERS = new Predicate[]{
-            NOT_DECREE, NOT_FIRED, BIRTHDAY_NOT_NULL};
+            NOT_DECREE, NOT_FIRED};
 
     @Value("${external.employee.url}")
     private String employeeUrl;
@@ -47,7 +47,7 @@ public class EmployeeDataProvider implements ExternalDataProvider<Employee> {
     }
 
     @PostConstruct
-    @Scheduled(cron = "${external.employee.cron:0 30 6 * * MON-FRI}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.employee.cron:0 30 8 * * MON-FRI}", zone = "${common.timezone}")
     public void update() {
         log.info("Updating employee list");
         employeeList = filter(jsonReader.read(employeeUrl, Employee.class), EMPLOYEE_FILTERS);
