@@ -1,8 +1,7 @@
-package com.whiskels.notifier.slack.reporter.impl;
+package com.whiskels.notifier.slack.reporter;
 
 import com.whiskels.notifier.external.DataProvider;
 import com.whiskels.notifier.external.employee.domain.Employee;
-import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +33,9 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
         super(webHook, publisher, provider);
     }
 
-    abstract List<Predicate<Employee>> anniversaryPredicates();
+    protected abstract List<Predicate<Employee>> anniversaryPredicates();
 
-    abstract List<Predicate<Employee>> birthdayPredicates();
+    protected abstract List<Predicate<Employee>> birthdayPredicates();
 
     protected final void createPayload(String header) {
         createPayload(header, false);

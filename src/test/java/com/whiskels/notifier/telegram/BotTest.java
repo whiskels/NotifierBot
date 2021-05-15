@@ -2,7 +2,6 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -13,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = "telegram.bot.token=123")
 class BotTest {
-    private final ApplicationEventPublisher publisher = Mockito.mock(ApplicationEventPublisher.class);
+    private final ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
     private final Bot bot = new Bot(publisher);
 
     @Test
