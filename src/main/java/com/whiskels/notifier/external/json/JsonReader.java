@@ -1,9 +1,9 @@
 package com.whiskels.notifier.external.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.whiskels.notifier.external.ExternalApiClient;
+import com.whiskels.notifier.external.DataLoader;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -12,18 +12,21 @@ import java.net.URL;
 import java.util.List;
 
 import static com.whiskels.notifier.external.json.JacksonObjectMapper.getMapper;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 @Slf4j
-@ConditionalOnBean(ExternalApiClient.class)
+@ConditionalOnBean(DataLoader.class)
 public class JsonReader {
     private static final String ERROR = "Invalid read array from: %s (%s)";
 
     public <T> List<T> read(String url, String node, Class<T> clazz) {
         try {
-            final ObjectMapper mapper = getMapper();
-            final String json = mapper.readTree(new URL(url)).get(node).toString();
-            return mapper.readerFor(clazz).<T>readValues(json).readAll();
+            return readFromString(getMapper()
+                            .readTree(new URL(url))
+                            .get(node)
+                            .toString(),
+                    clazz);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format(ERROR, url, e));
         }
@@ -31,14 +34,13 @@ public class JsonReader {
 
     public <T> List<T> read(String url, Class<T> clazz) {
         try {
-            ObjectReader reader = getMapper().readerFor(clazz);
-            return reader.<T>readValues(new URL(url)).readAll();
+            return readFromString(IOUtils.toString(new URL(url), UTF_8), clazz);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format(ERROR, url, e));
         }
     }
 
-    public <T> List<T> readFromString(String json, Class<T> clazz) {
+    public static <T> List<T> readFromString(String json, Class<T> clazz) {
         try {
             ObjectReader reader = getMapper().readerFor(clazz);
             return reader.<T>readValues(json).readAll();

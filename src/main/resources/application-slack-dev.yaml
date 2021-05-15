@@ -4,4 +4,4 @@ slack:
   customer:
     debt.webhook:
     payment.webhook:
-  employee.birthday.webhook:
+  employee.webhook:

@@ -42,7 +42,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     @EventListener(SendMessageCreationEvent.class)
-    public void executeWithExceptionCheck(CreationEvent<SendMessage> event) {
+    public void executeSafe(CreationEvent<SendMessage> event) {
         final SendMessage message = event.get();
         try {
             execute(message);

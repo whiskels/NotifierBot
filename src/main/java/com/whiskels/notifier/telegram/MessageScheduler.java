@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.telegram.annotations.Schedulable;
+import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.service.ScheduleService;
@@ -26,7 +26,7 @@ import java.util.List;
 public class MessageScheduler {
     private final ScheduleService scheduleService;
     private final Clock clock;
-    private final HandlerProvider handlerProvider;
+    private final HandlerOrchestrator handlerOrchestrator;
 
     @Scheduled(cron = "${telegram.bot.schedule.cron:0 * * * * MON-FRI}", zone = "${common.timezone}")
     public void processScheduledTasks() {
@@ -36,7 +36,7 @@ public class MessageScheduler {
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 final User user = schedule.getUser();
-                handlerProvider.getSchedulableHandler(user.getRoles())
+                handlerOrchestrator.getSchedulableHandler(user.getRoles())
                         .authorizeAndHandle(user, null);
                 log.debug("Scheduled message for {} sent at {}:{}",
                         user.getChatId(), ldt.getHour(), ldt.getMinute());

@@ -1,6 +1,5 @@
 package com.whiskels.notifier.external.operation.util;
 
-import com.whiskels.notifier.external.operation.dto.FinancialOperationDto;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.operation.dto.PaymentDto;
 import lombok.AccessLevel;
@@ -20,13 +19,12 @@ import static org.springframework.data.domain.Sort.by;
 public final class FinOperationUtil {
     public static final String DB_CATEGORY_PAYMENT = "Revenue";
 
+    public static final Sort SORT_AMOUNT_RUB_DESC = by(desc("amountRub"));
+
     public static final Comparator<PaymentDto> AMOUNT_COMPARATOR = Comparator.comparing(PaymentDto::getAmount)
             .thenComparing(PaymentDto::getContractor).reversed();
 
-    public static final Comparator<FinancialOperationDto> BALANCE_AMOUNT_COMPARATOR = Comparator.comparing(
-            FinancialOperationDto::getAmountUsd).thenComparing(FinancialOperationDto::getContractor).reversed();
-
-    public static Predicate<FinancialOperation> NEW_CRM_ID(List<Integer> ids) {
+    public static Predicate<FinancialOperation> newCrmId(List<Integer> ids) {
         return c -> !ids.contains(c.getCrmId());
     }
 
@@ -36,29 +34,5 @@ public final class FinOperationUtil {
 
     public static Specification<FinancialOperation> category(String category) {
         return (operation, cq, cb) -> cb.equal(operation.get("category"), category);
-    }
-
-    public static final Sort SORT_AMOUNT_RUB_DESC = by(desc("amountRub"));
-
-    public static double calculateRoubleAmount(FinancialOperation financialOperation, double usdRate, double eurRate) {
-        final double amount = financialOperation.getAmount();
-        final String currency = financialOperation.getCurrency();
-        if (currency.equalsIgnoreCase("USD")) {
-            return amount * usdRate;
-        } else if (currency.equalsIgnoreCase("EUR")) {
-            return amount * eurRate;
-        }
-        return amount;
-    }
-
-    public static double calculateUsdAmount(FinancialOperation financialOperation, double usdRate, double eurRate) {
-        final double amount = financialOperation.getAmount();
-        final String currency = financialOperation.getCurrency();
-        if (currency.equalsIgnoreCase("RUB")) {
-            return amount / usdRate;
-        } else if (currency.equalsIgnoreCase("EUR")) {
-            return amount * eurRate / usdRate;
-        }
-        return amount;
     }
 }

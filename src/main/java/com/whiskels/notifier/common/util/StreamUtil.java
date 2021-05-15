@@ -28,10 +28,24 @@ public final class StreamUtil {
                 .collect(toList());
     }
 
+    public static <T extends Comparable<T>> List<T> filterAndSort(List<T> list, List<Predicate<T>> predicates) {
+        return list.stream()
+                .filter(predicates.stream().reduce(x -> true, Predicate::and))
+                .sorted()
+                .collect(toList());
+    }
+
     @SafeVarargs
     public static <T> List<T> filterAndSort(List<T> list, Comparator<T> comparator, Predicate<T>... predicates) {
         return list.stream()
                 .filter(Stream.of(predicates).reduce(x -> true, Predicate::and))
+                .sorted(comparator)
+                .collect(toList());
+    }
+
+    public static <T> List<T> filterAndSort(List<T> list, Comparator<T> comparator, List<Predicate<T>> predicates) {
+        return list.stream()
+                .filter(predicates.stream().reduce(x -> true, Predicate::and))
                 .sorted(comparator)
                 .collect(toList());
     }

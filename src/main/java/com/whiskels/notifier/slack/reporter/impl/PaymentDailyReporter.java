@@ -22,18 +22,18 @@ import java.util.stream.Collectors;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
 
+@Slf4j
 @Component
 @Profile("slack-common")
-@Slf4j
 @ConditionalOnProperty("slack.customer.payment.webhook")
 @ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = DataProvider.class)
-@ConfigurationProperties(prefix = "slack.customer.payment")
+@ConfigurationProperties("slack.customer.payment")
 public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
     private static final ToDoubleFunction<List<PaymentDto>> RECEIVABLE_SUM = x -> x.stream()
             .collect(Collectors.summarizingDouble(PaymentDto::getAmountRub))
             .getSum();
 
-    @Value("${slack.customer.payment.report.header:Payment report on")
+    @Value("${slack.customer.payment.header:Payment report on}")
     private String header;
 
     @Setter
@@ -47,8 +47,9 @@ public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
         super(webHook, publisher, provider);
     }
 
-    @Scheduled(cron = "${slack.customer.payment.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${slack.customer.payment.cron:0 1 13 * * MON-FRI}", zone = "${common.timezone}")
     public void report() {
+        log.debug("Creating employee event payload");
         List<PaymentDto> data = provider.get();
 
         publish(SlackPayloadBuilder.builder()

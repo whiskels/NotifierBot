@@ -16,13 +16,13 @@ import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_TWO_NEW_LINES;
 import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.builder;
 
+@Slf4j
 @Component
 @Profile("slack-common")
-@Slf4j
 @ConditionalOnProperty("slack.customer.debt.webhook")
 @ConditionalOnBean(value = Debt.class, parameterizedContainer = DataProvider.class)
 public class DebtDailyReporter extends SlackReporter<Debt> {
-    @Value("${slack.customer.debt.report.header:Debt report on")
+    @Value("${slack.customer.debt.header:Debt report on}")
     private String header;
 
     public DebtDailyReporter(@Value("${slack.customer.debt.webhook}") String webHook,
@@ -31,8 +31,9 @@ public class DebtDailyReporter extends SlackReporter<Debt> {
         super(webHook, publisher, provider);
     }
 
-    @Scheduled(cron = "${slack.customer.debt.cron}", zone = "${common.timezone}")
+    @Scheduled(cron = "${slack.customer.debt.cron:0 0 13 * * MON-FRI}", zone = "${common.timezone}")
     public void report() {
+        log.debug("Creating employee debt payload");
         publish(builder()
                 .hook(webHook)
                 .collector(COLLECTOR_TWO_NEW_LINES)

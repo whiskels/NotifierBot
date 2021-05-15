@@ -40,6 +40,7 @@ public class Employee {
     String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
     Date birthday;
+    @JsonProperty("appointment_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate appointmentDate;
     String status;

@@ -1,0 +1,46 @@
+{
+  "status": 1,
+  "content": [
+    {
+      "c2fs_id": 123,
+      "wop_id": 1234,
+      "contractor": "Test contractor 1",
+      "finance_subject": "Test subj 1",
+      "wop": "Test wop 1",
+      "account_manager": "Jason Bourne",
+      "currency": "USD",
+      "debt_comment": null,
+      "debtor_delay_180": "50000",
+      "debtor_delay_90": "50000",
+      "debtor_delay_60": "50000",
+      "debtor_delay_30": "50000",
+      "debtor_delay_0": "50000",
+      "debtor_delay_current": "0",
+      "not_realization": "0",
+      "delay_90": "0",
+      "delay_60": "0",
+      "delay_30": "0"
+    },
+    {
+      "c2fs_id": 123,
+      "wop_id": 1235,
+      "contractor": "Test contractor 2",
+      "finance_subject": "Test subj 2",
+      "wop": "Test wop 2",
+      "account_manager": "James Bond",
+      "currency": "RUB",
+      "debt_comment": null,
+      "debtor_delay_180": "0.0",
+      "debtor_delay_90": "0.0",
+      "debtor_delay_60": "0.0",
+      "debtor_delay_30": "0.0",
+      "debtor_delay_0": "0.0",
+      "debtor_delay_current": "0.0",
+      "not_realization": "-413826",
+      "delay_90": "413826",
+      "delay_60": "413826",
+      "delay_30": "413826"
+    }
+  ],
+  "message": null
+}
