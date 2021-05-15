@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.whiskels.notifier.common.util.StreamUtil.filter;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.NOT_DECREE;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.NOT_FIRED;
 import static java.time.LocalDate.now;
 
 @Service

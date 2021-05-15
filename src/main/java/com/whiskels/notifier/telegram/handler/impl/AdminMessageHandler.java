@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.telegram.Command.ADMIN_MESSAGE;
-import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
 /**
  * Notifies all bot users with a message from admin

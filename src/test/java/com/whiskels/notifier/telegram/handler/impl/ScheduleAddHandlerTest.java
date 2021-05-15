@@ -16,7 +16,8 @@ import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest(classes = {ScheduleAddHandler.class, DebtHandler.class})
 @MockBean(classes = {CustomerDebtDataProvider.class, ScheduleService.class})
