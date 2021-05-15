@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
+import static com.whiskels.notifier.common.util.StreamUtil.collectToBulletListString;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
@@ -65,14 +66,14 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
         if (!birthdays.isEmpty() || !skipEmpty) {
             log.debug("Added birthday block to payload: empty = {}, skipEmpty = {}", birthdays.isEmpty(), skipEmpty);
             builder.block(birthday)
-                    .block(birthdays, Employee::toBirthdayString);
+                    .block(collectToBulletListString(birthdays, Employee::toBirthdayString));
         }
 
 
         if (!anniversaries.isEmpty() || !skipEmpty) {
             log.debug("Added anniversary block to payload: empty = {}, skipEmpty = {}", anniversaries.isEmpty(), skipEmpty);
             builder.block(anniversary)
-                    .block(anniversaries, Employee::toWorkAnniversaryString);
+                    .block(collectToBulletListString(anniversaries, Employee::toWorkAnniversaryString));
         }
 
         publish(builder.build());
