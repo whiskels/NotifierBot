@@ -72,7 +72,11 @@ public final class SlackPayloadBuilder {
 
     public SlackPayloadBuilder block(String text) {
         MarkdownTextObject content = new MarkdownTextObject();
-        content.setText(text);
+        if (text == null || text.isEmpty()) {
+            content.setText(noData);
+        } else {
+            content.setText(text);
+        }
         createSectionBlock(content);
 
         return this;

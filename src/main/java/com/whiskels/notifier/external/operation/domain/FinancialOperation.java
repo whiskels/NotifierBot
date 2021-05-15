@@ -5,14 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whiskels.notifier.AbstractBaseEntity;
-import com.whiskels.notifier.external.operation.repository.LocalDatePersistenceConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -76,7 +74,6 @@ public class FinancialOperation extends AbstractBaseEntity implements Comparable
     String project;
     String office;
     String description;
-    @Convert(converter = LocalDatePersistenceConverter.class)
     LocalDate loadDate;
 
     @Override

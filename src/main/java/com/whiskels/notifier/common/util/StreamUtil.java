@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
 import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -76,5 +77,12 @@ public final class StreamUtil {
         return collection.stream()
                 .map(toString)
                 .collect(collector);
+    }
+
+    public static <T> String collectToBulletListString(Collection<T> collection, Function<T, String> toStringFunc) {
+        return collection.stream()
+                .map(o -> "• " + toStringFunc.apply(o))
+                .collect(COLLECTOR_NEW_LINE);
+
     }
 }
