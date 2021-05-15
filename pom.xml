@@ -15,23 +15,23 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-boot.version>2.4.3</spring-boot.version>
+        <spring-boot.version>2.4.5</spring-boot.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.24</telegrambots-spring.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.28.Final</hibernate.version>
+        <hibernate.version>5.4.30.Final</hibernate.version>
 
         <!--    Tests  -->
         <assertj.version>3.16.1</assertj.version>
         <mockito.version>3.5.11</mockito.version>
 
         <!--DB-->
-        <postgresql.version>42.2.19.jre7</postgresql.version>
+        <postgresql.version>42.2.20.jre7</postgresql.version>
         <flyway.version>6.5.7</flyway.version>
 
-        <jackson-json.version>2.12.1</jackson-json.version>
+        <jackson-json.version>2.12.3</jackson-json.version>
     </properties>
 
     <build>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.slack.api</groupId>
             <artifactId>slack-api-client</artifactId>
-            <version>1.6.2</version>
+            <version>1.7.1</version>
         </dependency>
 
         <!-- Spring Boot Data JPA -->
