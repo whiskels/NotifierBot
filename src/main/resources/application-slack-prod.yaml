@@ -4,3 +4,4 @@ slack:
   customer:
     debt.webhook: ${CUSTOMER_DEBT_SLACK_WEBHOOK}
     payment.webhook: ${CUSTOMER_PAYMENT_SLACK_WEBHOOK}
+  employee.webhook: ${EMPLOYEE_SLACK_WEBHOOK}

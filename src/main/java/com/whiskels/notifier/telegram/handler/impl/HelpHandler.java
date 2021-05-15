@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.telegram.Command;
-import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
@@ -36,8 +36,7 @@ public class HelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /HELP");
-        MessageBuilder builder = MessageBuilder.create(user)
+        MessageBuilder builder = MessageBuilder.builder(user)
                 .line("Hello. I'm *%s*", botUsername)
                 .line("Here are your available commands")
                 .line("Use [/help] command to display this message");

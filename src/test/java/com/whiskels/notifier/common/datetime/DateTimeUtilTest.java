@@ -10,7 +10,7 @@ import static com.whiskels.notifier.common.datetime.DateTimeUtil.subtractWorking
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.toLocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DateTimeUtilTest {
+class DateTimeUtilTest {
     public static final LocalDate FRIDAY = LocalDate.of(2021, 3, 19);
     public static final LocalDate SATURDAY = LocalDate.of(2021, 3, 20);
     public static final LocalDate SUNDAY = LocalDate.of(2021, 3, 21);

@@ -2,5 +2,3 @@ telegram:
   bot:
     # Telegram chat ID of bot admin
     admin: 87971601
-    # Workdays every minute cron - check for scheduled messages
-    schedule.cron: 0 * * * * MON-FRI

@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 /**
  * Abstract class for all handlers
  * <p>
- * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotations.BotCommand} annotation to define
+ * Inheritors are marked with {@link com.whiskels.notifier.telegram.annotation.BotCommand} annotation to define
  * supported command.
  * <p>
  * Scheduling of {@link #handle(User, String)} call is possible with
- * {@link com.whiskels.notifier.telegram.annotations.Schedulable} annotation
+ * {@link com.whiskels.notifier.telegram.annotation.Schedulable} annotation
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -57,13 +57,15 @@ public abstract class AbstractBaseHandler {
     private void handleUnauthorized(User user, String message) {
         log.info("Unauthorized access: {} {}", user, message);
         String userChatId = String.valueOf(user.getChatId());
-        publish(MessageBuilder.create(userChatId)
+        publish(MessageBuilder.builder(userChatId)
                 .line("Your token is *%s*", userChatId)
                 .line("Please contact your supervisor to gain access")
                 .build());
-        publish(MessageBuilder.create(botAdmin)
+        publish(MessageBuilder.builder(botAdmin)
                 .line("*Unauthorized access:* %s", userChatId)
-                .line("*Message:* %s", message.replaceAll("_", "-"))
+                .line("*Message:* %s", message == null || message.isEmpty()
+                        ? "Empty"
+                        : message.replaceAll("_", "-"))
                 .build());
     }
 }

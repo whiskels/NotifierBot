@@ -4,8 +4,9 @@ public enum Command {
     ADMIN_MESSAGE,
     ADMIN_PROMOTE,
     ADMIN_TIME("Show bot server time"),
+    ADMIN_SLACK,
     ADMIN_NAME,
-    GET_BIRTHDAY("Upcoming birthdays"),
+    GET_EVENT("Upcoming employee events"),
     GET_DEBT("Overdue debts report"),
     GET_PAYMENT("Payment report"),
     SCHEDULE("Manage schedule"),
@@ -13,7 +14,6 @@ public enum Command {
     SCHEDULE_HELP,
     HELP,
     START,
-    ADMIN_SLACK,
     TOKEN("Show your token");
 
     private final String description;

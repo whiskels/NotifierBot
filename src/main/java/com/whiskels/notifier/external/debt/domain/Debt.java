@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
 import static com.whiskels.notifier.external.debt.util.DebtUtil.TOTAL_DEBT_COMPARATOR;
-import static com.whiskels.notifier.common.FormatUtil.formatDouble;
 
 /**
  * Customer debt data is received from JSON of the following syntax:
@@ -66,9 +66,15 @@ public class Debt implements Comparable<Debt> {
 
     @Override
     public String toString() {
-        return String.format("*%s*%n   %s%n   %s%n   %s%n   *%s %s*%n%s",
-                contractor, financeSubject, wayOfPayment, accountManager,
-                formatDouble(totalDebt), currency, debtComment);
+        return String.format("*%s*%n   %s%n   %s%n   %s%n   *%s %s*%n%s"
+                , contractor
+                , financeSubject
+                , wayOfPayment
+                , accountManager
+                , formatDouble(totalDebt)
+                , currency
+                , debtComment != null ? debtComment : "No comment"
+        );
     }
 
     @Override

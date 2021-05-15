@@ -7,5 +7,5 @@ spring:
 external:
   customer:
     debt.url:
-    receivable.url:
+    operation.url:
   employee.url:

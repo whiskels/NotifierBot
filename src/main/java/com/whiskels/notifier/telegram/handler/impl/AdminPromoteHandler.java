@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractUserHandler;
@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.telegram.Command.ADMIN_PROMOTE;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
@@ -36,7 +36,6 @@ public class AdminPromoteHandler extends AbstractUserHandler {
 
     @Override
     protected void handle(User admin, String message) {
-        log.debug("Preparing /ADMIN_PROMOTE");
         final String[] arguments = extractArguments(message).split(" ");
         final int userId = Integer.parseInt(arguments[0]);
 
@@ -58,21 +57,21 @@ public class AdminPromoteHandler extends AbstractUserHandler {
                 toUpdate.setRoles(userRoles);
                 userService.update(toUpdate);
 
-                publish(create(admin)
+                publish(builder(admin)
                         .line("Updated user: %s", toUpdate.toString())
                         .build());
-                publish(create(toUpdate)
+                publish(builder(toUpdate)
                         .line("Your roles were updated: %s", userRoles.stream()
                                 .map(Role::toString)
                                 .collect(Collectors.joining(", ")))
                         .build());
             } catch (IllegalArgumentException e) {
-                publish(create(admin)
+                publish(builder(admin)
                         .line("Illegal role: %s", roleValue)
                         .build());
             }
         } else {
-            publish(create(admin)
+            publish(builder(admin)
                     .line("Couldn't find user: %d", userId)
                     .build());
         }

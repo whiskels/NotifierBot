@@ -1,5 +1,4 @@
 spring:
-  profiles.active: prod
   datasource:
     driver-class-name: org.postgresql.Driver
     initialization-mode: never
@@ -11,14 +10,6 @@ spring:
     url: ${JDBC_DATABASE_URL}
 common:
   timezone: Europe/Moscow
-external:
-  customer:
-    debt:
-      cron: 0 55 11 * * MON-FRI
-    receivable:
-      cron: 0 55 11 * * MON-FRI
-  employee:
-    cron: 0 30 6 * * MON-FRI
 moex:
   url: https://iss.moex.com/iss/statistics/engines/currency/markets/selt/rates
   usd: CBRF_USD_LAST (double)

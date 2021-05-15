@@ -24,12 +24,12 @@ public class MoexService {
     private String eur;
 
     @Getter
-    private double usdRate;
+    private Double usdRate = null;
     @Getter
-    private double eurRate;
+    private Double eurRate = null;
 
     @PostConstruct
-    @Scheduled(cron = "0 0 0 * * *", zone = "${common.timezone}")
+    @Scheduled(cron = "${moex.cron:0 0 0 * * *}", zone = "${common.timezone}")
     public void update() {
         log.info("Updating exchange rates");
         // Getting moex exchange rates string

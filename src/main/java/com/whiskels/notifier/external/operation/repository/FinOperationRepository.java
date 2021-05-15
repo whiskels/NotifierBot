@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
-@ConditionalOnProperty("external.customer.receivable.url")
+@ConditionalOnProperty("external.customer.operation.url")
 public interface FinOperationRepository extends JpaRepository<FinancialOperation, Integer>,
         JpaSpecificationExecutor<FinancialOperation> {
     @Transactional
@@ -24,8 +24,5 @@ public interface FinOperationRepository extends JpaRepository<FinancialOperation
     int deleteByDateBefore(@Param("date") LocalDate date);
 
     @Query("select r.crmId from FinancialOperation r")
-    List<Integer> getIdList();
-
-    @Query(value = "select max(load_date) from financial_operation", nativeQuery = true)
-    LocalDate lastUpdateDate();
+    List<Integer> getPresentCrmIdList();
 }

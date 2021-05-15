@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.telegram.annotations.BotCommand;
+import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractUserHandler;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static com.whiskels.notifier.telegram.Command.ADMIN_NAME;
-import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
 /**
  * Allows bot admin to change user name by sending bot a chat command
@@ -30,7 +30,6 @@ public class AdminUpdateNameHandler extends AbstractUserHandler {
 
     @Override
     protected void handle(User admin, String message) {
-        log.debug("Preparing /ADMIN_NAME");
         final String arguments = extractArguments(message);
         final int userId = Integer.parseInt(arguments.substring(0, arguments.indexOf(" ")));
 
@@ -40,11 +39,11 @@ public class AdminUpdateNameHandler extends AbstractUserHandler {
             toUpdate.setName(extractArguments(arguments));
             userService.update(toUpdate);
 
-            publish(create(admin)
+            publish(builder(admin)
                     .line("Updated user: %s", toUpdate.toString())
                     .build());
         } else {
-            publish(create(admin)
+            publish(builder(admin)
                     .line("Couldn't find user: %d", userId)
                     .build());
         }

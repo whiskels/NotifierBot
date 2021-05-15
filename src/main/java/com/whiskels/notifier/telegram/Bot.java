@@ -34,8 +34,6 @@ public class Bot extends TelegramLongPollingBot {
     @Getter
     private String botToken;
 
-
-
     private final ApplicationEventPublisher publisher;
 
     @Override
@@ -43,8 +41,8 @@ public class Bot extends TelegramLongPollingBot {
         publisher.publishEvent(new UpdateCreationEvent(update));
     }
 
-    @EventListener(classes = {SendMessageCreationEvent.class})
-    public void executeWithExceptionCheck(CreationEvent<SendMessage> event) {
+    @EventListener(SendMessageCreationEvent.class)
+    public void executeSafe(CreationEvent<SendMessage> event) {
         final SendMessage message = event.get();
         try {
             execute(message);

@@ -9,7 +9,7 @@ import java.time.ZoneId;
 
 @Configuration
 public class ClockConfiguration {
-    @Value("${common.timezone}")
+    @Value("${common.timezone:Europe/Moscow}")
     private String timeZone;
 
     @Bean

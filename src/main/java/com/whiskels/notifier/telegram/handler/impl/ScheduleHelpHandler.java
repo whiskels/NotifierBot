@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.telegram.annotations.BotCommand;
-import com.whiskels.notifier.telegram.annotations.Schedulable;
+import com.whiskels.notifier.telegram.annotation.BotCommand;
+import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
-import static com.whiskels.notifier.telegram.builder.MessageBuilder.create;
+import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 /**
@@ -29,8 +29,7 @@ public class ScheduleHelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        log.debug("Preparing /SCHEDULE_HELP");
-        publish(create(user)
+        publish(builder(user)
                 .line("*Help message for /schedule command*")
                 .line()
                 .line("[/schedule *time*](/schedule time) - set daily message at time. Examples: ")

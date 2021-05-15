@@ -32,7 +32,7 @@ public final class MessageBuilder {
      * @param chatId of user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(String chatId) {
+    public static MessageBuilder builder(String chatId) {
         MessageBuilder builder = new MessageBuilder();
         builder.setChatId(chatId);
         return builder;
@@ -44,8 +44,8 @@ public final class MessageBuilder {
      * @param user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static MessageBuilder create(User user) {
-        return create(String.valueOf(user.getChatId()));
+    public static MessageBuilder builder(User user) {
+        return builder(String.valueOf(user.getChatId()));
     }
 
     /**
@@ -90,7 +90,10 @@ public final class MessageBuilder {
      * @return this
      */
     public MessageBuilder button(String text, String callbackData) {
-        row.add(new InlineKeyboardButton().setText(text).setCallbackData(callbackData));
+        var button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(callbackData);
+        row.add(button);
         return this;
     }
 
@@ -122,15 +125,17 @@ public final class MessageBuilder {
      * @return {@link SendMessage}
      */
     public SendMessage build() {
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(chatId)
-                .enableMarkdown(true)
-                .setText(sb.toString().replace("_", " "));
+        var sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
 
         if (!keyboard.isEmpty()) {
-            sendMessage.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(keyboard));
+            var markup = new InlineKeyboardMarkup();
+            markup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(markup);
         }
 
         return sendMessage;

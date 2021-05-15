@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whiskels.notifier.AbstractBaseEntity;
-import com.whiskels.notifier.telegram.repository.LocalDatePersistenceConverter;
+import com.whiskels.notifier.external.operation.repository.LocalDatePersistenceConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +16,8 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
-
-import static java.time.LocalDate.now;
 
 /**
  * Customer receivable data is received from JSON of the following syntax:
@@ -80,11 +77,11 @@ public class FinancialOperation extends AbstractBaseEntity implements Comparable
     String office;
     String description;
     @Convert(converter = LocalDatePersistenceConverter.class)
-    LocalDate loadDate = now(ZoneId.of("Europe/Moscow"));
+    LocalDate loadDate;
 
     @Override
     public int compareTo(@NotNull FinancialOperation o) {
-        return Comparator.comparing(FinancialOperation::getAmount)
+        return Comparator.comparing(FinancialOperation::getAmountRub)
                 .thenComparing(FinancialOperation::getContractor)
                 .reversed()
                 .compare(this, o);

@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.BIRTHDAY_FORMATTER;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.toLocalDate;
-import static com.whiskels.notifier.common.FormatUtil.BIRTHDAY_FORMATTER;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY_COMPARATOR;
+import static java.time.YearMonth.now;
 
 /**
  * Employee data is received from JSON of the following syntax:
@@ -36,22 +36,28 @@ import static com.whiskels.notifier.external.employee.util.EmployeeUtil.BIRTHDAY
 @Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Employee implements Comparable<Employee> {
+public class Employee {
     String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
     Date birthday;
+    @JsonProperty("appointment_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate appointmentDate;
     String status;
     @JsonProperty("status_system")
     String statusSystem;
 
     @Override
     public String toString() {
-        return String.format("%s %s", name, BIRTHDAY_FORMATTER.format(toLocalDate(birthday)));
+       return toBirthdayString();
     }
 
-    @Override
-    public int compareTo(@NotNull Employee o) {
-        return BIRTHDAY_COMPARATOR
-                .compare(this, o);
+    public String toWorkAnniversaryString() {
+        final int totalWorkingYears = now().getYear() - appointmentDate.getYear();
+        return String.format("%s %s (%s)", name, BIRTHDAY_FORMATTER.format(appointmentDate), totalWorkingYears);
+    }
+
+    public String toBirthdayString() {
+        return String.format("%s %s", name, BIRTHDAY_FORMATTER.format(toLocalDate(birthday)));
     }
 }

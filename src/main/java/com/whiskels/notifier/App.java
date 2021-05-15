@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.telegram.telegrambots.ApiContextInitializer;
 
 @SpringBootApplication
 @EnableScheduling
@@ -15,8 +14,6 @@ import org.telegram.telegrambots.ApiContextInitializer;
 @Profile("!test")
 public class App {
     public static void main(String[] args) {
-        ApiContextInitializer.init();
-
         SpringApplication.run(App.class, args);
     }
 }
