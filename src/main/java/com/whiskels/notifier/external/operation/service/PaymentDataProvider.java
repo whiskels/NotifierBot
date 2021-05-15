@@ -1,7 +1,7 @@
 package com.whiskels.notifier.external.operation.service;
 
-import com.whiskels.notifier.external.DataProvider;
 import com.whiskels.notifier.external.DataLoader;
+import com.whiskels.notifier.external.DataProvider;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.operation.dto.PaymentDto;
 import com.whiskels.notifier.external.operation.repository.FinOperationRepository;

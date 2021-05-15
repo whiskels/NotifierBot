@@ -90,7 +90,10 @@ public final class MessageBuilder {
      * @return this
      */
     public MessageBuilder button(String text, String callbackData) {
-        row.add(new InlineKeyboardButton().setText(text).setCallbackData(callbackData));
+        var button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(callbackData);
+        row.add(button);
         return this;
     }
 
@@ -122,15 +125,17 @@ public final class MessageBuilder {
      * @return {@link SendMessage}
      */
     public SendMessage build() {
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(chatId)
-                .enableMarkdown(true)
-                .setText(sb.toString().replace("_", " "));
+        var sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
 
         if (!keyboard.isEmpty()) {
-            sendMessage.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(keyboard));
+            var markup = new InlineKeyboardMarkup();
+            markup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(markup);
         }
 
         return sendMessage;

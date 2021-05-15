@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static com.whiskels.notifier.telegram.Command.ADMIN_NAME;
-import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
 /**
  * Allows bot admin to change user name by sending bot a chat command

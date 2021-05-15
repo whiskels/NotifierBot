@@ -18,7 +18,7 @@
         <spring-boot.version>2.4.3</spring-boot.version>
 
         <!-- TelegramBots Spring Boot Starter -->
-        <telegrambots-spring.version>0.22</telegrambots-spring.version>
+        <telegrambots-spring.version>0.24</telegrambots-spring.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.4.28.Final</hibernate.version>
