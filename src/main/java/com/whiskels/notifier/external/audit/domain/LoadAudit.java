@@ -18,6 +18,7 @@ import static javax.persistence.EnumType.STRING;
 @Table(name = "load_audit")
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class LoadAudit extends AbstractBaseEntity {
     @Column(name = "date", nullable = false)
     @NotNull
