@@ -42,8 +42,8 @@ public final class EmployeeUtil {
     }
 
     public static Predicate<Employee> isBirthdayBetween(LocalDate startDate, LocalDate endDate) {
-        return employee -> daysBetweenBirthdayAnd(employee, startDate) >= 0
-                && daysBetweenBirthdayAnd(employee, endDate) < 0;
+        return employee -> daysBetweenBirthdayAnd(employee, startDate) > 0
+                && daysBetweenBirthdayAnd(employee, endDate) <= 0;
     }
 
     public static Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
@@ -69,8 +69,8 @@ public final class EmployeeUtil {
     }
 
     public static Predicate<Employee> isAnniversaryBetween(LocalDate startDate, LocalDate endDate) {
-        return employee -> daysBetweenAnniversaryAnd(employee, startDate) >= 0
-                && daysBetweenAnniversaryAnd(employee, endDate) < 0;
+        return employee -> daysBetweenAnniversaryAnd(employee, startDate) > 0
+                && daysBetweenAnniversaryAnd(employee, endDate) <= 0;
     }
 
 }
