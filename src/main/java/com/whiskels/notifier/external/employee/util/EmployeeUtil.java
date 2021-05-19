@@ -25,52 +25,50 @@ public final class EmployeeUtil {
     public static final Comparator<Employee> EMPLOYEE_ANNIVERSARY_COMPARATOR = Comparator.comparing(Employee::getAppointmentDate)
             .thenComparing(Employee::getName);
 
-    public static long daysBetweenBirthdayAnd(Employee employee, LocalDate today) {
+    public static long daysBetween(LocalDate startDate, LocalDate endDate) {
         return ChronoUnit.DAYS.between(
-                today.atStartOfDay(),
-                toLocalDate(employee.getBirthday()).withYear(today.getYear()).atStartOfDay());
+                endDate.atStartOfDay(),
+                startDate.withYear(endDate.getYear()).atStartOfDay());
     }
 
-    public static long daysBetweenAnniversaryAnd(Employee employee, LocalDate today) {
-        return ChronoUnit.DAYS.between(
-                today.atStartOfDay(),
-                employee.getAppointmentDate().withYear(today.getYear()).atStartOfDay());
+    public static boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return date != null && daysBetween(date, startDate) > 0 && daysBetween(startDate, endDate) <= 0;
     }
 
-    public static Predicate<Employee> isBirthdayOn(LocalDate date) {
-        return employee -> daysBetweenBirthdayAnd(employee, date) == 0;
+    public static boolean isSameMonth(LocalDate date, LocalDate checkDate) {
+        return date != null && date.getMonth().equals(checkDate.getMonth());
+    }
+
+    public static boolean isLater(LocalDate date, LocalDate checkDate) {
+        return date != null && date.getDayOfMonth() >= checkDate.getDayOfMonth();
     }
 
     public static Predicate<Employee> isBirthdayBetween(LocalDate startDate, LocalDate endDate) {
-        return employee -> daysBetweenBirthdayAnd(employee, startDate) > 0
-                && daysBetweenBirthdayAnd(employee, endDate) <= 0;
+        return e -> daysBetween(getBirthday(e), startDate) > 0
+                && daysBetween(getBirthday(e), endDate) <= 0;
     }
 
     public static Predicate<Employee> isBirthdaySameMonth(LocalDate today) {
-        return employee -> toLocalDate(employee.getBirthday()).getMonth().equals(today.getMonth());
+        return e -> isSameMonth(getBirthday(e), today);
     }
 
     public static Predicate<Employee> isBirthdayLaterThan(LocalDate today) {
-        return employee -> toLocalDate(employee.getBirthday()).getDayOfMonth() >= today.getDayOfMonth();
+        return e -> isLater(getBirthday(e), today);
     }
 
     public static Predicate<Employee> isAnniversarySameMonth(LocalDate today) {
-        return employee -> {
-            final LocalDate appointmentDate = employee.getAppointmentDate();
-            return (appointmentDate != null && appointmentDate.getMonth().equals(today.getMonth()));
-        };
+        return e -> isSameMonth(e.getAppointmentDate(), today);
     }
 
     public static Predicate<Employee> isAnniversaryLaterThan(LocalDate today) {
-        return employee -> {
-            final LocalDate appointmentDate = employee.getAppointmentDate();
-            return (appointmentDate != null && appointmentDate.getDayOfMonth() >= today.getDayOfMonth());
-        };
+        return e -> isLater(e.getAppointmentDate(), today);
     }
 
     public static Predicate<Employee> isAnniversaryBetween(LocalDate startDate, LocalDate endDate) {
-        return employee -> daysBetweenAnniversaryAnd(employee, startDate) > 0
-                && daysBetweenAnniversaryAnd(employee, endDate) <= 0;
+        return e -> isBetween(e.getAppointmentDate(), startDate, endDate);
     }
-
+    
+    public static LocalDate getBirthday(Employee e) {
+        return toLocalDate(e.getBirthday());
+    }
 }
