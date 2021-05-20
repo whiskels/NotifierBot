@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = {AdminTimeHandler.class, MockedClockConfiguration.class})

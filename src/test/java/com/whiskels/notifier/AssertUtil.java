@@ -2,7 +2,8 @@ package com.whiskels.notifier;
 
 import lombok.experimental.UtilityClass;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @UtilityClass
 public class AssertUtil {

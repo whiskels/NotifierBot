@@ -16,9 +16,7 @@ import static com.whiskels.notifier.external.DebtTestData.*;
 import static com.whiskels.notifier.external.EmployeeTestData.*;
 import static com.whiskels.notifier.external.FinOperationTestData.*;
 import static com.whiskels.notifier.telegram.UpdateTestData.HELP_MESSAGE_JSON;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JsonReaderTest {
     private final JsonReader reader = new JsonReader();
