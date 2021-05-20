@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = {AdminTimeHandler.class, MockedClockConfiguration.class})
 class AdminTimeHandlerTest extends AbstractHandlerTest {
-    private static final String EXPECTED_BOT_TIME_FORMATTED = "2014-12-22 10:15:30";
+    private static final String EXPECTED_BOT_TIME_FORMATTED = "2014-01-22 10:15:30";
 
     @Autowired
     private AdminTimeHandler adminTimeHandler;

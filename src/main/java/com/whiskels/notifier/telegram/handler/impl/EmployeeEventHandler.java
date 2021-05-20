@@ -31,7 +31,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @Schedulable(roles = HR)
 @ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
 public class EmployeeEventHandler extends AbstractBaseHandler {
-    @Value("${telegram.report.employee.birthday.header:Employee events on }")
+    @Value("${telegram.report.employee.birthday.header:Employee events on}")
     private String header;
     @Value("${telegram.report.employee.birthday.noData:Nobody}")
     private String noData;
