@@ -2,6 +2,7 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.MockedClockConfiguration;
 import com.whiskels.notifier.telegram.service.ScheduleService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,12 @@ class MessageSchedulerTest {
 
     @Autowired
     private HandlerOrchestrator orchestrator;
+
+    @BeforeEach
+    void resetMocks() {
+        reset(service);
+        reset(orchestrator);
+    }
 
     @Test
     void processScheduledTasks_TaskPresent() {

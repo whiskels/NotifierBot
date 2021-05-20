@@ -72,7 +72,7 @@ class DebtHandlerTest extends AbstractHandlerTest {
     }
 
     @Test
-    void testHelpHandler_Unauthorized() {
+    void testDebtHandler_Unauthorized() {
         testUnauthorizedInteraction(USER_2);
     }
 
