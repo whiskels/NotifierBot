@@ -21,7 +21,7 @@
         <telegrambots-spring.version>0.24</telegrambots-spring.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.30.Final</hibernate.version>
+        <hibernate.version>5.4.31.Final</hibernate.version>
 
         <!--    Tests  -->
         <assertj.version>3.16.1</assertj.version>
