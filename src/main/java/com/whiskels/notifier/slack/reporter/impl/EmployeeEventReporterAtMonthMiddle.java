@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
@@ -36,14 +38,16 @@ public class EmployeeEventReporterAtMonthMiddle extends AbstractEmployeeEventRep
     }
 
     protected List<Predicate<Employee>> birthdayPredicates() {
-        return List.of(BIRTHDAY_NOT_NULL,
-                isBirthdaySameMonth(provider.lastUpdate()),
-                isBirthdayLaterThan(provider.lastUpdate())
-        );
+        return generalPredicates(Employee::getBirthday);
     }
 
     protected List<Predicate<Employee>> anniversaryPredicates() {
-        return List.of(isAnniversarySameMonth(provider.lastUpdate()),
-                isAnniversaryLaterThan(provider.lastUpdate()));
+        return generalPredicates(Employee::getAppointmentDate);
+    }
+
+    private List<Predicate<Employee>> generalPredicates(Function<Employee, LocalDate> func) {
+        return List.of(notNull(func),
+                isSameMonth(func, provider.lastUpdate()),
+                isLaterThan(func, provider.lastUpdate()));
     }
 }

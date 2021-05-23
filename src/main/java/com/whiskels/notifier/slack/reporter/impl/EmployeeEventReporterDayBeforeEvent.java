@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.addWorkingDays;
@@ -39,16 +40,17 @@ public class EmployeeEventReporterDayBeforeEvent extends AbstractEmployeeEventRe
     }
 
     protected List<Predicate<Employee>> birthdayPredicates() {
-        LocalDate startDate = provider.lastUpdate();
-        LocalDate endDate = addWorkingDays(provider.lastUpdate(), 1);
-
-        return List.of(BIRTHDAY_NOT_NULL, isBirthdayBetween(startDate, endDate));
+        return generalPredicates(Employee::getBirthday);
     }
 
     protected List<Predicate<Employee>> anniversaryPredicates() {
+        return generalPredicates(Employee::getAppointmentDate);
+    }
+
+    private List<Predicate<Employee>> generalPredicates(Function<Employee, LocalDate> func) {
         LocalDate startDate = provider.lastUpdate();
         LocalDate endDate = addWorkingDays(provider.lastUpdate(), 1);
-
-        return List.of(isAnniversaryBetween(startDate, endDate));
+        return List.of(notNull(func),
+                isBetween(func, startDate, endDate));
     }
 }

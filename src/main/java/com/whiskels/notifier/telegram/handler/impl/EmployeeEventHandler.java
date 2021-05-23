@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Function;
+
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
@@ -56,11 +61,17 @@ public class EmployeeEventHandler extends AbstractBaseHandler {
                         .setNoData(noData)
                         .setActiveCollector(COLLECTOR_COMMA_SEPARATED)
                         .line(upcomingMonth)
-                        .list(filterAndSort(provider, EMPLOYEE_BIRTHDAY_COMPARATOR, BIRTHDAY_NOT_NULL, isBirthdaySameMonth(provider.lastUpdate())))
+                        .list(filteredBy(Employee::getBirthday, EMPLOYEE_BIRTHDAY_COMPARATOR), Employee::toBirthdayString)
                         .line(anniversary)
-                        .list(filterAndSort(provider, EMPLOYEE_ANNIVERSARY_COMPARATOR, isAnniversarySameMonth(provider.lastUpdate())),
-                                Employee::toWorkAnniversaryString)
+                        .list(filteredBy(Employee::getAppointmentDate, EMPLOYEE_ANNIVERSARY_COMPARATOR), Employee::toWorkAnniversaryString)
                         .build())
                 .build());
+    }
+
+    private List<Employee> filteredBy(Function<Employee, LocalDate> dateFunc, Comparator<Employee> comparator) {
+        return filterAndSort(provider,
+                comparator,
+                notNull(dateFunc),
+                isSameMonth(dateFunc, provider.lastUpdate()));
     }
 }

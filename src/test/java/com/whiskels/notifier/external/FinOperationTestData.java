@@ -3,9 +3,7 @@ package com.whiskels.notifier.external;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import lombok.experimental.UtilityClass;
 
-import java.util.GregorianCalendar;
-
-import static java.util.Calendar.JANUARY;
+import java.time.LocalDate;
 
 @UtilityClass
 public class FinOperationTestData {
@@ -14,7 +12,7 @@ public class FinOperationTestData {
     public static FinancialOperation operationOpex() {
         FinancialOperation op = new FinancialOperation();
         op.setCrmId(123);
-        op.setDate(new GregorianCalendar(2020, JANUARY, 5, 3, 0).getTime());
+        op.setDate(LocalDate.of(2020, 1, 5));
         op.setCurrency("USD");
         op.setAmount(-38.55d);
         op.setAmountUsd(-38.55d);
@@ -36,7 +34,7 @@ public class FinOperationTestData {
     public static FinancialOperation operationRevenue() {
         FinancialOperation op = new FinancialOperation();
         op.setCrmId(124);
-        op.setDate(new GregorianCalendar(2020, JANUARY, 5, 3, 0).getTime());
+        op.setDate(LocalDate.of(2020, 1, 5));
         op.setCurrency("USD");
         op.setAmount(200d);
         op.setAmountUsd(200d);

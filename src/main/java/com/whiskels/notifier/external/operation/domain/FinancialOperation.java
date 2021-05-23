@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.Date;
 
 /**
  * Customer receivable data is received from JSON of the following syntax:
@@ -49,7 +48,7 @@ public class FinancialOperation extends AbstractBaseEntity implements Comparable
     @JsonProperty("id")
     int crmId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    Date date;
+    LocalDate date;
     String currency;
     double amount;
     @JsonProperty("amount_usd")

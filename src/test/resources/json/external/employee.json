@@ -55,5 +55,24 @@
     "status_system": "fired",
     "office": "Moscow",
     "is_new_employee": false
+  },
+  {
+    "row_number": 4,
+    "id": 4,
+    "name": "Loki",
+    "employee_id": 4,
+    "full_name": "Loki",
+    "email": "loki@testcompany.com",
+    "appointment_date": "2003-02-11",
+    "removal_date": null,
+    "phone": "L0K1",
+    "department": "Mind games",
+    "position": "Loki",
+    "grade": null,
+    "birthday": null,
+    "status": "\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442",
+    "status_system": "working",
+    "office": "Asgard",
+    "is_new_employee": false
   }
 ]
