@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Main class used to handle incoming Updates.
- * Chooses suitable inheritor of AbstractBaseHandler to handle the input
+ * Verifies incoming update and delegates handling to {@link com.whiskels.notifier.telegram.HandlerOrchestrator}
  */
 @Component
 @Slf4j
@@ -41,7 +41,7 @@ public class UpdateProcessor {
         }
 
         if (text != null && userId != 0) {
-            handlerOrchestrator.operate(userId, text);
+            handlerOrchestrator.operateCommand(userId, text);
         }
     }
 

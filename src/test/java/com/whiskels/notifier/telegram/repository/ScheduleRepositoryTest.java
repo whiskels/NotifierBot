@@ -11,8 +11,8 @@ import java.util.List;
 
 import static com.whiskels.notifier.telegram.ScheduleTestData.*;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScheduleRepositoryTest extends AbstractRepositoryTest {
     @Autowired

@@ -28,7 +28,7 @@ class UpdateProcessorTest {
 
         listener.handleUpdate(new UpdateCreationEvent(helpUpdate));
 
-        verify(orchestrator).operate(USER_1.getChatId(), HELP.toString().toLowerCase());
+        verify(orchestrator).operateCommand(USER_1.getChatId(), HELP.toString().toLowerCase());
         verifyNoMoreInteractions(orchestrator);
     }
 
@@ -38,7 +38,7 @@ class UpdateProcessorTest {
 
         listener.handleUpdate(new UpdateCreationEvent(helpUpdate));
 
-        verify(orchestrator).operate(USER_1.getChatId(), TOKEN.toString());
+        verify(orchestrator).operateCommand(USER_1.getChatId(), TOKEN.toString());
         verifyNoMoreInteractions(orchestrator);
     }
 }

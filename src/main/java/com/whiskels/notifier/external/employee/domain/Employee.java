@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.whiskels.notifier.external.json.BirthdayDeserializer;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.BIRTHDAY_FORMATTER;
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.toLocalDate;
+import static java.lang.String.format;
 import static java.time.YearMonth.now;
 
 /**
@@ -37,15 +38,15 @@ import static java.time.YearMonth.now;
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
-    String name;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM")
-    Date birthday;
+    private String name;
+    @JsonDeserialize(using = BirthdayDeserializer.class)
+    private LocalDate birthday;
     @JsonProperty("appointment_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate appointmentDate;
-    String status;
+    private String status;
     @JsonProperty("status_system")
-    String statusSystem;
+    private String statusSystem;
 
     @Override
     public String toString() {
@@ -53,11 +54,16 @@ public class Employee {
     }
 
     public String toWorkAnniversaryString() {
+        if (appointmentDate == null) {
+            return (name + " (appointment date not set)");
+        }
         final int totalWorkingYears = now().getYear() - appointmentDate.getYear();
-        return String.format("%s %s (%s)", name, BIRTHDAY_FORMATTER.format(appointmentDate), totalWorkingYears);
+        return format("%s %s (%s)", name, BIRTHDAY_FORMATTER.format(appointmentDate), totalWorkingYears);
     }
 
     public String toBirthdayString() {
-        return String.format("%s %s", name, BIRTHDAY_FORMATTER.format(toLocalDate(birthday)));
+        return birthday == null
+                ? (name + " birthday is unknown")
+                : format("%s %s", name, BIRTHDAY_FORMATTER.format(birthday));
     }
 }

@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.common.datetime.ClockConfiguration;
+import com.whiskels.notifier.MockedClockConfiguration;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
 
-@Import(ClockConfiguration.class)
+@Import(MockedClockConfiguration.class)
 @SpringBootTest(classes = {HelpHandler.class, TokenHandler.class, AdminTimeHandler.class},
 properties = "telegram.bot.name=TESTBOT")
 class HelpHandlerTest extends AbstractHandlerTest {

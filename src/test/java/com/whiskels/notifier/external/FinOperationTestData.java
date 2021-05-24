@@ -3,8 +3,7 @@ package com.whiskels.notifier.external;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import lombok.experimental.UtilityClass;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 @UtilityClass
 public class FinOperationTestData {
@@ -13,16 +12,17 @@ public class FinOperationTestData {
     public static FinancialOperation operationOpex() {
         FinancialOperation op = new FinancialOperation();
         op.setCrmId(123);
-        op.setDate(new GregorianCalendar(2019, Calendar.DECEMBER, 30).getTime());
+        op.setDate(LocalDate.of(2020, 1, 5));
         op.setCurrency("USD");
         op.setAmount(-38.55d);
         op.setAmountUsd(-38.55d);
         op.setAmountRub(-2386.46);
         op.setBank("TestBank");
         op.setBankAccount("1234xxxxxxxx5678");
-        op.setLegalName("Test contractor 1");
+        op.setLegalName("Company name");
         op.setType("supplier");
         op.setContractorLegalName("Test contractor 1 LLC");
+        op.setContractor("Test contractor 1");
         op.setCategory("OPEX");
         op.setSubcategory("Software Trackers");
         op.setProject("Creative");
@@ -34,16 +34,17 @@ public class FinOperationTestData {
     public static FinancialOperation operationRevenue() {
         FinancialOperation op = new FinancialOperation();
         op.setCrmId(124);
-        op.setDate(new GregorianCalendar(2019, Calendar.DECEMBER, 30).getTime());
+        op.setDate(LocalDate.of(2020, 1, 5));
         op.setCurrency("USD");
         op.setAmount(200d);
         op.setAmountUsd(200d);
         op.setAmountRub(12381.14);
         op.setBank("TestBank");
         op.setBankAccount("1234xxxxxxxx5678");
-        op.setLegalName("Test contractor 3");
+        op.setLegalName("Company name");
         op.setType("supplier");
-        op.setContractorLegalName("Test contractor 3 LLC");
+        op.setContractorLegalName("Test contractor 2 LLC");
+        op.setContractor("Test contractor 2");
         op.setCategory("Revenue");
         op.setSubcategory("Revenue");
         op.setProject("Admin");
