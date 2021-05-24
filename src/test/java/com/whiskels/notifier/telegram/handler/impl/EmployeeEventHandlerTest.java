@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
+import static com.whiskels.notifier.external.EmployeeTestData.employeeNullBirthday;
 import static com.whiskels.notifier.external.EmployeeTestData.employeeWorking;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
@@ -40,7 +41,7 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testEmployeeEventHandler_authorized() {
-        when(employeeDataProvider.get()).thenReturn(List.of(employeeWorking()));
+        when(employeeDataProvider.get()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
         when(employeeDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
 
         testInteraction(USER_1, EXPECTED_AUTH);

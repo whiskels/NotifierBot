@@ -40,6 +40,10 @@ public final class EmployeeUtil {
         return date.getDayOfMonth() >= checkDate.getDayOfMonth();
     }
 
+    public static Predicate<Employee> isSameDay(Function<Employee, LocalDate> func, LocalDate compareDate) {
+        return e -> func.apply(e).withYear(compareDate.getYear()).equals(compareDate);
+    }
+
     public static Predicate<Employee> isBetween(Function<Employee, LocalDate> func, LocalDate startDate, LocalDate endDate) {
         return e -> daysBetween(func.apply(e), startDate) > 0
                 && daysBetween(func.apply(e), endDate) <= 0;

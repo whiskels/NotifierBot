@@ -16,21 +16,21 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.addWorkingDays;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.isSameDay;
+import static com.whiskels.notifier.external.employee.util.EmployeeUtil.notNull;
 
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.employee.webhook")
 @ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
-public class EmployeeEventReporterDayBeforeEvent extends AbstractEmployeeEventReporter {
-    @Value("${slack.employee.header.daily:Upcoming employee events on}")
+public class EmployeeEventReporterOnEvent extends AbstractEmployeeEventReporter {
+    @Value("${slack.employee.header.daily:Employee events on}")
     private String header;
 
-    public EmployeeEventReporterDayBeforeEvent(@Value("${slack.employee.webhook}") String webHook,
-                                               DataProvider<Employee> provider,
-                                               ApplicationEventPublisher publisher) {
+    public EmployeeEventReporterOnEvent(@Value("${slack.employee.webhook}") String webHook,
+                                        DataProvider<Employee> provider,
+                                        ApplicationEventPublisher publisher) {
         super(webHook, provider, publisher);
     }
 
@@ -48,9 +48,7 @@ public class EmployeeEventReporterDayBeforeEvent extends AbstractEmployeeEventRe
     }
 
     private List<Predicate<Employee>> generalPredicates(Function<Employee, LocalDate> func) {
-        LocalDate startDate = provider.lastUpdate();
-        LocalDate endDate = addWorkingDays(provider.lastUpdate(), 1);
         return List.of(notNull(func),
-                isBetween(func, startDate, endDate));
+                isSameDay(func, provider.lastUpdate()));
     }
 }
