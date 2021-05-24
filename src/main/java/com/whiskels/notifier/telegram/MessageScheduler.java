@@ -36,10 +36,7 @@ public class MessageScheduler {
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 final User user = schedule.getUser();
-                handlerOrchestrator.getSchedulableHandler(user.getRoles())
-                        .authorizeAndHandle(user, null);
-                log.debug("Scheduled message for {} sent at {}:{}",
-                        user.getChatId(), ldt.getHour(), ldt.getMinute());
+                handlerOrchestrator.operateSchedule(user);
             });
         }
     }

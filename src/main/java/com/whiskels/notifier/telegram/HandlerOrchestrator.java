@@ -30,13 +30,23 @@ public class HandlerOrchestrator {
     private final List<AbstractBaseHandler> handlers;
     private final UserService userService;
 
-    public void operate(int userId, String text) {
+    public void operateCommand(int userId, String text) {
         try {
             AbstractBaseHandler handler = getHandler(text);
             log.debug("Found handler {} for command {}", handler.getClass().getSimpleName(), text);
             handler.authorizeAndHandle(userService.getOrCreate(userId), text);
         } catch (UnsupportedOperationException e) {
-            log.debug("Command: {} is unsupported", text);
+            log.error("Command: {} is unsupported", text);
+        }
+    }
+
+    public void operateSchedule(User user) {
+        try {
+            AbstractBaseHandler handler = getSchedulableHandler(user.getRoles());
+            log.debug("Found scheduled handler {} ", handler.getClass().getSimpleName());
+            handler.authorizeAndHandle(user, null);
+        } catch (UnsupportedOperationException e) {
+            log.error("User: {} called schedulable handler, but nothing was found", user);
         }
     }
 
@@ -68,7 +78,7 @@ public class HandlerOrchestrator {
      * @param roles {@link Role} that scheduled an event
      * @return {@link AbstractBaseHandler} that was scheduled by user
      */
-    public AbstractBaseHandler getSchedulableHandler(Set<Role> roles) {
+    private AbstractBaseHandler getSchedulableHandler(Set<Role> roles) {
         return handlers.stream()
                 .filter(h -> h.getClass()
                         .isAnnotationPresent(Schedulable.class))

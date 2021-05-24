@@ -7,8 +7,7 @@ import com.whiskels.notifier.telegram.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.stream.Collectors;
-
+import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.telegram.Command.TOKEN;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 
@@ -31,7 +30,7 @@ public class TokenHandler extends AbstractBaseHandler {
                 .line("Your token is *%s*", user.getChatId())
                 .line("Your roles are: %s", user.getRoles().stream()
                         .map(Enum::toString)
-                        .collect(Collectors.joining(", ")))
+                        .collect(COLLECTOR_COMMA_SEPARATED))
                 .build());
     }
 }

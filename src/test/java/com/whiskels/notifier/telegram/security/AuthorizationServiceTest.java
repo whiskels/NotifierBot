@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = AuthorizationService.class)
 class AuthorizationServiceTest {

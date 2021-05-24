@@ -16,9 +16,8 @@ import static com.whiskels.notifier.external.DebtTestData.*;
 import static com.whiskels.notifier.external.EmployeeTestData.*;
 import static com.whiskels.notifier.external.FinOperationTestData.*;
 import static com.whiskels.notifier.telegram.UpdateTestData.HELP_MESSAGE_JSON;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JsonReaderTest {
     private final JsonReader reader = new JsonReader();
@@ -69,10 +68,8 @@ class JsonReaderTest {
                 Employee.class
         );
 
-        assertEquals(3, employees.size());
-        assertEqualsIgnoringCR(employeeWorking(), employees.get(0));
-        assertEqualsIgnoringCR(employeeDecree(), employees.get(1));
-        assertEqualsIgnoringCR(employeeFired(), employees.get(2));
+        assertThat(employees)
+                .containsExactlyInAnyOrder(employeeWorking(), employeeDecree(), employeeFired(), employeeNullBirthday());
     }
 
     @SneakyThrows

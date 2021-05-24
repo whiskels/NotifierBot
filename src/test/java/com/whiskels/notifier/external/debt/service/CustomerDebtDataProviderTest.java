@@ -16,7 +16,7 @@ import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
 import static com.whiskels.notifier.external.DebtTestData.*;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_EUR;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_USD;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = {CustomerDebtDataProvider.class, MockedClockConfiguration.class,
