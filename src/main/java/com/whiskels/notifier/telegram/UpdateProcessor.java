@@ -2,6 +2,7 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.common.CreationEvent;
 import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.orchestrator.HandlerOrchestrator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -13,14 +14,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Main class used to handle incoming Updates.
- * Verifies incoming update and delegates handling to {@link com.whiskels.notifier.telegram.HandlerOrchestrator}
+ * Verifies incoming update and delegates handling to {@link HandlerOrchestrator}
  */
 @Component
 @Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
 public class UpdateProcessor {
-    private final HandlerOrchestrator handlerOrchestrator;
+    private final HandlerOrchestrator orchestrator;
 
     @EventListener(classes = {UpdateCreationEvent.class})
     public void handleUpdate(CreationEvent<Update> updateCreationEvent) {
@@ -41,7 +42,7 @@ public class UpdateProcessor {
         }
 
         if (text != null && userId != 0) {
-            handlerOrchestrator.operateCommand(userId, text);
+            orchestrator.operate(userId, text);
         }
     }
 
