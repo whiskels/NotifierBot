@@ -1,6 +1,7 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.orchestrator.HandlerOrchestrator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,7 @@ class UpdateProcessorTest {
 
         listener.handleUpdate(new UpdateCreationEvent(helpUpdate));
 
-        verify(orchestrator).operateCommand(USER_1.getChatId(), HELP.toString().toLowerCase());
+        verify(orchestrator).operate(USER_1.getChatId(), HELP.toString().toLowerCase());
         verifyNoMoreInteractions(orchestrator);
     }
 
@@ -38,7 +39,7 @@ class UpdateProcessorTest {
 
         listener.handleUpdate(new UpdateCreationEvent(helpUpdate));
 
-        verify(orchestrator).operateCommand(USER_1.getChatId(), TOKEN.toString());
+        verify(orchestrator).operate(USER_1.getChatId(), TOKEN.toString());
         verifyNoMoreInteractions(orchestrator);
     }
 }
