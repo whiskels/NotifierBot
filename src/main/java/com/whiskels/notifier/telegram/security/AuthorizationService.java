@@ -40,7 +40,7 @@ public class AuthorizationService {
             }
             return !Collections.disjoint(user.getRoles(), requiredRoles);
         } catch (UnsupportedOperationException e) {
-            log.error("Attempting to check security on class that is no annotated with @BotCommand: {}",
+            log.error("Attempting to check security on class that is not annotated with @BotCommand: {}",
                     clazz.getSimpleName());
             return true;
         }
