@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-boot.version>2.4.5</spring-boot.version>
+        <spring-boot.version>2.5.0</spring-boot.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.24</telegrambots-spring.version>
