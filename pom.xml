@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.slack.api</groupId>
             <artifactId>slack-api-client</artifactId>
-            <version>1.7.1</version>
+            <version>1.8.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
