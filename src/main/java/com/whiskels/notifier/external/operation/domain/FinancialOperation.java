@@ -5,17 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whiskels.notifier.AbstractBaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.Date;
 
 /**
  * Customer receivable data is received from JSON of the following syntax:
@@ -47,11 +43,12 @@ import java.util.Date;
 @AllArgsConstructor
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class FinancialOperation extends AbstractBaseEntity implements Comparable<FinancialOperation> {
     @JsonProperty("id")
     int crmId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
-    Date date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    LocalDate date;
     String currency;
     double amount;
     @JsonProperty("amount_usd")

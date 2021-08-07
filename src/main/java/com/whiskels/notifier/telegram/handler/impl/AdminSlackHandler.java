@@ -6,6 +6,7 @@ import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
 import com.whiskels.notifier.telegram.security.AuthorizationService;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -24,6 +25,8 @@ import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 @ConditionalOnBean(SlackReporter.class)
 public class AdminSlackHandler extends AbstractBaseHandler {
     @Autowired
+    @Setter
+    @SuppressWarnings("rawtypes")
     private List<SlackReporter> slackReporterList;
 
     public AdminSlackHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher) {
@@ -31,6 +34,7 @@ public class AdminSlackHandler extends AbstractBaseHandler {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     protected void handle(User user, String message) {
         if (!message.contains(" ")) {
             MessageBuilder builder = builder(user)

@@ -12,7 +12,7 @@ import static com.whiskels.notifier.external.DebtTestData.debtTwo;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_EUR;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_USD;
 import static com.whiskels.notifier.external.debt.util.DebtUtil.*;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DebtUtilTest {
     @Test

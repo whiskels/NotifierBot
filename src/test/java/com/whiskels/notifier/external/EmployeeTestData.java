@@ -3,10 +3,7 @@ package com.whiskels.notifier.external;
 import com.whiskels.notifier.external.employee.domain.Employee;
 import lombok.experimental.UtilityClass;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import static java.util.Calendar.JANUARY;
+import java.time.LocalDate;
 
 @UtilityClass
 public class EmployeeTestData {
@@ -15,7 +12,8 @@ public class EmployeeTestData {
     public static Employee employeeWorking() {
         Employee employee = new Employee();
         employee.setName("Jason Bourne");
-        employee.setBirthday(new GregorianCalendar(1970, JANUARY, 1).getTime());
+        employee.setBirthday(LocalDate.of(2020, 1, 1));
+        employee.setAppointmentDate(LocalDate.of(2020,10,14));
         employee.setStatus("Работает");
         employee.setStatusSystem("working");
         return employee;
@@ -24,7 +22,8 @@ public class EmployeeTestData {
     public static Employee employeeDecree() {
         Employee employee = new Employee();
         employee.setName("Test employee");
-        employee.setBirthday(new GregorianCalendar(1970, JANUARY, 31).getTime());
+        employee.setBirthday(LocalDate.of(2020, 1, 31));
+        employee.setAppointmentDate(LocalDate.of(2019,8,1));
         employee.setStatus("Декрет");
         employee.setStatusSystem("decree");
         return employee;
@@ -33,9 +32,19 @@ public class EmployeeTestData {
     public static Employee employeeFired() {
         Employee employee = new Employee();
         employee.setName("James Bond");
-        employee.setBirthday(new GregorianCalendar(1970, Calendar.AUGUST, 25).getTime());
+        employee.setBirthday(LocalDate.of(2020, 8, 25));
+        employee.setAppointmentDate(LocalDate.of(2016,10,17));
         employee.setStatus("Уволен");
         employee.setStatusSystem("fired");
+        return employee;
+    }
+
+    public static Employee employeeNullBirthday() {
+        Employee employee = new Employee();
+        employee.setName("Loki");
+        employee.setStatus("Работает");
+        employee.setStatusSystem("working");
+        employee.setAppointmentDate(LocalDate.of(2003,2,11));
         return employee;
     }
 }

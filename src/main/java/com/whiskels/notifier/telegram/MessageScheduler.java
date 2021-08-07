@@ -3,6 +3,7 @@ package com.whiskels.notifier.telegram;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
+import com.whiskels.notifier.telegram.orchestrator.SchedulableHandlerOrchestrator;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ import java.util.List;
 public class MessageScheduler {
     private final ScheduleService scheduleService;
     private final Clock clock;
-    private final HandlerOrchestrator handlerOrchestrator;
+    private final SchedulableHandlerOrchestrator orchestrator;
 
     @Scheduled(cron = "${telegram.bot.schedule.cron:0 * * * * MON-FRI}", zone = "${common.timezone}")
     public void processScheduledTasks() {
@@ -36,10 +37,7 @@ public class MessageScheduler {
         if (!scheduledUsers.isEmpty()) {
             scheduledUsers.forEach(schedule -> {
                 final User user = schedule.getUser();
-                handlerOrchestrator.getSchedulableHandler(user.getRoles())
-                        .authorizeAndHandle(user, null);
-                log.debug("Scheduled message for {} sent at {}:{}",
-                        user.getChatId(), ldt.getHour(), ldt.getMinute());
+                orchestrator.operate(user);
             });
         }
     }

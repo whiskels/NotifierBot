@@ -1,6 +1,7 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.orchestrator.HandlerOrchestrator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

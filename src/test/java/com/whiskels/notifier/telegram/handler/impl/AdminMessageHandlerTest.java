@@ -15,8 +15,8 @@ import java.util.List;
 import static com.whiskels.notifier.telegram.UserTestData.*;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = {AdminMessageHandler.class})

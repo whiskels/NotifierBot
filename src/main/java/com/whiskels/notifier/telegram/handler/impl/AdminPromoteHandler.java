@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static com.whiskels.notifier.telegram.Command.ADMIN_PROMOTE;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.domain.Role.UNAUTHORIZED;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 
 /**
@@ -49,10 +50,19 @@ public class AdminPromoteHandler extends AbstractUserHandler {
                 Set<Role> userRoles = toUpdate.getRoles();
 
                 if (toUpdate.getRoles().contains(roleToUpdate)) {
-                    userRoles.remove(roleToUpdate);
+                    userRoles = userRoles.stream()
+                            .filter(role -> role != roleToUpdate)
+                            .collect(Collectors.toSet());
+                    if (userRoles.isEmpty()) {
+                        userRoles.add(UNAUTHORIZED);
+                    }
                 } else {
                     userRoles.add(roleToUpdate);
+                    if (userRoles.size() > 1) {
+                        userRoles.remove(UNAUTHORIZED);
+                    }
                 }
+
 
                 toUpdate.setRoles(userRoles);
                 userService.update(toUpdate);

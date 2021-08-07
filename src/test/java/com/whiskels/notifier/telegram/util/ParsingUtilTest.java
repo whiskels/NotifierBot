@@ -8,7 +8,7 @@ import static com.whiskels.notifier.telegram.util.ParsingUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ParserUtilTest {
+class ParsingUtilTest {
     private static final String TEST_COMMAND = "/GET";
     private static final String TEST_ARGUMENTS = "some arguments";
     private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
