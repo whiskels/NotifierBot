@@ -1,6 +1,5 @@
 package com.whiskels.notifier.external.moex;
 
-import junit.framework.AssertionFailedError;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnableConfigurationProperties
 @SpringBootTest(properties = {
@@ -24,7 +23,7 @@ class MoexServiceTest {
     private MoexService moexService;
 
     @Test
-    @Retryable(value = AssertionFailedError.class)
+    @Retryable()
     void testMoexUpdate() {
         moexService.update();
         assertNotNull(moexService.getEurRate());
