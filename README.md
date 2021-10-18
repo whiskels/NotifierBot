@@ -1,6 +1,6 @@
 ### Telegram Notifier Bot
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/307f26a176cd4488b19db004f6705254)](https://www.codacy.com/gh/whiskels/TelegramNotifierBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.com/whiskels/TelegramNotifierBot.svg?branch=master)](https://travis-ci.com/whiskels/TelegramNotifierBot)
+[![Build Status](https://app.travis-ci.com/whiskels/TelegramNotifierBot.svg?branch=master)](https://travis-ci.com/whiskels/TelegramNotifierBot)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fwhiskels%2FTelegramNotifierBot&count_bg=%2379C83D&title_bg=%23555555&icon=telegram.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 [![Known Vulnerabilities](https://snyk.io/test/github/whiskels/telegramnotifierbot/badge.svg)](https://snyk.io/test/github/whiskels/telegramnotifierbot)
 ___
