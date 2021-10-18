@@ -1,5 +1,6 @@
-package com.whiskels.notifier.external.operation.repository;
+package com.whiskels.notifier.external.operation.service;
 
+import com.whiskels.notifier.external.audit.repository.LoadAuditRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +16,16 @@ import static java.time.LocalDate.now;
 
 @Slf4j
 @Component
-@ConditionalOnBean(FinOperationRepository.class)
+@ConditionalOnBean(FinOperationDataLoaderAuditor.class)
 @RequiredArgsConstructor
-public class FinOperationCleaner {
-    @Value("${external.customer.operation.workingDaysToDeleteAfter:14}")
+public class LoadAuditCleaner {
+    @Value("${external.audit.workingDaysToDeleteAfter:14}")
     private int workingDaysToDeleteAfter;
 
-    private final FinOperationRepository repository;
+    private final LoadAuditRepository repository;
     private final Clock clock;
 
-    @Scheduled(cron = "${external.customer.operation.cleanerCron:0 0 9 * * *}", zone = "${common.timezone}")
+    @Scheduled(cron = "${external.audit.cleanerCron:0 0 9 * * *}", zone = "${common.timezone}")
     private void deleteOldEntries() {
         LocalDate deleteBeforeDate = subtractWorkingDays(now(clock), workingDaysToDeleteAfter);
         log.info("Deleted {} old entries with load date before {}",
