@@ -1,11 +1,10 @@
-package com.whiskels.notifier.external.employee.domain;
+package com.whiskels.notifier.external.employee;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.whiskels.notifier.external.json.BirthdayDeserializer;
 import lombok.Data;
 
 import java.time.LocalDate;

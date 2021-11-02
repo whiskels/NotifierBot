@@ -50,7 +50,7 @@ public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
     @Scheduled(cron = "${slack.customer.payment.cron:0 1 13 * * MON-FRI}", zone = "${common.timezone}")
     public void report() {
         log.debug("Creating employee event payload");
-        List<PaymentDto> data = provider.get();
+        List<PaymentDto> data = provider.getData();
 
         publish(SlackPayloadBuilder.builder()
                 .hook(webHook)

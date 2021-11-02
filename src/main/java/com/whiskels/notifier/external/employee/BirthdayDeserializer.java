@@ -1,4 +1,4 @@
-package com.whiskels.notifier.external.json;
+package com.whiskels.notifier.external.employee;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

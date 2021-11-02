@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static com.whiskels.notifier.external.employee.EmployeeUtil.*;
 
 @Component
 @Profile("slack-common")
@@ -29,7 +29,7 @@ public class EmployeeEventReporterAtMonthStart extends AbstractEmployeeEventRepo
     public EmployeeEventReporterAtMonthStart(@Value("${slack.employee.webhook}") String webHook,
                                              DataProvider<Employee> provider,
                                              ApplicationEventPublisher publisher) {
-        super(webHook, provider, publisher);
+         super(webHook, provider, publisher);
     }
 
     @Scheduled(cron = "${slack.employee.cron.monthStart:0 0 9 1 * *}", zone = "${common.timezone}")

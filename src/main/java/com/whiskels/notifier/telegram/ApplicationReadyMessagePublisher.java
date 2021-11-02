@@ -32,16 +32,17 @@ public class ApplicationReadyMessagePublisher {
         publisher.publishEvent(new SendMessageCreationEvent(MessageBuilder.builder(botAdmin)
                 .line("*Successful boot report*")
                 .line()
-                .line("*Bot handlers:* %s", getBeanSimpleClassNames(AbstractBaseHandler.class))
+                .line("*Bot handlers:* %s", getBeanLabels(AbstractBaseHandler.class))
                 .line()
-                .line("*Slack reporters:* %s", getBeanSimpleClassNames(SlackReporter.class))
+                .line("*Slack reporters:* %s", getBeanLabels(SlackReporter.class))
                 .build()));
         log.debug("Start report sent to Admin");
     }
 
-    private <T> String getBeanSimpleClassNames(Class<T> clazz) {
+    private <T> String getBeanLabels(Class<T> clazz) {
         return applicationContext.getBeansOfType(clazz).values().stream()
                 .map(bean -> bean.getClass().getSimpleName())
+                .sorted(String::compareTo)
                 .collect(COLLECTOR_COMMA_SEPARATED);
     }
 }

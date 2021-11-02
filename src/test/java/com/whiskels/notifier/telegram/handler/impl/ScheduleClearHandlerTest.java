@@ -1,6 +1,5 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.debt.service.CustomerDebtDataProvider;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,7 @@ import static java.lang.String.format;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {ScheduleClearHandler.class, DebtHandler.class})
-@MockBean(classes = {CustomerDebtDataProvider.class, ScheduleService.class})
+@MockBean(classes = {ScheduleService.class})
 class ScheduleClearHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_AUTH = format("Your schedule (100) was cleared%n");
 

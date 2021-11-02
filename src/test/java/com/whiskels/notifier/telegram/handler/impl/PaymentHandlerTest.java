@@ -36,7 +36,7 @@ class PaymentHandlerTest extends AbstractHandlerTest {
 
     @BeforeEach
     public void setHandler() {
-        when(paymentDataProvider.get()).thenReturn(List.of(fromEntity(operationRevenue())));
+        when(paymentDataProvider.getData()).thenReturn(List.of(fromEntity(operationRevenue())));
         when(paymentDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = paymentHandler;
     }

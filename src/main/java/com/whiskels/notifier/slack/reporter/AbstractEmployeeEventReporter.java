@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.util.StreamUtil.collectToBulletListString;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
+import static com.whiskels.notifier.external.employee.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
+import static com.whiskels.notifier.external.employee.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
 import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.builder;
 
 @Slf4j
@@ -51,10 +51,10 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
                 .header(header)
                 .notifyChannel();
 
-        List<Employee> birthdays = filterAndSort(provider.get(),
+        List<Employee> birthdays = filterAndSort(provider.getData(),
                 EMPLOYEE_BIRTHDAY_COMPARATOR,
                 birthdayPredicates());
-        List<Employee> anniversaries = filterAndSort(provider.get(),
+        List<Employee> anniversaries = filterAndSort(provider.getData(),
                 EMPLOYEE_ANNIVERSARY_COMPARATOR,
                 anniversaryPredicates());
 

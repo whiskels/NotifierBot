@@ -1,4 +1,4 @@
-package com.whiskels.notifier.external.debt.domain;
+package com.whiskels.notifier.external.debt;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
-import static com.whiskels.notifier.external.debt.util.DebtUtil.TOTAL_DEBT_COMPARATOR;
+import static com.whiskels.notifier.external.debt.DebtUtil.TOTAL_DEBT_COMPARATOR;
 
 /**
  * Customer debt data is received from JSON of the following syntax:
