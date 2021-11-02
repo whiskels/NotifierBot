@@ -12,7 +12,6 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 
 @Slf4j
 @BotCommand(command = ADMIN_AUDIT, requiredRoles = {ADMIN})
-@ConditionalOnBean(AuditRepository.class)
 public class AdminAuditHandler extends AbstractAdminCallHandler<AuditRepository> {
     public AdminAuditHandler() {
         super(auditRepository -> auditRepository.getLast(PageRequest.of(0, 10)),
