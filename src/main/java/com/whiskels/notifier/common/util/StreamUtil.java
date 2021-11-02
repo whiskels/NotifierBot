@@ -53,12 +53,12 @@ public final class StreamUtil {
 
     @SafeVarargs
     public static <T extends Comparable<T>> List<T> filterAndSort(DataProvider<T> provider, Predicate<T>... predicates) {
-        return filterAndSort(provider.get(), predicates);
+        return filterAndSort(provider.getData(), predicates);
     }
 
     @SafeVarargs
     public static <T> List<T> filterAndSort(DataProvider<T> provider, Comparator<T> comparator, Predicate<T>... predicates) {
-        return filterAndSort(provider.get(), comparator, predicates);
+        return filterAndSort(provider.getData(), comparator, predicates);
     }
 
     @SafeVarargs

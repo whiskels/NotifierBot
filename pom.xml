@@ -7,7 +7,7 @@
     <groupId>com.whiskels</groupId>
     <artifactId>TelegramNotifierBot</artifactId>
 
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <properties>
         <java.version>14</java.version>
@@ -21,17 +21,17 @@
         <telegrambots-spring.version>0.24</telegrambots-spring.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.30.Final</hibernate.version>
+        <hibernate.version>5.4.31.Final</hibernate.version>
 
         <!--    Tests  -->
         <assertj.version>3.16.1</assertj.version>
         <mockito.version>3.10.0</mockito.version>
 
         <!--DB-->
-        <postgresql.version>42.2.20.jre7</postgresql.version>
+        <postgresql.version>42.2.23.jre7</postgresql.version>
         <flyway.version>6.5.7</flyway.version>
 
-        <jackson-json.version>2.12.3</jackson-json.version>
+        <jackson-json.version>2.12.5</jackson-json.version>
     </properties>
 
     <build>
@@ -105,14 +105,14 @@
         <dependency>
             <groupId>com.slack.api</groupId>
             <artifactId>slack-api-client</artifactId>
-            <version>1.7.1</version>
+            <version>1.10.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.28</version>
+            <version>1.29</version>
         </dependency>
 
         <!-- Lombok -->
@@ -176,13 +176,13 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>1.3.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>5.2.16.RELEASE</version>
+            <version>5.3.9</version>
         </dependency>
     </dependencies>
 

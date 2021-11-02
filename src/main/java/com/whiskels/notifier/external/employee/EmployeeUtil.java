@@ -1,6 +1,5 @@
-package com.whiskels.notifier.external.employee.util;
+package com.whiskels.notifier.external.employee;
 
-import com.whiskels.notifier.external.employee.domain.Employee;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

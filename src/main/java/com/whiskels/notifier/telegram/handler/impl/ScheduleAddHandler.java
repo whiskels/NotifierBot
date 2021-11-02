@@ -6,12 +6,10 @@ import com.whiskels.notifier.telegram.builder.MessageBuilder;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractScheduleHandler;
-import com.whiskels.notifier.telegram.security.AuthorizationService;
-import com.whiskels.notifier.telegram.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,15 +28,10 @@ import static com.whiskels.notifier.telegram.util.ParsingUtil.getTime;
 @Slf4j
 @BotCommand(command = SCHEDULE, requiredRoles = {HR, MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
+@RequiredArgsConstructor
 public class ScheduleAddHandler extends AbstractScheduleHandler {
     @Value("${telegram.bot.schedule.empty:Empty}")
     private String emptySchedule;
-
-    public ScheduleAddHandler(AuthorizationService authorizationService,
-                              ApplicationEventPublisher publisher,
-                              ScheduleService scheduleService) {
-        super(authorizationService, publisher, scheduleService);
-    }
 
     @Override
     protected void handle(User user, String message) {

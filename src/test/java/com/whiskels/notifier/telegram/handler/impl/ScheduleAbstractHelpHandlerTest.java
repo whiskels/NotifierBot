@@ -1,20 +1,18 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.debt.service.CustomerDebtDataProvider;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
 
 @SpringBootTest(classes = {ScheduleHelpHandler.class, DebtHandler.class})
-@MockBean(CustomerDebtDataProvider.class)
-class ScheduleHelpHandlerTest extends AbstractHandlerTest {
+//@MockBean(CustomerDebtDataProvider.class)
+class ScheduleAbstractHelpHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_AUTH = format("*Help message for /schedule command*%n" +
             "%n" +
             "[/schedule *time*](/schedule time) - set daily message at time. Examples: %n" +

@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.domain;
 
-import com.whiskels.notifier.AbstractBaseEntity;
+import com.whiskels.notifier.common.AbstractBaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

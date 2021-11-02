@@ -1,4 +1,4 @@
-package com.whiskels.notifier;
+package com.whiskels.notifier.common;
 
 import lombok.Getter;
 import lombok.Setter;

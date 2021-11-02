@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external.debt.util;
 
-import com.whiskels.notifier.external.debt.domain.Debt;
+import com.whiskels.notifier.external.debt.Debt;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import static com.whiskels.notifier.external.DebtTestData.debtOne;
 import static com.whiskels.notifier.external.DebtTestData.debtTwo;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_EUR;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_USD;
-import static com.whiskels.notifier.external.debt.util.DebtUtil.*;
+import static com.whiskels.notifier.external.debt.DebtUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DebtUtilTest {

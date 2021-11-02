@@ -31,7 +31,7 @@ ___
 - Unauthorized users can get their token;
 - Authorized users can get information about upcoming birthdays;
 - Authorized users can get information about customer debts based on their role (manager, head);
-- Admins can get bot server time, notify all users, update users using chat commands;
+- Admins can trigger application actions via bot commands;
 - Scheduling of individual notification time for each user;
 - Several levels of logging;
 - Bot is deployed to Heroku.

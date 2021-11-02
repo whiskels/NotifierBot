@@ -3,9 +3,8 @@ package com.whiskels.notifier.telegram.handler.impl;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
-import com.whiskels.notifier.telegram.security.AuthorizationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.Clock;
 
@@ -22,14 +21,9 @@ import static java.time.LocalDateTime.now;
  */
 @Slf4j
 @BotCommand(command = ADMIN_TIME, requiredRoles = {ADMIN})
+@RequiredArgsConstructor
 public class AdminTimeHandler extends AbstractBaseHandler {
     private final Clock clock;
-
-    public AdminTimeHandler(AuthorizationService authorizationService,
-                            ApplicationEventPublisher publisher, Clock clock) {
-        super(authorizationService, publisher);
-        this.clock = clock;
-    }
 
     @Override
     protected void handle(User admin, String message) {

@@ -1,17 +1,16 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
-import com.whiskels.notifier.telegram.security.AuthorizationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -21,7 +20,7 @@ import java.util.function.Function;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.employee.util.EmployeeUtil.*;
+import static com.whiskels.notifier.external.employee.EmployeeUtil.*;
 import static com.whiskels.notifier.telegram.Command.GET_EVENT;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
@@ -35,6 +34,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = GET_EVENT, requiredRoles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
 @Schedulable(roles = HR)
 @ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
+@RequiredArgsConstructor
 public class EmployeeEventHandler extends AbstractBaseHandler {
     @Value("${telegram.report.employee.birthday.header:Employee events on}")
     private String header;
@@ -46,13 +46,6 @@ public class EmployeeEventHandler extends AbstractBaseHandler {
     private String anniversary;
 
     private final DataProvider<Employee> provider;
-
-    public EmployeeEventHandler(AuthorizationService authorizationService,
-                                ApplicationEventPublisher publisher,
-                                DataProvider<Employee> provider) {
-        super(authorizationService, publisher);
-        this.provider = provider;
-    }
 
     @Override
     protected void handle(User user, String message) {
