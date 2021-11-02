@@ -26,7 +26,7 @@ ___
 - Separate profiles (war, test);
 - Authentication is based on green list of tokens stored in Postgres DB;
 - Role-based authorization;
-- Bot admin is notified if user calls userCommand he is unauthorized to use;
+- Bot admin is notified if user calls command he is unauthorized to use;
 - Help message is generated dynamically (based on user roles);
 - Unauthorized users can get their token;
 - Authorized users can get information about upcoming birthdays;
