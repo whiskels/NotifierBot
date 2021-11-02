@@ -1,7 +1,7 @@
 package com.whiskels.notifier.external.json;
 
-import com.whiskels.notifier.external.debt.domain.Debt;
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.external.operation.domain.FinancialOperation;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

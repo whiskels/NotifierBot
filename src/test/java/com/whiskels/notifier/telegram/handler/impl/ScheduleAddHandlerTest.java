@@ -1,6 +1,5 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.debt.service.CustomerDebtDataProvider;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import com.whiskels.notifier.telegram.service.ScheduleService;
@@ -19,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = {ScheduleAddHandler.class, DebtHandler.class})
-@MockBean(classes = {CustomerDebtDataProvider.class, ScheduleService.class})
+@MockBean(classes = {ScheduleService.class})
 class ScheduleAddHandlerTest extends AbstractHandlerTest {
     private static final String EXPECTED_AUTH = format("*Your current schedule:*%n" +
             "Empty%n" +

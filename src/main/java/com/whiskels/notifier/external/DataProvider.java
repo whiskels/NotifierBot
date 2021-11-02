@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface DataProvider<T> {
-    List<T> get();
+    List<T> getData();
 
     LocalDate lastUpdate();
 }

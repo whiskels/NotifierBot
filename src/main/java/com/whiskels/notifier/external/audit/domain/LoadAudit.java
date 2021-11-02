@@ -1,7 +1,11 @@
 package com.whiskels.notifier.external.audit.domain;
 
-import com.whiskels.notifier.AbstractBaseEntity;
-import lombok.*;
+import com.whiskels.notifier.common.audit.domain.AbstractAuditedEntity;
+import com.whiskels.notifier.common.datetime.DateTimeUtil;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,20 +14,18 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.time.LocalDate;
+import java.util.List;
 
+import static java.lang.String.format;
 import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "load_audit")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoadAudit extends AbstractBaseEntity {
-    @Column(name = "date", nullable = false)
-    @NotNull
-    private LocalDate date;
-
+@Builder
+@EqualsAndHashCode(callSuper = true)
+public class LoadAudit extends AbstractAuditedEntity {
     @Enumerated(STRING)
     @Column(name = "loader", nullable = false)
     @NotBlank
@@ -34,13 +36,15 @@ public class LoadAudit extends AbstractBaseEntity {
     @NotNull
     private int count;
 
+    public static <T> LoadAudit audit(List<T> objects, Loader loader) {
+        return LoadAudit.builder()
+                .count(objects.size())
+                .loader(loader)
+                .build();
+    }
+
     @Override
     public String toString() {
-        return "LoadAudit{" +
-                "id=" + id +
-                ", date=" + date +
-                ", loader=" + loader +
-                ", count=" + count +
-                '}';
+        return format("%s: %s %s", DateTimeUtil.format(loadDateTime), loader, count);
     }
 }

@@ -1,8 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.domain.Debt;
-import com.whiskels.notifier.external.debt.service.CustomerDebtDataProvider;
+import com.whiskels.notifier.external.debt.Debt;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +55,7 @@ class DebtHandlerTest extends AbstractHandlerTest {
 
     @BeforeEach
     public void setHandler() {
-        when(debtDataProvider.get()).thenReturn(List.of(debtOne(), debtTwo()));
+        when(debtDataProvider.getData()).thenReturn(List.of(debtOne(), debtTwo()));
         when(debtDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = debtHandler;
     }
@@ -80,7 +79,7 @@ class DebtHandlerTest extends AbstractHandlerTest {
     static class DebtHandlerTestConfig {
         @Bean
         DataProvider<Debt> provider() {
-            return mock(CustomerDebtDataProvider.class);
+            return mock(DataProvider.class);
         }
     }
 }

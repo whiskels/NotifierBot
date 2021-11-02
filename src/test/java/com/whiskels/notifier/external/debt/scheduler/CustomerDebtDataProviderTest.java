@@ -1,7 +1,9 @@
-package com.whiskels.notifier.external.debt.service;
+package com.whiskels.notifier.external.debt.scheduler;
 
 import com.whiskels.notifier.MockedClockConfiguration;
-import com.whiskels.notifier.external.debt.domain.Debt;
+import com.whiskels.notifier.external.DataLoaderAndProvider;
+import com.whiskels.notifier.external.debt.DebtInMemoryLoader;
+import com.whiskels.notifier.external.debt.Debt;
 import com.whiskels.notifier.external.json.JsonReader;
 import com.whiskels.notifier.external.moex.MoexService;
 import org.junit.jupiter.api.Test;
@@ -19,12 +21,12 @@ import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_USD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = {CustomerDebtDataProvider.class, MockedClockConfiguration.class,
+@SpringBootTest(classes = {DebtInMemoryLoader.class, MockedClockConfiguration.class,
         CustomerDebtDataProviderTest.DebtDataProviderTestConfig.class},
-        properties = "external.customer.debt.url=test")
+        properties = {"external.customer.debt.url=test", "external.customer.debt.json-node=content"})
 class CustomerDebtDataProviderTest {
     @Autowired
-    private CustomerDebtDataProvider provider;
+    private DataLoaderAndProvider<Debt> provider;
 
     @Autowired
     private JsonReader mockReader;
@@ -36,7 +38,7 @@ class CustomerDebtDataProviderTest {
 
         assertEquals(EXPECTED_DATE, provider.lastUpdate());
 
-        List<Debt> actualDebtList = provider.get();
+        List<Debt> actualDebtList = provider.getData();
         assertEquals(1, actualDebtList.size());
 
         Debt actual = actualDebtList.get(0);

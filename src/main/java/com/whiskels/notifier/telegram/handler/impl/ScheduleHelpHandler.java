@@ -4,10 +4,8 @@ import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
-import com.whiskels.notifier.telegram.security.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.ApplicationEventPublisher;
 
 import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
@@ -22,11 +20,6 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @BotCommand(command = SCHEDULE_HELP, requiredRoles = {MANAGER, HEAD, ADMIN})
 @ConditionalOnBean(annotation = Schedulable.class)
 public class ScheduleHelpHandler extends AbstractBaseHandler {
-    public ScheduleHelpHandler(AuthorizationService authorizationService,
-                               ApplicationEventPublisher publisher) {
-        super(authorizationService, publisher);
-    }
-
     @Override
     protected void handle(User user, String message) {
         publish(builder(user)

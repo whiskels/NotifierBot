@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static com.whiskels.notifier.telegram.domain.Role.UNAUTHORIZED;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -24,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Profile("telegram-common")
 @Component
 @Retention(RUNTIME)
-@Target(TYPE)
+@Target({TYPE, METHOD})
 public @interface BotCommand {
     /**
      * Returns an array of the commands supported by handler

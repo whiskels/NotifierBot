@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external;
 
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.employee.Employee;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;

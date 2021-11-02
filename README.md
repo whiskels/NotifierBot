@@ -26,12 +26,12 @@ ___
 - Separate profiles (war, test);
 - Authentication is based on green list of tokens stored in Postgres DB;
 - Role-based authorization;
-- Bot admin is notified if user calls command he is unauthorized to use;
+- Bot admin is notified if user calls userCommand he is unauthorized to use;
 - Help message is generated dynamically (based on user roles);
 - Unauthorized users can get their token;
 - Authorized users can get information about upcoming birthdays;
 - Authorized users can get information about customer debts based on their role (manager, head);
-- Admins can get bot server time, notify all users, update users using chat commands;
+- Admins can trigger application actions via bot commands;
 - Scheduling of individual notification time for each user;
 - Several levels of logging;
 - Bot is deployed to Heroku.

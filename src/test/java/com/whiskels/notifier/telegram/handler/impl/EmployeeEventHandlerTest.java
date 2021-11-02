@@ -1,8 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.domain.Employee;
-import com.whiskels.notifier.external.employee.service.EmployeeDataLoaderAndProvider;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,7 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testEmployeeEventHandler_authorized() {
-        when(employeeDataProvider.get()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
+        when(employeeDataProvider.getData()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
         when(employeeDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
 
         testInteraction(USER_1, EXPECTED_AUTH);
@@ -56,7 +55,7 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
     static class EmployeeEventHandlerTestConfig {
         @Bean
         DataProvider<Employee> provider() {
-            return mock(EmployeeDataLoaderAndProvider.class);
+            return mock(DataProvider.class);
         }
     }
 }

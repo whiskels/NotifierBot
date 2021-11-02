@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external;
 
-import com.whiskels.notifier.external.debt.domain.Debt;
+import com.whiskels.notifier.external.debt.Debt;
 import lombok.experimental.UtilityClass;
 
 import static org.assertj.core.api.Assertions.assertThat;

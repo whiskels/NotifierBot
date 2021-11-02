@@ -1,7 +1,6 @@
 package com.whiskels.notifier.telegram.security;
 
 import com.whiskels.notifier.App;
-import com.whiskels.notifier.telegram.handler.impl.AdminSlackHandler;
 import com.whiskels.notifier.telegram.handler.impl.DebtHandler;
 import com.whiskels.notifier.telegram.handler.impl.HelpHandler;
 import com.whiskels.notifier.telegram.handler.impl.TokenHandler;
@@ -21,7 +20,6 @@ class AuthorizationServiceTest {
 
     @Test
     void testAuthorizationService() {
-        assertTrue(service.authorize(AdminSlackHandler.class, USER_1));
         assertFalse(service.authorize(DebtHandler.class, USER_2));
         assertTrue(service.authorize(TokenHandler.class, USER_2));
         assertTrue(service.authorize(HelpHandler.class, USER_2));

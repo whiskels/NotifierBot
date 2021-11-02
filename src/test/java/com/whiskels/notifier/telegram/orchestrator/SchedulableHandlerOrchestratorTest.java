@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.orchestrator;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.domain.Employee;
+import com.whiskels.notifier.external.employee.Employee;
 import com.whiskels.notifier.telegram.SendMessagePublisherTest;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
@@ -75,14 +75,14 @@ class SchedulableHandlerOrchestratorTest extends SendMessagePublisherTest {
         @Bean
         DataProvider<Employee> employeeDataProvider() {
             DataProvider<Employee> employeeDataProvider = mock(DataProvider.class);
-            when(employeeDataProvider.get()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
+            when(employeeDataProvider.getData()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
             when(employeeDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
             return employeeDataProvider;
         }
 
         @Bean
         EmployeeEventHandler employeeEventHandler() {
-            return new EmployeeEventHandler(authorizationService, publisher, employeeDataProvider());
+            return new EmployeeEventHandler(employeeDataProvider());
         }
     }
 }

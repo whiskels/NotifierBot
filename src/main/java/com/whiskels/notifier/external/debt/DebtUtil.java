@@ -1,6 +1,5 @@
-package com.whiskels.notifier.external.debt.util;
+package com.whiskels.notifier.external.debt;
 
-import com.whiskels.notifier.external.debt.domain.Debt;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -11,7 +10,8 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DebtUtil {
     public static final Comparator<Debt> TOTAL_DEBT_COMPARATOR = Comparator.comparing(Debt::getTotalDebtRouble)
-            .thenComparing(Debt::getContractor).reversed();
+            .thenComparing(Debt::getContractor)
+            .reversed();
 
     public static Predicate<Debt> totalDebtRoubleHigherThan(int amount) {
         return debt -> debt.getTotalDebtRouble() > amount;
