@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.operation.dto.PaymentDto;
+import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
 import com.whiskels.notifier.telegram.domain.User;

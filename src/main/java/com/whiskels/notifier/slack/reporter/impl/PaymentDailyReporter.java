@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.operation.dto.PaymentDto;
+import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.Setter;

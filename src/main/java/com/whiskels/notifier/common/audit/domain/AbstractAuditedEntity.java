@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.DATE_TIME_FORMATTER;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -27,4 +29,12 @@ public abstract class AbstractAuditedEntity extends AbstractBaseEntity {
     @Column(nullable = false)
     @NotNull
     protected LocalDateTime loadDateTime;
+
+    @Override
+    public String toString() {
+        String loadDateTimeString = loadDateTime != null
+                ? DATE_TIME_FORMATTER.format(loadDateTime)
+                : "undefined";
+        return "[" + loadDateTimeString + "]";
+    }
 }

@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;

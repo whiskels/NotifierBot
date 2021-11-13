@@ -7,12 +7,12 @@ import com.whiskels.notifier.telegram.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.Command.ADMIN_HELP;
+import static com.whiskels.notifier.telegram.util.ParsingUtil.extractCommand;
 
 /**
  * Shows help message and dynamically created inline keyboard based on user role
@@ -31,26 +31,22 @@ public abstract class AbstractHelpHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(User user, String message) {
-        publish(generateMessage(user));
+        MessageBuilder builder = MessageBuilder.builder(user);
+        generateMessage(builder, message);
+        generateButtons(builder, user);
+        publish(builder.build());
     }
 
-    private SendMessage generateMessage(User user) {
-        MessageBuilder builder = getBuilder(user);
-        generateButtons(user, builder);
-        return builder.build();
-    }
-
-    private MessageBuilder getBuilder(User user) {
-        if (user.getRoles().contains(ADMIN)) {
-            return MessageBuilder.builder(user).line("Help message");
+    private void generateMessage(MessageBuilder builder, String message) {
+        if (extractCommand(message).equals(ADMIN_HELP.name())) {
+            builder.line("Help message");
+        } else {
+            builder.line("Hello. I'm *%s*", botName)
+                    .line("Here are your available commands");
         }
-
-        return MessageBuilder.builder(user)
-                .line("Hello. I'm *%s*", botName)
-                .line("Here are your available commands");
     }
 
-    private void generateButtons(User user, MessageBuilder builder) {
+    private void generateButtons(MessageBuilder builder, User user) {
         // Dynamically creates buttons if handler has message and is available to user
         for (AbstractBaseHandler handler : handlers) {
             BotCommand annotation = handler.getClass().getAnnotation(BotCommand.class);

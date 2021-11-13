@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.operation.dto.PaymentDto;
-import com.whiskels.notifier.external.operation.service.PaymentDataProvider;
+import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
+import com.whiskels.notifier.external.json.operation.service.PaymentDataProvider;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.FinOperationTestData.operationRevenue;
-import static com.whiskels.notifier.external.operation.dto.PaymentDto.fromEntity;
+import static com.whiskels.notifier.external.json.FinOperationTestData.operationRevenue;
+import static com.whiskels.notifier.external.json.operation.dto.PaymentDto.fromEntity;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;

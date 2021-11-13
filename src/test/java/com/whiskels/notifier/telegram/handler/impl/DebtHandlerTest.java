@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.DebtTestData.debtOne;
-import static com.whiskels.notifier.external.DebtTestData.debtTwo;
+import static com.whiskels.notifier.external.json.DebtTestData.debtOne;
+import static com.whiskels.notifier.external.json.DebtTestData.debtTwo;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
