@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
@@ -23,13 +23,13 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
  */
 @Slf4j
 @BotCommand(command = GET_PAYMENT, requiredRoles = {ADMIN})
-@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = Supplier.class)
 @RequiredArgsConstructor
 public class PaymentHandler extends AbstractBaseHandler {
     @Value("${telegram.report.customer.payment.header:Payment report on}")
     private String header;
 
-    private final DataProvider<PaymentDto> provider;
+    private final Supplier<PaymentDto> provider;
 
     @Override
     protected void handle(User user, String message) {

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnableRetry
 @EnableConfigurationProperties
@@ -17,17 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         "moex.url=https://iss.moex.com/iss/statistics/engines/currency/markets/selt/rates",
         "moex.usd=CBRF_USD_LAST (double)",
         "moex.eur=CBRF_EUR_LAST (double)"
-}, classes = {MockedClockConfiguration.class, MoexService.class})
+}, classes = {MockedClockConfiguration.class, MoexLoader.class})
 @EnableAspectJAutoProxy(proxyTargetClass=true)
-class MoexServiceTest {
+class MoexLoaderTest {
     @Autowired
-    private MoexService moexService;
+    private MoexLoader moexLoader;
 
     @Test
     @Retryable
     void testMoexUpdate() {
-        moexService.update();
-        assertNotNull(moexService.getEurRate());
-        assertNotNull(moexService.getUsdRate());
+        assertEquals(2, moexLoader.load().size());
     }
 }

@@ -1,6 +1,6 @@
 package com.whiskels.notifier.external.json.operation.service;
 
-import com.whiskels.notifier.external.DataLoader;
+import com.whiskels.notifier.external.Loader;
 import com.whiskels.notifier.external.audit.repository.LoadAuditRepository;
 import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import static com.whiskels.notifier.external.audit.domain.Loader.FINANCIAL_OPERA
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnBean(value = FinancialOperation.class, parameterizedContainer = DataLoader.class)
+@ConditionalOnBean(value = FinancialOperation.class, parameterizedContainer = Loader.class)
 public class FinOperationDataLoaderAuditor {
     private final LoadAuditRepository auditRepository;
 

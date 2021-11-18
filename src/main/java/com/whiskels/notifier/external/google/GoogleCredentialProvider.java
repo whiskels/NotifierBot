@@ -12,7 +12,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,7 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 @Slf4j
-@Service
+@Component
+@Lazy
 @ConditionalOnProperty("external.google.credentials.json")
 class GoogleCredentialProvider {
     public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();

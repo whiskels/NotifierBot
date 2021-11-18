@@ -64,6 +64,6 @@ public class FinancialOperation extends AbstractAuditedEntity implements Compara
 
     @Override
     public String toString() {
-        return super.toString() + format(" %s %s %s", crmId, category, contractor);
+        return super.toString() + format(" `%s %s %s`", crmId, category, contractor);
     }
 }

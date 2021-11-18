@@ -32,9 +32,8 @@ public abstract class AbstractAuditedEntity extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        String loadDateTimeString = loadDateTime != null
+        return loadDateTime != null
                 ? DATE_TIME_FORMATTER.format(loadDateTime)
                 : "undefined";
-        return "[" + loadDateTimeString + "]";
     }
 }

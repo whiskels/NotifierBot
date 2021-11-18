@@ -1,51 +1,40 @@
 package com.whiskels.notifier.external.moex;
 
-import com.whiskels.notifier.external.DataLoader;
+import com.whiskels.notifier.external.Loader;
 import com.whiskels.notifier.telegram.TelegramLabeled;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.Clock;
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.time.LocalDate.now;
+import static com.whiskels.notifier.external.moex.Currency.EUR_RUB;
+import static com.whiskels.notifier.external.moex.Currency.USD_RUB;
 
-@Service
+@Component
 @Slf4j
 @ConfigurationProperties("moex")
 @Setter
 @RequiredArgsConstructor
-public class MoexService implements DataLoader<String>, TelegramLabeled {
-    private final Clock clock;
-
+public class MoexLoader implements Loader<MoexRate>, TelegramLabeled {
     private String url;
     private String usd;
     private String eur;
-    private LocalDate lastUpdateDate;
-
-    @Getter
-    private Double usdRate = 70d;
-    @Getter
-    private Double eurRate = 80d;
 
     @Override
     @Retryable
     @PostConstruct
-    @Scheduled(cron = "${moex.cron:0 0 0 * * *}", zone = "${common.timezone}")
-    public List<String> update() {
+    public List<MoexRate> load() {
         log.info("Updating exchange rates");
         // Getting moex exchange rates string
         try {
@@ -64,23 +53,15 @@ public class MoexService implements DataLoader<String>, TelegramLabeled {
             }
 
             if (!ratesMap.isEmpty()) {
-                usdRate = Double.parseDouble(ratesMap.get(usd));
-                eurRate = Double.parseDouble(ratesMap.get(eur));
-                log.info("Updated exchange rates: USD={}, EUR={}", usdRate, eurRate);
+                return List.of(new MoexRate(USD_RUB, Double.parseDouble(ratesMap.get(usd))),
+                        new MoexRate(EUR_RUB, Double.parseDouble(ratesMap.get(eur))));
             }
         } catch (IOException e) {
             log.error("Exception while trying to get MOEX data: {}", e.toString());
         } catch (NumberFormatException e) {
             log.error("Exception while trying to update exchange rate: {}", e.toString());
         }
-        lastUpdateDate = now(clock);
-
-        return List.of(String.valueOf(usdRate), String.valueOf(eurRate));
-    }
-
-    @Override
-    public LocalDate lastUpdate() {
-        return lastUpdateDate;
+        return Collections.emptyList();
     }
 
     @Override

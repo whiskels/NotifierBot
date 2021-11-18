@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
@@ -26,7 +26,7 @@ import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.customer.payment.webhook")
-@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = Supplier.class)
 @ConfigurationProperties("slack.customer.payment")
 public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
     private static final ToDoubleFunction<List<PaymentDto>> RECEIVABLE_SUM = x -> x.stream()
@@ -42,7 +42,7 @@ public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
     private final Random rnd = new Random();
 
     public PaymentDailyReporter(@Value("${slack.customer.payment.webhook}") String webHook,
-                                DataProvider<PaymentDto> provider,
+                                Supplier<PaymentDto> provider,
                                 ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }

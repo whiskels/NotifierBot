@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +20,13 @@ import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.b
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.customer.debt.webhook")
-@ConditionalOnBean(value = Debt.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = Debt.class, parameterizedContainer = Supplier.class)
 public class DebtDailyReporter extends SlackReporter<Debt> {
     @Value("${slack.customer.debt.header:Debt report on}")
     private String header;
 
     public DebtDailyReporter(@Value("${slack.customer.debt.webhook}") String webHook,
-                             DataProvider<Debt> provider,
+                             Supplier<Debt> provider,
                              ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }

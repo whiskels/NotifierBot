@@ -16,7 +16,7 @@ import static java.time.LocalDate.now;
 
 @Slf4j
 @Component
-@ConditionalOnBean(FinOperationDataLoader.class)
+@ConditionalOnBean(FinOperationLoader.class)
 @RequiredArgsConstructor
 public class FinOperationCleaner {
     @Value("${external.customer.operation.workingDaysToDeleteAfter:14}")

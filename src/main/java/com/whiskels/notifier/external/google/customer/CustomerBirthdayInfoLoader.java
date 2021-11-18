@@ -1,11 +1,9 @@
 package com.whiskels.notifier.external.google.customer;
 
-import com.whiskels.notifier.external.google.InMemoryGoogleSheetsDataLoader;
-import com.whiskels.notifier.telegram.TelegramLabeled;
+import com.whiskels.notifier.external.google.GoogleSheetsLoader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,11 +11,9 @@ import java.util.stream.Collectors;
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
 import static java.time.LocalDate.now;
 
-@Service
+@Component
 @ConditionalOnProperty("external.google.customer.birthday.spreadsheet")
-public class CustomerBirthdayInfoDataLoader extends InMemoryGoogleSheetsDataLoader<CustomerBirthdayInfo> implements TelegramLabeled {
-    @Value("${external.google.customer.telegram.label:Customer birthdays}")
-    private String telegramLabel;
+public class CustomerBirthdayInfoLoader extends GoogleSheetsLoader<CustomerBirthdayInfo> {
     @Value("${external.google.customer.column.company:1}")
     private int companyColumnIndex;
     @Value("${external.google.customer.column.name:2}")
@@ -25,15 +21,10 @@ public class CustomerBirthdayInfoDataLoader extends InMemoryGoogleSheetsDataLoad
     @Value("${external.google.customer.column.birthday:4}")
     private int birthdayColumnIndex;
 
-    public CustomerBirthdayInfoDataLoader(
+    public CustomerBirthdayInfoLoader(
             @Value("${external.google.customer.birthday.spreadsheet}") String spreadsheetId,
             @Value("${external.google.customer.birthday.cell.range}") String range) {
         super(spreadsheetId, range);
-    }
-
-    @Scheduled(cron = "${external.google.customer.birthday.cron:0 30 8 * * MON-FRI}", zone = "${common.timezone}")
-    public void updateScheduled() {
-        update();
     }
 
     @Override
@@ -56,10 +47,5 @@ public class CustomerBirthdayInfoDataLoader extends InMemoryGoogleSheetsDataLoad
 
     private int maxColumnIndex() {
         return Math.max(companyColumnIndex, Math.max(nameColumnIndex, birthdayColumnIndex) + 1);
-    }
-
-    @Override
-    public String getLabel() {
-        return telegramLabel;
     }
 }

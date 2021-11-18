@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.google.customer.CustomerBirthdayInfo;
 import com.whiskels.notifier.slack.reporter.AbstractCustomerEventReporter;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +19,13 @@ import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.customer.birthday.webhook")
-@ConditionalOnBean(value = CustomerBirthdayInfo.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = CustomerBirthdayInfo.class, parameterizedContainer = Supplier.class)
 public class CustomerEventReporterAtMonthMiddle extends AbstractCustomerEventReporter {
     @Value("${slack.customer.birthday.header.monthMiddle:Upcoming customer birthdays till the end of the month}")
     private String header;
 
     public CustomerEventReporterAtMonthMiddle(@Value("${slack.customer.birthday.webhook}") String webHook,
-                                              DataProvider<CustomerBirthdayInfo> provider,
+                                              Supplier<CustomerBirthdayInfo> provider,
                                               ApplicationEventPublisher publisher) {
         super(webHook, provider, publisher);
     }

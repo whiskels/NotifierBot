@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.google.customer.CustomerBirthdayInfo;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public abstract class AbstractCustomerEventReporter extends SlackReporter<Custom
     protected String noData;
 
     public AbstractCustomerEventReporter(@Value("${slack.customer.birthday.webhook}") String webHook,
-                                         DataProvider<CustomerBirthdayInfo> provider,
+                                         Supplier<CustomerBirthdayInfo> provider,
                                          ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }

@@ -1,11 +1,11 @@
-package com.whiskels.notifier.external.json.debt.scheduler;
+package com.whiskels.notifier.external.json.debt;
 
 import com.whiskels.notifier.MockedClockConfiguration;
-import com.whiskels.notifier.external.DataLoaderAndProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.JsonReader;
-import com.whiskels.notifier.external.json.debt.Debt;
-import com.whiskels.notifier.external.json.debt.DebtLoaderAndProvider;
-import com.whiskels.notifier.external.moex.MoexService;
+import com.whiskels.notifier.external.moex.MoexLoader;
+import com.whiskels.notifier.external.moex.MoexRate;
+import com.whiskels.notifier.external.moex.MoexSupplier;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,15 +18,17 @@ import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_EUR;
 import static com.whiskels.notifier.external.MoexTestData.MOCK_RATE_USD;
 import static com.whiskels.notifier.external.json.DebtTestData.*;
+import static com.whiskels.notifier.external.moex.Currency.EUR_RUB;
+import static com.whiskels.notifier.external.moex.Currency.USD_RUB;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = {DebtLoaderAndProvider.class, MockedClockConfiguration.class,
-        CustomerDebtDataProviderTest.DebtDataProviderTestConfig.class},
+@SpringBootTest(classes = {DebtSupplier.class, DebtLoader.class, MoexSupplier.class, MockedClockConfiguration.class,
+        CustomerDebtSupplierTest.DebtDataProviderTestConfig.class},
         properties = {"external.customer.debt.url=test", "external.customer.debt.json-node=content"})
-class CustomerDebtDataProviderTest {
+class CustomerDebtSupplierTest {
     @Autowired
-    private DataLoaderAndProvider<Debt> provider;
+    private Supplier<Debt> supplier;
 
     @Autowired
     private JsonReader mockReader;
@@ -36,9 +38,9 @@ class CustomerDebtDataProviderTest {
         verify(mockReader).read("test", "content", Debt.class);
         verifyNoMoreInteractions(mockReader);
 
-        assertEquals(EXPECTED_DATE, provider.lastUpdate());
+        assertEquals(EXPECTED_DATE, supplier.lastUpdate());
 
-        List<Debt> actualDebtList = provider.getData();
+        List<Debt> actualDebtList = supplier.getData();
         assertEquals(1, actualDebtList.size());
 
         Debt actual = actualDebtList.get(0);
@@ -50,11 +52,10 @@ class CustomerDebtDataProviderTest {
     @TestConfiguration
     static class DebtDataProviderTestConfig {
         @Bean
-        public MoexService moexService() {
-            MoexService moexService = mock(MoexService.class);
-            when(moexService.getUsdRate()).thenReturn(MOCK_RATE_USD);
-            when(moexService.getEurRate()).thenReturn(MOCK_RATE_EUR);
-            return moexService;
+        public MoexLoader moexLoader() {
+            MoexLoader moexLoader = mock(MoexLoader.class);
+            when(moexLoader.load()).thenReturn(List.of(new MoexRate(USD_RUB, MOCK_RATE_USD), new MoexRate(EUR_RUB, MOCK_RATE_EUR)));
+            return moexLoader;
         }
 
         @Bean

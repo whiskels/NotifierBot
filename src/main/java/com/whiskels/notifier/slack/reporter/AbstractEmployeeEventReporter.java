@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
     protected String noData;
 
     public AbstractEmployeeEventReporter(@Value("${slack.employee.webhook}") String webHook,
-                                         DataProvider<Employee> provider,
+                                         Supplier<Employee> provider,
                                          ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }

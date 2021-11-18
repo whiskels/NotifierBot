@@ -1,6 +1,6 @@
 package com.whiskels.notifier.slack.reporter;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.slack.SlackPayload;
 import com.whiskels.notifier.slack.SlackPayloadCreatedEvent;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 public abstract class SlackReporter<T> {
     protected final String webHook;
     protected final ApplicationEventPublisher publisher;
-    protected final DataProvider<T> provider;
+    protected final Supplier<T> provider;
 
     public abstract void report();
 

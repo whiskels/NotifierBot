@@ -1,6 +1,6 @@
 package com.whiskels.notifier.common.util;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -52,12 +52,12 @@ public final class StreamUtil {
     }
 
     @SafeVarargs
-    public static <T extends Comparable<T>> List<T> filterAndSort(DataProvider<T> provider, Predicate<T>... predicates) {
+    public static <T extends Comparable<T>> List<T> filterAndSort(Supplier<T> provider, Predicate<T>... predicates) {
         return filterAndSort(provider.getData(), predicates);
     }
 
     @SafeVarargs
-    public static <T> List<T> filterAndSort(DataProvider<T> provider, Comparator<T> comparator, Predicate<T>... predicates) {
+    public static <T> List<T> filterAndSort(Supplier<T> provider, Comparator<T> comparator, Predicate<T>... predicates) {
         return filterAndSort(provider.getData(), comparator, predicates);
     }
 

@@ -1,6 +1,5 @@
-package com.whiskels.notifier.external.json.debt.util;
+package com.whiskels.notifier.external.json.debt;
 
-import com.whiskels.notifier.external.json.debt.Debt;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

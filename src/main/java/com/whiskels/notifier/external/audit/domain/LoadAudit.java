@@ -44,6 +44,6 @@ public class LoadAudit extends AbstractAuditedEntity {
 
     @Override
     public String toString() {
-        return super.toString() + format(" %s %s", loader, count);
+        return super.toString() + format(" `%s %s`", loader, count);
     }
 }

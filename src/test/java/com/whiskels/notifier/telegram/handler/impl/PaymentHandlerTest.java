@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
+import com.whiskels.notifier.external.Supplier;
 import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
-import com.whiskels.notifier.external.json.operation.service.PaymentDataProvider;
+import com.whiskels.notifier.external.json.operation.service.PaymentSupplier;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,12 @@ class PaymentHandlerTest extends AbstractHandlerTest {
     private PaymentHandler paymentHandler;
 
     @Autowired
-    private DataProvider<PaymentDto> paymentDataProvider;
+    private Supplier<PaymentDto> paymentSupplier;
 
     @BeforeEach
     public void setHandler() {
-        when(paymentDataProvider.getData()).thenReturn(List.of(fromEntity(operationRevenue())));
-        when(paymentDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
+        when(paymentSupplier.getData()).thenReturn(List.of(fromEntity(operationRevenue())));
+        when(paymentSupplier.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = paymentHandler;
     }
 
@@ -54,8 +54,8 @@ class PaymentHandlerTest extends AbstractHandlerTest {
     @TestConfiguration
     static class DebtHandlerTestConfig {
         @Bean
-        DataProvider<PaymentDto> provider() {
-            return mock(PaymentDataProvider.class);
+        Supplier<PaymentDto> provider() {
+            return mock(PaymentSupplier.class);
         }
     }
 }

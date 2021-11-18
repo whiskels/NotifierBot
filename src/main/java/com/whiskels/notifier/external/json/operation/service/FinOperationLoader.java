@@ -1,12 +1,10 @@
 package com.whiskels.notifier.external.json.operation.service;
 
-import com.whiskels.notifier.external.DataLoader;
-import com.whiskels.notifier.external.json.JsonReader;
+import com.whiskels.notifier.external.json.JsonLoader;
 import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.json.operation.repository.FinOperationRepository;
-import com.whiskels.notifier.telegram.TelegramLabeled;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,25 +27,29 @@ import static java.util.Collections.emptyList;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 @ConditionalOnProperty("external.customer.operation.url")
-public class FinOperationDataLoader implements DataLoader<FinancialOperation>, TelegramLabeled {
+public class FinOperationLoader extends JsonLoader<FinancialOperation> {
     private final FinOperationRepository finOperationRepository;
-    private final JsonReader jsonReader;
     private final Clock clock;
     private final FinOperationDataLoaderAuditor auditor;
 
     @Value("${external.customer.operation.workingDaysToLoad:2}")
     private int workingDaysToLoad;
 
-    @Value("${external.customer.operation.url}")
-    private String customerUrl;
+    @Autowired
+    public FinOperationLoader(@Value("${external.customer.operation.url}") String jsonUrl,
+                              FinOperationRepository finOperationRepository,
+                              FinOperationDataLoaderAuditor auditor,
+                              Clock clock) {
+        super(jsonUrl);
+        this.finOperationRepository = finOperationRepository;
+        this.clock = clock;
+        this.auditor = auditor;
+    }
 
-    @Value("${external.customer.operation.telegram.label:Financial operations}")
-    private String telegramLabel;
-
+    @Override
     @Scheduled(cron = "${external.customer.operation.cron:0 5 12 * * MON-FRI}", zone = "${common.timezone}")
-    public List<FinancialOperation> update() {
+    public List<FinancialOperation> load() {
         DayOfWeek today = now(clock).getDayOfWeek();
         if (today != SATURDAY && today != SUNDAY) {
             List<FinancialOperation> newOperations = getNewFinancialOperations();
@@ -58,14 +60,9 @@ public class FinOperationDataLoader implements DataLoader<FinancialOperation>, T
         }
     }
 
-    @Override
-    public LocalDate lastUpdate() {
-        return auditor.lastUpdate();
-    }
-
     private List<FinancialOperation> getNewFinancialOperations() {
         log.info("Preparing to check for new financial operations");
-        List<FinancialOperation> requestedOperations = jsonReader.read(getNewUrl(), FinancialOperation.class);
+        List<FinancialOperation> requestedOperations = loadFromJson(getNewUrl());
         log.info("Request returned {} financial operations with crm ids: {}",
                 requestedOperations.size(),
                 requestedOperations.stream()
@@ -93,12 +90,7 @@ public class FinOperationDataLoader implements DataLoader<FinancialOperation>, T
         LocalDate endDate = now(clock).minusDays(1);
         LocalDate startDate = subtractWorkingDays(endDate, workingDaysToLoad);
         log.info("Creating receivables url for range of: {} to {}", startDate, endDate);
-        return customerUrl.replace("startDate", startDate.format(YEAR_MONTH_DAY_FORMATTER))
+        return jsonUrl.replace("startDate", startDate.format(YEAR_MONTH_DAY_FORMATTER))
                 .replace("endDate", endDate.format(YEAR_MONTH_DAY_FORMATTER));
-    }
-
-    @Override
-    public String getLabel() {
-        return telegramLabel;
     }
 }

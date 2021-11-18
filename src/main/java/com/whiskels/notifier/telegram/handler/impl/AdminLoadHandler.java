@@ -1,6 +1,6 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataLoader;
+import com.whiskels.notifier.external.Loader;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.handler.AbstractAdminCallHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +11,9 @@ import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 
 @Slf4j
 @BotCommand(command = ADMIN_RELOAD_DATA, requiredRoles = {ADMIN})
-@ConditionalOnBean(DataLoader.class)
-public class AdminLoadHandler extends AbstractAdminCallHandler<DataLoader> {
+@ConditionalOnBean(Loader.class)
+public class AdminLoadHandler extends AbstractAdminCallHandler<Loader> {
     public AdminLoadHandler() {
-        super(DataLoader::update, null,"Reload data");
+        super(Loader::load, null,"Reload data");
     }
 }
