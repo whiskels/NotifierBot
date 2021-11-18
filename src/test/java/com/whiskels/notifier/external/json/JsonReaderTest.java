@@ -1,8 +1,8 @@
 package com.whiskels.notifier.external.json;
 
-import com.whiskels.notifier.external.debt.Debt;
-import com.whiskels.notifier.external.employee.Employee;
-import com.whiskels.notifier.external.operation.domain.FinancialOperation;
+import com.whiskels.notifier.external.json.debt.Debt;
+import com.whiskels.notifier.external.json.employee.Employee;
+import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.List;
 
 import static com.whiskels.notifier.AssertUtil.assertEqualsIgnoringCR;
-import static com.whiskels.notifier.external.DebtTestData.*;
-import static com.whiskels.notifier.external.EmployeeTestData.*;
-import static com.whiskels.notifier.external.FinOperationTestData.*;
+import static com.whiskels.notifier.external.json.DebtTestData.*;
+import static com.whiskels.notifier.external.json.EmployeeTestData.*;
+import static com.whiskels.notifier.external.json.FinOperationTestData.*;
 import static com.whiskels.notifier.telegram.UpdateTestData.HELP_MESSAGE_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

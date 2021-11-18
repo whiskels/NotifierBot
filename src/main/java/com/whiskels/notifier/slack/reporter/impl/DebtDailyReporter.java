@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

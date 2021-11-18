@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.orchestrator;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.telegram.SendMessagePublisherTest;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.EmployeeTestData.employeeNullBirthday;
-import static com.whiskels.notifier.external.EmployeeTestData.employeeWorking;
+import static com.whiskels.notifier.external.json.EmployeeTestData.employeeNullBirthday;
+import static com.whiskels.notifier.external.json.EmployeeTestData.employeeWorking;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
 import static com.whiskels.notifier.telegram.domain.Role.HR;

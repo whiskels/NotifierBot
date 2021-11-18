@@ -4,7 +4,6 @@ import com.whiskels.notifier.common.audit.repository.AuditRepository;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.handler.AbstractAdminCallHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.PageRequest;
 
 import static com.whiskels.notifier.telegram.Command.ADMIN_AUDIT;

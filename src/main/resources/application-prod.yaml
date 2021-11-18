@@ -8,3 +8,12 @@ external:
     debt.url: ${CUSTOMER_DEBT_JSON_URL}
     operation.url: ${CUSTOMER_RECEIVABLE_JSON_URL}
   employee.url: ${EMPLOYEE_URL}
+  google:
+    credentials:
+      json: ${GOOGLE_CREDENTIALS_JSON}
+      app.name: ${GOOGLE_APP_NAME}
+      email: ${GOOGLE_APP_EMAIL}
+    customer.birthday:
+      spreadsheet: ${CUSTOMER_BIRTHDAY_SPREADSHEET}
+      cell:
+        range: ${CUSTOMER_BIRTHDAY_CELL_RANGE}

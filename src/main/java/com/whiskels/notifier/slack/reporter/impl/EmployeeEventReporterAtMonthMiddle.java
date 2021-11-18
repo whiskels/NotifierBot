@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.external.employee.EmployeeUtil.*;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
 
 @Component
 @Profile("slack-common")

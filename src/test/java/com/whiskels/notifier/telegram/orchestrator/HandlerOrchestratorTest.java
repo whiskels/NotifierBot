@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 })
 @Import({HandlerOrchestratorTest.UserServiceBeanConfig.class, MockedClockConfiguration.class})
 class HandlerOrchestratorTest extends SendMessagePublisherTest {
-    private static final String EXPECTED_HELP_MESSAGE = format("Help message%n");
+    private static final String EXPECTED_HELP_MESSAGE = format("Hello. I'm *TelegramNotifierBot*%nHere are your available commands%n");
 
     @Autowired
     HandlerOrchestrator orchestrator;
