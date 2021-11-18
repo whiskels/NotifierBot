@@ -1,7 +1,6 @@
 package com.whiskels.notifier.external.audit.domain;
 
 import com.whiskels.notifier.common.audit.domain.AbstractAuditedEntity;
-import com.whiskels.notifier.common.datetime.DateTimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -45,6 +44,6 @@ public class LoadAudit extends AbstractAuditedEntity {
 
     @Override
     public String toString() {
-        return format("%s: %s %s", DateTimeUtil.format(loadDateTime), loader, count);
+        return super.toString() + format(" `%s %s`", loader, count);
     }
 }

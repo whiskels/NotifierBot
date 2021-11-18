@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,18 +16,19 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.external.employee.EmployeeUtil.*;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.isSameMonth;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.notNull;
 
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.employee.webhook")
-@ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = Employee.class, parameterizedContainer = Supplier.class)
 public class EmployeeEventReporterAtMonthStart extends AbstractEmployeeEventReporter {
     @Value("${slack.employee.header.monthStart:Upcoming employee events this month}")
     private String header;
 
     public EmployeeEventReporterAtMonthStart(@Value("${slack.employee.webhook}") String webHook,
-                                             DataProvider<Employee> provider,
+                                             Supplier<Employee> provider,
                                              ApplicationEventPublisher publisher) {
          super(webHook, provider, publisher);
     }

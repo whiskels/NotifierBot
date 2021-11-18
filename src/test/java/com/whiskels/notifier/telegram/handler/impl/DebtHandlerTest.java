@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.DebtTestData.debtOne;
-import static com.whiskels.notifier.external.DebtTestData.debtTwo;
+import static com.whiskels.notifier.external.json.DebtTestData.debtOne;
+import static com.whiskels.notifier.external.json.DebtTestData.debtTwo;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
@@ -51,12 +51,12 @@ class DebtHandlerTest extends AbstractHandlerTest {
     private DebtHandler debtHandler;
 
     @Autowired
-    private DataProvider<Debt> debtDataProvider;
+    private Supplier<Debt> debtSupplier;
 
     @BeforeEach
     public void setHandler() {
-        when(debtDataProvider.getData()).thenReturn(List.of(debtOne(), debtTwo()));
-        when(debtDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
+        when(debtSupplier.getData()).thenReturn(List.of(debtOne(), debtTwo()));
+        when(debtSupplier.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = debtHandler;
     }
 
@@ -78,8 +78,8 @@ class DebtHandlerTest extends AbstractHandlerTest {
     @TestConfiguration
     static class DebtHandlerTestConfig {
         @Bean
-        DataProvider<Debt> provider() {
-            return mock(DataProvider.class);
+        Supplier<Debt> provider() {
+            return mock(Supplier.class);
         }
     }
 }

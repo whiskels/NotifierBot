@@ -1,7 +1,7 @@
 package com.whiskels.notifier.slack.reporter;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,11 +10,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.birthdayComparator;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.util.StreamUtil.collectToBulletListString;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.employee.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
-import static com.whiskels.notifier.external.employee.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
+import static com.whiskels.notifier.external.json.employee.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
 import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.builder;
 
 @Slf4j
@@ -29,7 +29,7 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
     protected String noData;
 
     public AbstractEmployeeEventReporter(@Value("${slack.employee.webhook}") String webHook,
-                                         DataProvider<Employee> provider,
+                                         Supplier<Employee> provider,
                                          ApplicationEventPublisher publisher) {
         super(webHook, publisher, provider);
     }
@@ -52,7 +52,7 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
                 .notifyChannel();
 
         List<Employee> birthdays = filterAndSort(provider.getData(),
-                EMPLOYEE_BIRTHDAY_COMPARATOR,
+                birthdayComparator(),
                 birthdayPredicates());
         List<Employee> anniversaries = filterAndSort(provider.getData(),
                 EMPLOYEE_ANNIVERSARY_COMPARATOR,

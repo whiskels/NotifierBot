@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.telegram.handler.AbstractHandlerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.EmployeeTestData.employeeNullBirthday;
-import static com.whiskels.notifier.external.EmployeeTestData.employeeWorking;
+import static com.whiskels.notifier.external.json.EmployeeTestData.employeeNullBirthday;
+import static com.whiskels.notifier.external.json.EmployeeTestData.employeeWorking;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
@@ -31,7 +31,7 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
     private EmployeeEventHandler employeeEventHandler;
 
     @Autowired
-    private DataProvider<Employee> employeeDataProvider;
+    private Supplier<Employee> employeeSupplier;
 
     @BeforeEach
     public void setHandler() {
@@ -40,8 +40,8 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testEmployeeEventHandler_authorized() {
-        when(employeeDataProvider.getData()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
-        when(employeeDataProvider.lastUpdate()).thenReturn(EXPECTED_DATE);
+        when(employeeSupplier.getData()).thenReturn(List.of(employeeWorking(), employeeNullBirthday()));
+        when(employeeSupplier.lastUpdate()).thenReturn(EXPECTED_DATE);
 
         testInteraction(USER_1, EXPECTED_AUTH);
     }
@@ -54,8 +54,8 @@ class EmployeeEventHandlerTest extends AbstractHandlerTest {
     @TestConfiguration
     static class EmployeeEventHandlerTestConfig {
         @Bean
-        DataProvider<Employee> provider() {
-            return mock(DataProvider.class);
+        Supplier<Employee> provider() {
+            return mock(Supplier.class);
         }
     }
 }

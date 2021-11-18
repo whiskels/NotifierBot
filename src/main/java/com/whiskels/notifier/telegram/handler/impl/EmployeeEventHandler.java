@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.employee.Employee;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.employee.Employee;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
@@ -17,10 +17,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_COMMA_SEPARATED;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.employee.EmployeeUtil.*;
+import static com.whiskels.notifier.external.json.employee.EmployeeUtil.EMPLOYEE_ANNIVERSARY_COMPARATOR;
+import static com.whiskels.notifier.external.json.employee.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
 import static com.whiskels.notifier.telegram.Command.GET_EVENT;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
@@ -33,7 +34,7 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @Slf4j
 @BotCommand(command = GET_EVENT, requiredRoles = {EMPLOYEE, HR, MANAGER, HEAD, ADMIN})
 @Schedulable(roles = HR)
-@ConditionalOnBean(value = Employee.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = Employee.class, parameterizedContainer = Supplier.class)
 @RequiredArgsConstructor
 public class EmployeeEventHandler extends AbstractBaseHandler {
     @Value("${telegram.report.employee.birthday.header:Employee events on}")
@@ -45,7 +46,7 @@ public class EmployeeEventHandler extends AbstractBaseHandler {
     @Value("${telegram.report.employee.anniversary:*Work anniversaries:*}")
     private String anniversary;
 
-    private final DataProvider<Employee> provider;
+    private final Supplier<Employee> provider;
 
     @Override
     protected void handle(User user, String message) {

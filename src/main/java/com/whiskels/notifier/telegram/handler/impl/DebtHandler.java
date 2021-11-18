@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram.handler.impl;
 
-import com.whiskels.notifier.external.DataProvider;
-import com.whiskels.notifier.external.debt.Debt;
+import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.json.debt.Debt;
 import com.whiskels.notifier.telegram.annotation.BotCommand;
 import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
@@ -31,13 +31,13 @@ import static com.whiskels.notifier.telegram.domain.Role.*;
 @Slf4j
 @BotCommand(command = GET_DEBT, requiredRoles = {MANAGER, HEAD, ADMIN})
 @Schedulable(roles = {MANAGER, HEAD, ADMIN})
-@ConditionalOnBean(value = Debt.class, parameterizedContainer = DataProvider.class)
+@ConditionalOnBean(value = Debt.class, parameterizedContainer = Supplier.class)
 @RequiredArgsConstructor
 public class DebtHandler extends AbstractBaseHandler {
     @Value("${telegram.report.customer.debt.header:Overdue debts report on}")
     private String header;
 
-    private final DataProvider<Debt> provider;
+    private final Supplier<Debt> provider;
 
     @Override
     protected void handle(User user, String message) {
