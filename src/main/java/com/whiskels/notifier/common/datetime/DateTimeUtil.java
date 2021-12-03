@@ -71,10 +71,14 @@ public final class DateTimeUtil {
         if (text == null || text.isEmpty()) {
             return null;
         }
-        return LocalDate.parse(text, new DateTimeFormatterBuilder()
-                .appendPattern("dd.MM")
-                .parseDefaulting(ChronoField.YEAR, 2020)
-                .toFormatter(Locale.ENGLISH));
+        try {
+            return LocalDate.parse(text, new DateTimeFormatterBuilder()
+                    .appendPattern("dd.MM")
+                    .parseDefaulting(ChronoField.YEAR, 2020)
+                    .toFormatter(Locale.ENGLISH));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static <T> Predicate<T> notNull(Function<T, LocalDate> func) {
