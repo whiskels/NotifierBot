@@ -20,7 +20,7 @@
         <spring-aspects.version>5.3.10</spring-aspects.version>
 
         <!-- TelegramBots Spring Boot Starter -->
-        <telegrambots-spring.version>0.24</telegrambots-spring.version>
+        <telegrambots-spring.version>0.25</telegrambots-spring.version>
 
         <!-- Slack API -->
         <slack-api.version>1.12.1</slack-api.version>
