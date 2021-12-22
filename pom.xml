@@ -23,7 +23,7 @@
         <telegrambots-spring.version>0.24</telegrambots-spring.version>
 
         <!-- Slack API -->
-        <slack-api.version>1.12.1</slack-api.version>
+        <slack-api.version>1.15.0</slack-api.version>
 
         <!-- SnakeYaml -->
         <snakeyaml.version>1.29</snakeyaml.version>
