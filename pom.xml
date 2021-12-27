@@ -47,7 +47,7 @@
         <postgresql.version>42.2.24.jre7</postgresql.version>
         <flyway.version>6.5.7</flyway.version>
 
-        <jackson-json.version>2.13.0</jackson-json.version>
+        <jackson-json.version>2.13.1</jackson-json.version>
     </properties>
 
     <dependencies>
