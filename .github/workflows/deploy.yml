@@ -1,0 +1,39 @@
+name: Deploy to Heroku
+
+on:
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ master ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 14
+        uses: actions/setup-java@v2
+        with:
+          java-version: '14'
+          distribution: 'adopt'
+          cache: maven
+      - name: Deploy
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: mvn -B clean heroku:deploy -DskipTests
+  scale:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 30 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '30s'
+      - name: Scale worker
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku ps:scale worker=1 -a $HEROKU_APP_NAME
