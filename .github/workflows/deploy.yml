@@ -24,7 +24,6 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: mvn -B clean heroku:deploy -DskipTests
   scale:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: deploy
     runs-on: ubuntu-latest
     steps:
