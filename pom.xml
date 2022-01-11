@@ -171,6 +171,7 @@
                 <version>0.8.4</version>
                 <executions>
                     <execution>
+                        <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
@@ -190,7 +191,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
-                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                    <forkCount>0</forkCount>
+                    <argLine>@{argLine} -Dfile.encoding=UTF-8</argLine>
                     <reportFormat>plain</reportFormat>
                     <includes>
                         <include>**/*Test*.java</include>
