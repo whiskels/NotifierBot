@@ -52,6 +52,6 @@ public class DebtLoader extends JsonLoader<Debt> {
                 .filter(rate -> rate.getCurrency().equals(currency))
                 .map(MoexRate::getRate)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Missing currency rate for " + currency));
+                .orElse(currency.getDefaultValue());
     }
 }

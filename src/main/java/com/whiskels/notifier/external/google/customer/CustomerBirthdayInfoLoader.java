@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
@@ -14,6 +15,9 @@ import static java.time.LocalDate.now;
 @Component
 @ConditionalOnProperty("external.google.customer.birthday.spreadsheet")
 public class CustomerBirthdayInfoLoader extends GoogleSheetsLoader<CustomerBirthdayInfo> {
+    private final Predicate<CustomerBirthdayInfo> customerBirthdayInfoPredicate =
+            customerBirthdayInfo -> customerBirthdayInfo != null && isSameMonth(customerBirthdayInfo.getBirthday(), now(clock));
+
     @Value("${external.google.customer.column.company:1}")
     private int companyColumnIndex;
     @Value("${external.google.customer.column.name:2}")
@@ -30,19 +34,21 @@ public class CustomerBirthdayInfoLoader extends GoogleSheetsLoader<CustomerBirth
     @Override
     protected List<CustomerBirthdayInfo> mapToData(List<List<Object>> values) {
         return values.stream()
-                .map(value -> {
-                    if (value.size() < maxColumnIndex()) {
-                        return null;
-                    }
-                    return CustomerBirthdayInfo.builder()
-                            .companyName((String) value.get(companyColumnIndex))
-                            .name((String) value.get(nameColumnIndex))
-                            .birthday(parseDate((String) value.get(birthdayColumnIndex)))
-                            .build();
-                })
-                .filter(customerBirthdayInfo -> customerBirthdayInfo != null && isSameMonth(customerBirthdayInfo.getBirthday(), now(clock)))
+                .map(this::mapToCustomerBirthdayInfo)
+                .filter(customerBirthdayInfoPredicate)
                 .sorted(birthdayComparator())
                 .collect(Collectors.toList());
+    }
+
+    private CustomerBirthdayInfo mapToCustomerBirthdayInfo(List<Object> data) {
+        if (data.size() < maxColumnIndex()) {
+            return null;
+        }
+        return CustomerBirthdayInfo.builder()
+                .companyName((String) data.get(companyColumnIndex))
+                .name((String) data.get(nameColumnIndex))
+                .birthday(parseDate((String) data.get(birthdayColumnIndex)))
+                .build();
     }
 
     private int maxColumnIndex() {

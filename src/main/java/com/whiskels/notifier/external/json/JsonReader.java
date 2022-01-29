@@ -24,8 +24,7 @@ public class JsonReader {
             return readFromString(getMapper()
                             .readTree(new URL(url))
                             .get(node)
-                            .toString(),
-                    clazz);
+                            .toString(), clazz);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format(ERROR, url, e));
         }

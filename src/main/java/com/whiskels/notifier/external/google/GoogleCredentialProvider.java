@@ -30,22 +30,21 @@ class GoogleCredentialProvider {
     public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
 
+    @Getter
+    private final String appName;
+    @Getter
+    private final NetHttpTransport httpTransport;
+    private final String credentialsJson;
+    private final String userEmail;
+
     GoogleCredentialProvider(@Value("${external.google.credentials.app.name}") String appName,
-                                    @Value("${external.google.credentials.json}") String credentialsJson,
-                                    @Value("${external.google.credentials.email}") String userEmail) throws GeneralSecurityException, IOException {
+                             @Value("${external.google.credentials.json}") String credentialsJson,
+                             @Value("${external.google.credentials.email}") String userEmail) throws GeneralSecurityException, IOException {
         this.appName = appName;
         this.credentialsJson = credentialsJson;
         this.userEmail = userEmail;
         this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     }
-
-    @Getter
-    private final String appName;
-    @Getter
-    private final NetHttpTransport httpTransport;
-
-    private final String credentialsJson;
-    private final String userEmail;
 
     @SneakyThrows
     public Credential getCredentials() {

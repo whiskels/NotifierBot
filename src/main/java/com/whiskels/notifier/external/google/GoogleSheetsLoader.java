@@ -5,13 +5,13 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.whiskels.notifier.external.Loader;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
+import java.util.Collections;
 import java.util.List;
 
 import static com.whiskels.notifier.external.google.GoogleCredentialProvider.JSON_FACTORY;
@@ -36,7 +36,6 @@ public abstract class GoogleSheetsLoader<T> implements Loader<T> {
         return mapToData(readSheet());
     }
 
-    @SneakyThrows
     private List<List<Object>> readSheet() {
         Sheets service = new Sheets.Builder(
                 credentialProvider.getHttpTransport(),
@@ -45,10 +44,15 @@ public abstract class GoogleSheetsLoader<T> implements Loader<T> {
         )
                 .setApplicationName(credentialProvider.getAppName())
                 .build();
-        ValueRange response = service.spreadsheets().values()
-                .get(spreadsheetId, range)
-                .execute();
-        List<List<Object>> values = response.getValues();
+        List<List<Object>> values = Collections.emptyList();
+        try {
+            ValueRange response = service.spreadsheets().values()
+                    .get(spreadsheetId, range)
+                    .execute();
+            values = response.getValues();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         if (values == null || values.isEmpty()) {
             log.error("No data found. while retrieving data from spreadsheet");
         }
