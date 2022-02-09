@@ -44,7 +44,7 @@
         <mockito.version>3.10.0</mockito.version>
 
         <!--DB-->
-        <postgresql.version>42.2.24.jre7</postgresql.version>
+        <postgresql.version>42.3.1</postgresql.version>
         <flyway.version>6.5.7</flyway.version>
 
         <jackson-json.version>2.13.0</jackson-json.version>
