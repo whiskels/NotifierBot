@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-boot.version>2.4.5</spring-boot.version>
+        <spring-boot.version>2.5.11</spring-boot.version>
         <spring-retry.version>1.3.1</spring-retry.version>
         <spring-aspects.version>5.3.10</spring-aspects.version>
 
@@ -47,7 +47,7 @@
         <postgresql.version>42.2.24.jre7</postgresql.version>
         <flyway.version>6.5.7</flyway.version>
 
-        <jackson-json.version>2.13.0</jackson-json.version>
+        <jackson-json.version>2.13.1</jackson-json.version>
     </properties>
 
     <dependencies>
