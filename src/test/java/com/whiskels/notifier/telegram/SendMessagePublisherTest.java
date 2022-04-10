@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.PublisherTest;
-import com.whiskels.notifier.telegram.events.SendMessageCreationEvent;
+import com.whiskels.notifier.telegram.event.SendMessageCreationEvent;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class SendMessagePublisherTest extends PublisherTest<SendMessageCreationEvent> {
-    private static final String UNAUTH_MSG = format("Your token is *2*%nPlease contact your supervisor to gain access%n");
+    private static final String UNAUTH_MSG = format("Your token is *2*%nPlease contact your supervisor to gain access");
     protected static final String ADMIN_ID = "87971601";
 
     public final SendMessage verifyPublishedMessage(int expectedUserId, String expectedMessage) {
@@ -40,6 +40,6 @@ public class SendMessagePublisherTest extends PublisherTest<SendMessageCreationE
     }
 
     private static String adminUnauthMessage(String message) {
-        return  format("*Unauthorized access:* 2%n*Message:* %s%n",message.isEmpty() ? "Empty" : message);
+        return format("*Unauthorized access:*%nUser{chatId=2, name='Test user 2', roles=[UNAUTHORIZED]}, %s", message);
     }
 }

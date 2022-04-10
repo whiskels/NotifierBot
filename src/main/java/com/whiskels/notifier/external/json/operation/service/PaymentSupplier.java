@@ -2,6 +2,7 @@ package com.whiskels.notifier.external.json.operation.service;
 
 import com.whiskels.notifier.external.Loader;
 import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.audit.repository.LoadAuditRepository;
 import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
 import com.whiskels.notifier.external.json.operation.repository.FinOperationRepository;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.whiskels.notifier.common.util.StreamUtil.map;
+import static com.whiskels.notifier.external.audit.domain.Loader.FINANCIAL_OPERATION;
 import static com.whiskels.notifier.external.json.operation.util.FinOperationUtil.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -23,6 +25,7 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @ConditionalOnBean(value = FinancialOperation.class, parameterizedContainer = Loader.class)
 public class PaymentSupplier implements Supplier<PaymentDto> {
     private final FinOperationRepository repository;
+    private final LoadAuditRepository auditRepository;
     private final Loader<FinancialOperation> loader;
 
     public List<PaymentDto> getData() {
@@ -30,7 +33,7 @@ public class PaymentSupplier implements Supplier<PaymentDto> {
     }
 
     public LocalDate lastUpdate() {
-        return repository.getLastUpdateDate();
+        return auditRepository.getLastUpdateDate(FINANCIAL_OPERATION);
     }
 
     @Override

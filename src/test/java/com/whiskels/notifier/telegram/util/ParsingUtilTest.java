@@ -1,5 +1,6 @@
 package com.whiskels.notifier.telegram.util;
 
+import com.whiskels.notifier.telegram.Command;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ParsingUtilTest {
-    private static final String TEST_COMMAND = "/GET";
+    private static final String TEST_COMMAND = "/GET_DEBT";
     private static final String TEST_ARGUMENTS = "some arguments";
     private static final String TEST_STRING = TEST_COMMAND + " " + TEST_ARGUMENTS;
 
@@ -68,7 +69,7 @@ class ParsingUtilTest {
 
     @Test
     void getCommand() {
-        assertEquals(TEST_COMMAND, extractCommand(TEST_STRING));
+        assertEquals(Command.GET_DEBT, extractCommand(TEST_STRING));
     }
 
     @Test

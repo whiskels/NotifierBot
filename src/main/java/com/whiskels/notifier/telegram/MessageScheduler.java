@@ -1,9 +1,8 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.telegram.annotation.Schedulable;
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.orchestrator.SchedulableHandlerOrchestrator;
+import com.whiskels.notifier.telegram.orchestrator.ScheduledHandlerOrchestrator;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,18 +15,15 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Allows bot to send scheduled messages
- */
 @Component
 @Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
-@ConditionalOnBean(annotation = Schedulable.class)
+@ConditionalOnBean(ScheduledCommandHandler.class)
 public class MessageScheduler {
     private final ScheduleService scheduleService;
     private final Clock clock;
-    private final SchedulableHandlerOrchestrator orchestrator;
+    private final ScheduledHandlerOrchestrator orchestrator;
 
     @Scheduled(cron = "${telegram.bot.schedule.cron:0 * * * * MON-FRI}", zone = "${common.timezone}")
     public void processScheduledTasks() {

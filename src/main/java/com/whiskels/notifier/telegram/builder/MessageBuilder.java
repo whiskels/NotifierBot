@@ -128,7 +128,7 @@ public final class MessageBuilder {
         var sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
-        sendMessage.setText(sb.toString().replace("_", " "));
+        sendMessage.setText(getMessage());
 
         addRowToKeyboard();
 
@@ -139,6 +139,10 @@ public final class MessageBuilder {
         }
 
         return sendMessage;
+    }
+
+    private String getMessage() {
+        return sb.toString().replace("_", " ").trim();
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.MockedClockConfiguration;
-import com.whiskels.notifier.telegram.orchestrator.SchedulableHandlerOrchestrator;
+import com.whiskels.notifier.telegram.orchestrator.ScheduledHandlerOrchestrator;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class MessageSchedulerTest {
     private ScheduleService service;
 
     @Autowired
-    private SchedulableHandlerOrchestrator orchestrator;
+    private ScheduledHandlerOrchestrator orchestrator;
 
     @BeforeEach
     void resetMocks() {
@@ -75,8 +75,8 @@ class MessageSchedulerTest {
         }
 
         @Bean
-        SchedulableHandlerOrchestrator orchestrator() {
-            return mock(SchedulableHandlerOrchestrator.class);
+        ScheduledHandlerOrchestrator orchestrator() {
+            return mock(ScheduledHandlerOrchestrator.class);
         }
 
         @Bean

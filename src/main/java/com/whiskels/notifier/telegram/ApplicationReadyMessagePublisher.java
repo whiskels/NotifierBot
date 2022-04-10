@@ -2,10 +2,10 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.telegram.builder.MessageBuilder;
-import com.whiskels.notifier.telegram.events.SendMessageCreationEvent;
-import com.whiskels.notifier.telegram.handler.AbstractBaseHandler;
+import com.whiskels.notifier.telegram.event.SendMessageCreationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
@@ -32,7 +32,7 @@ public class ApplicationReadyMessagePublisher {
         publisher.publishEvent(new SendMessageCreationEvent(MessageBuilder.builder(botAdmin)
                 .line("*Successful boot report*")
                 .line()
-                .line("*Bot handlers:* %s", getBeanLabels(AbstractBaseHandler.class))
+                .line("*Bot handlers:* %s", getBeanLabels(CommandHandler.class))
                 .line()
                 .line("*Slack reporters:* %s", getBeanLabels(SlackReporter.class))
                 .build()));
@@ -41,7 +41,7 @@ public class ApplicationReadyMessagePublisher {
 
     private <T> String getBeanLabels(Class<T> clazz) {
         return applicationContext.getBeansOfType(clazz).values().stream()
-                .map(bean -> bean.getClass().getSimpleName())
+                .map(bean -> AopProxyUtils.ultimateTargetClass(bean).getSimpleName())
                 .sorted(String::compareTo)
                 .collect(COLLECTOR_COMMA_SEPARATED);
     }

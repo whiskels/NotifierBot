@@ -23,6 +23,7 @@ public interface AuditRepository<T extends AbstractAuditedEntity> extends Reposi
     @Query("select max(a.loadDate) from #{#entityName} a")
     LocalDate getLastUpdateDate();
 
+    @Transactional
     @Modifying
     @Query("delete from #{#entityName} a where a.loadDate < :date")
     int deleteByDateBefore(@Param("date") LocalDate date);

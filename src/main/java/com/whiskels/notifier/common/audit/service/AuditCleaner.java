@@ -31,7 +31,7 @@ public class AuditCleaner {
         auditRepositories.forEach(repository -> {
             int deletedAuditEntriesCount = repository.deleteByDateBefore(deleteBeforeDate);
             log.info("{} Deleted {} old entries with load date before {}",
-                    repository.getClass().getSimpleName(), deletedAuditEntriesCount, deleteBeforeDate);
+                    repository.getLabel(), deletedAuditEntriesCount, deleteBeforeDate);
         });
     }
 }
