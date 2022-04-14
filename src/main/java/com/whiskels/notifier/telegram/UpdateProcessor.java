@@ -44,19 +44,19 @@ public class UpdateProcessor {
     @AllArgsConstructor
     @Getter
     static class MessageContext {
-        private final int userId;
+        private final Long userId;
         private final String message;
 
         static MessageContext fromMessage(Update update) {
             var msg = update.getMessage();
-            int userId = msg.getFrom().getId();
+            Long userId = msg.getFrom().getId();
             String text = msg.getText();
             return new MessageContext(userId, text);
         }
 
         static MessageContext fromCallBackQuery(Update update) {
             var msg = update.getCallbackQuery();
-            int userId = msg.getFrom().getId();
+            Long userId = msg.getFrom().getId();
             String text = msg.getData();
             return new MessageContext(userId, text);
         }

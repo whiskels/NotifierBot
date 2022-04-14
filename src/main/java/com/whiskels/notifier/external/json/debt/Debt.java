@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
+
+import javax.validation.constraints.NotNull;
 
 import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
 import static com.whiskels.notifier.external.json.debt.DebtUtil.TOTAL_DEBT_COMPARATOR;

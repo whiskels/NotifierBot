@@ -31,7 +31,7 @@ class ScheduleClearHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testScheduleClearHandler_Authorized() {
-        when(scheduleService.clear(USER_1.getChatId())).thenReturn(100);
+        when(scheduleService.clear(USER_1.getId())).thenReturn(100);
 
         testInteraction(USER_1, EXPECTED_AUTH);
     }

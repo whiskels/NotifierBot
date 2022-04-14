@@ -14,7 +14,7 @@ import java.util.List;
 @Profile("telegram-common")
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.user.chatId=:chatId ORDER BY s.hour ASC")
-    List<Schedule> getAll(@Param("chatId") int chatId);
+    List<Schedule> getAll(@Param("chatId") Long chatId);
 
     @Transactional
     @Modifying

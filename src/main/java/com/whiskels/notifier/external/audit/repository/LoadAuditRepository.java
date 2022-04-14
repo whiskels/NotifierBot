@@ -16,9 +16,5 @@ import java.time.LocalDate;
 @Transactional(readOnly = true)
 public interface LoadAuditRepository extends AuditRepository<LoadAudit> {
     @Query("select max(la.loadDate) from LoadAudit la where la.loader=:loader")
-    LocalDate getLastUpdateDate(@Param("loader") String loader);
-
-    default LocalDate getLastUpdateDate(Loader loader) {
-        return getLastUpdateDate(loader.name());
-    }
+    LocalDate getLastUpdateDate(@Param("loader") Loader loader);
 }

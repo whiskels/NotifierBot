@@ -26,7 +26,7 @@ public class HandlerOrchestrator {
         this.handlers = handlers.stream().collect(toMap(CommandHandler::getCommand, Function.identity()));
     }
 
-    public void operate(int userId, String message) {
+    public void operate(Long userId, String message) {
         handlers.getOrDefault(extractCommand(message), defaultHandler)
                 .handle(userService.getOrCreate(userId), message);
     }

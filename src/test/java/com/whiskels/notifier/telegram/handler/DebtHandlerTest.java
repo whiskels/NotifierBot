@@ -66,7 +66,7 @@ class DebtHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testDebtHandler_authorizedManager() {
-        testInteraction(new User(4, 4, "James Bond", Set.of(MANAGER), emptyList()), format("%s", EXPECTED_MANAGER));
+        testInteraction(new User(4, 4L, "James Bond", Set.of(MANAGER), emptyList()), format("%s", EXPECTED_MANAGER));
     }
 
     @Test

@@ -44,7 +44,7 @@ public class PaymentSupplier implements Supplier<PaymentDto> {
     private List<FinancialOperation> getDataFromDb() {
         List<FinancialOperation> selectedOperations = repository.findAll(where(loadDate(lastUpdate())
                 .and(category(DB_CATEGORY_PAYMENT))), SORT_AMOUNT_RUB_DESC);
-        log.info("Selected {} financial operations from db", selectedOperations);
+        log.info("Selected {} financial operations from db", selectedOperations.size());
         return selectedOperations;
     }
 }

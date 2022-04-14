@@ -15,12 +15,12 @@ import java.util.Optional;
 public class UserService {
     protected final UserRepository userRepository;
 
-    public User getOrCreate(int chatId) {
+    public User getOrCreate(Long chatId) {
         return get(chatId)
                 .orElseGet(() -> userRepository.save(new User(chatId)));
     }
 
-    public Optional<User> get(int chatId) {
+    public Optional<User> get(Long chatId) {
         return userRepository.getByChatId(chatId);
     }
 

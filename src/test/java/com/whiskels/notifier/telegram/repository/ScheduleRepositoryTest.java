@@ -21,9 +21,9 @@ class ScheduleRepositoryTest extends AbstractRepositoryTest {
     @Test
     @Sql(scripts = {"classpath:db/clear.sql", "classpath:db/add_schedule.sql"}, config = @SqlConfig(encoding = "UTF-8"))
     void testGetByChatId() {
-        List<Schedule> userOneSchedule = scheduleRepository.getAll(1);
-        List<Schedule> userTwoSchedule = scheduleRepository.getAll(2);
-        List<Schedule> userThreeSchedule = scheduleRepository.getAll(3);
+        List<Schedule> userOneSchedule = scheduleRepository.getAll(1L);
+        List<Schedule> userTwoSchedule = scheduleRepository.getAll(2L);
+        List<Schedule> userThreeSchedule = scheduleRepository.getAll(3L);
 
         assertEquals(2, userOneSchedule.size());
         assertTrue(userOneSchedule.containsAll(List.of(SCHEDULE_USER_1_1, SCHEDULE_USER_1_2)));
@@ -38,10 +38,10 @@ class ScheduleRepositoryTest extends AbstractRepositoryTest {
     @Sql(scripts = {"classpath:db/clear.sql", "classpath:db/add_schedule.sql"}, config = @SqlConfig(encoding = "UTF-8"))
     void testDelete() {
         assertEquals(2, scheduleRepository.delete(1));
-        assertTrue(scheduleRepository.getAll(1).isEmpty());
+        assertTrue(scheduleRepository.getAll(1L).isEmpty());
 
         assertEquals(1, scheduleRepository.delete(2));
-        assertTrue(scheduleRepository.getAll(2).isEmpty());
+        assertTrue(scheduleRepository.getAll(2L).isEmpty());
 
         assertEquals(0, scheduleRepository.delete(3));
     }
@@ -52,7 +52,7 @@ class ScheduleRepositoryTest extends AbstractRepositoryTest {
         Schedule expected  = new Schedule(11, 11, USER_1);
         scheduleRepository.save(expected);
 
-        List<Schedule> actual = scheduleRepository.getAll(1);
+        List<Schedule> actual = scheduleRepository.getAll(1L);
         assertEquals(1, actual.size());
 
         expected.setId(actual.get(0).getId());

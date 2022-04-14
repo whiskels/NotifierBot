@@ -44,7 +44,7 @@ class ScheduleAddHandlerTest extends AbstractHandlerTest {
     void testScheduleAddHandler_Authorized() {
         testInteraction(USER_1, EXPECTED_AUTH, EXPECTED_AUTH_KEYBOARD);
 
-        verify(scheduleService).getSchedule(1);
+        verify(scheduleService).getSchedule(1L);
         verifyNoMoreInteractions(scheduleService);
     }
 

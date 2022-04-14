@@ -16,7 +16,7 @@ public class SendMessagePublisherTest extends PublisherTest<SendMessageCreationE
     private static final String UNAUTH_MSG = format("Your token is *2*%nPlease contact your supervisor to gain access");
     protected static final String ADMIN_ID = "87971601";
 
-    public final SendMessage verifyPublishedMessage(int expectedUserId, String expectedMessage) {
+    public final SendMessage verifyPublishedMessage(Long expectedUserId, String expectedMessage) {
         SendMessage actual = getPublishedObject().get();
         assertEquals(String.valueOf(expectedUserId), actual.getChatId());
         assertEquals(expectedMessage, actual.getText());
@@ -27,7 +27,7 @@ public class SendMessagePublisherTest extends PublisherTest<SendMessageCreationE
         return getPublishedObject().get();
     }
 
-    public final void verifyUnauthorizedInteraction(int userId, String message) {
+    public final void verifyUnauthorizedInteraction(Long userId, String message) {
         verify(publisher, times(2)).publishEvent(captor.capture());
         List<SendMessage> actualMessages = captor.getAllValues().stream()
                 .map(SendMessageCreationEvent::get)
