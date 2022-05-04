@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.common.CreationEvent;
-import com.whiskels.notifier.telegram.events.SendMessageCreationEvent;
-import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.event.SendMessageCreationEvent;
+import com.whiskels.notifier.telegram.event.UpdateCreationEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -9,10 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Comparator;
 
@@ -28,15 +28,15 @@ import static java.lang.String.format;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FinancialOperation extends AbstractAuditedEntity implements Comparable<FinancialOperation> {
     @JsonProperty("id")
-    int crmId;
+    Integer crmId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate date;
     String currency;
-    double amount;
+    Double amount;
     @JsonProperty("amount_usd")
-    double amountUsd;
+    Double amountUsd;
     @JsonProperty("amount_rub")
-    double amountRub;
+    Double amountRub;
     String bank;
     @JsonProperty("bank_account")
     String bankAccount;

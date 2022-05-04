@@ -19,18 +19,18 @@ class DemoUserServiceTest {
 
     @Test
     void getOrCreate() {
-        when(repository.getByChatId(1)).thenReturn(Optional.of(USER_1));
+        when(repository.getByChatId(1L)).thenReturn(Optional.of(USER_1));
 
-        when(repository.getByChatId(2)).thenReturn(Optional.empty());
+        when(repository.getByChatId(2L)).thenReturn(Optional.empty());
 
-        User expected = new User(2);
+        User expected = new User(2L);
         expected.setRoles(Set.of(ADMIN));
         when(repository.save(any())).thenReturn(expected);
 
-        User actualPresent = userService.getOrCreate(1);
-        verify(repository).getByChatId(1);
-        User actualMissing = userService.getOrCreate(2);
-        verify(repository).getByChatId(2);
+        User actualPresent = userService.getOrCreate(1L);
+        verify(repository).getByChatId(1L);
+        User actualMissing = userService.getOrCreate(2L);
+        verify(repository).getByChatId(2L);
         verify(repository).save(any());
         verifyNoMoreInteractions(repository);
 

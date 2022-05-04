@@ -2,8 +2,7 @@ package com.whiskels.notifier.external.json.operation.util;
 
 import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -15,7 +14,7 @@ import java.util.function.Predicate;
 import static org.springframework.data.domain.Sort.Order.desc;
 import static org.springframework.data.domain.Sort.by;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class FinOperationUtil {
     public static final String DB_CATEGORY_PAYMENT = "Revenue";
 

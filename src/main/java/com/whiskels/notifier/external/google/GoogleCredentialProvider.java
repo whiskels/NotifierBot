@@ -5,7 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -27,7 +27,7 @@ import java.util.List;
 @Lazy
 @ConditionalOnProperty("external.google.credentials.json")
 class GoogleCredentialProvider {
-    public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    public static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
 
     @Getter

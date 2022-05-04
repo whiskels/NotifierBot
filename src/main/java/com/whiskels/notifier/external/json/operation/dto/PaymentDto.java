@@ -3,7 +3,8 @@ package com.whiskels.notifier.external.json.operation.dto;
 import com.whiskels.notifier.external.json.operation.domain.FinancialOperation;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
+
+import javax.validation.constraints.NotNull;
 
 import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
 import static com.whiskels.notifier.external.json.operation.util.FinOperationUtil.AMOUNT_COMPARATOR;

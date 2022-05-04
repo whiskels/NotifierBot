@@ -45,7 +45,7 @@ class JsonReaderTest {
         assertNotNull(actual);
         assertTrue(actual.hasMessage());
         Message message = actual.getMessage();
-        assertEquals(Integer.valueOf(1), message.getFrom().getId());
+        assertEquals(1L, message.getFrom().getId());
         assertEquals("/help", message.getText());
     }
 

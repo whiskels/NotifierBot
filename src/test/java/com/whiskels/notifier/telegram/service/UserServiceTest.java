@@ -20,15 +20,15 @@ class UserServiceTest {
 
     @Test
     void getOrCreate() {
-        when(repository.getByChatId(1)).thenReturn(Optional.of(USER_1));
-        User missing = new User(2);
-        when(repository.getByChatId(2)).thenReturn(Optional.empty());
+        when(repository.getByChatId(1L)).thenReturn(Optional.of(USER_1));
+        User missing = new User(2L);
+        when(repository.getByChatId(2L)).thenReturn(Optional.empty());
         when(repository.save(any())).thenReturn(missing);
 
-        User actualPresent = userService.getOrCreate(1);
-        verify(repository).getByChatId(1);
-        User actualMissing = userService.getOrCreate(2);
-        verify(repository).getByChatId(2);
+        User actualPresent = userService.getOrCreate(1L);
+        verify(repository).getByChatId(1L);
+        User actualMissing = userService.getOrCreate(2L);
+        verify(repository).getByChatId(2L);
         verify(repository).save(any());
         verifyNoMoreInteractions(repository);
 
@@ -39,18 +39,18 @@ class UserServiceTest {
     @Test
     void get() {
         Optional<User> expected = Optional.of(USER_1);
-        when(repository.getByChatId(1)).thenReturn(expected);
+        when(repository.getByChatId(1L)).thenReturn(expected);
 
-        Optional<User> actual = userService.get(1);
+        Optional<User> actual = userService.get(1L);
 
-        verify(repository).getByChatId(1);
+        verify(repository).getByChatId(1L);
         verifyNoMoreInteractions(repository);
         assertEquals(expected, actual);
     }
 
     @Test
     void update() {
-        User expected = new User(1);
+        User expected = new User(1L);
         when(repository.save(expected)).thenReturn(expected);
 
         User actual = userService.update(expected);

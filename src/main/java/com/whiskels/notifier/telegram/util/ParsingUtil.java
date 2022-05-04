@@ -1,8 +1,10 @@
 package com.whiskels.notifier.telegram.util;
 
+import com.whiskels.notifier.telegram.Command;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.EnumSet;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,6 +25,7 @@ public final class ParsingUtil {
      * @param text
      * @return List of hours and minutes
      */
+    //TODO refactor using strategy
     public static List<Integer> getTime(String text) {
         int hours = 0;
         int minutes = 0;
@@ -55,11 +58,17 @@ public final class ParsingUtil {
         return List.of(hours, minutes);
     }
 
-    public static String extractCommand(String text) {
-        return text.split(" ")[0];
+    public static Command extractCommand(String message) {
+        String textCommand = message.split(" ")[0];
+        return EnumSet.allOf(Command.class)
+                .stream()
+                .filter(command -> command.toString().equalsIgnoreCase(textCommand))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException();
+                }).orElse(Command.HELP);
     }
 
-    public static String extractArguments(String text) {
-        return text.substring(text.indexOf(" ") + 1);
+    public static String extractArguments(String message) {
+        return message.substring(message.indexOf(" ") + 1);
     }
 }

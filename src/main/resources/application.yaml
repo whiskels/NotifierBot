@@ -1,13 +1,18 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    initialization-mode: never
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
       show-sql: true
       hibernate:
         ddl-auto: update
     url: ${JDBC_DATABASE_URL}
+  sql:
+    init:
+      mode: never
+# TODO fix profiles to remove this property
+  config:
+    use-legacy-processing: true
 common:
   timezone: Europe/Moscow
 moex:

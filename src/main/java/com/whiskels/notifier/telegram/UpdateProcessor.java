@@ -1,15 +1,14 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.common.CreationEvent;
-import com.whiskels.notifier.telegram.events.UpdateCreationEvent;
+import com.whiskels.notifier.telegram.event.UpdateCreationEvent;
 import com.whiskels.notifier.telegram.orchestrator.HandlerOrchestrator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
@@ -17,36 +16,49 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Verifies incoming update and delegates handling to {@link HandlerOrchestrator}
  */
 @Component
-@Slf4j
 @RequiredArgsConstructor
 @Profile("telegram-common")
 public class UpdateProcessor {
     private final HandlerOrchestrator orchestrator;
 
-    @EventListener(classes = {UpdateCreationEvent.class})
+    @EventListener(UpdateCreationEvent.class)
     public void handleUpdate(CreationEvent<Update> updateCreationEvent) {
         final Update update = updateCreationEvent.get();
-        int userId = 0;
-        String text = null;
 
+        MessageContext context = null;
         if (isMessageWithText(update)) {
-            final Message message = update.getMessage();
-            userId = message.getFrom().getId();
-            text = message.getText();
-            log.debug("Update is text message {} from {}", text, userId);
+            context = MessageContext.fromMessage(update);
         } else if (update.hasCallbackQuery()) {
-            final CallbackQuery callbackQuery = update.getCallbackQuery();
-            userId = callbackQuery.getFrom().getId();
-            text = callbackQuery.getData();
-            log.debug("Update is callbackQuery {} from {}", text, userId);
+            context = MessageContext.fromCallBackQuery(update);
         }
 
-        if (text != null && userId != 0) {
-            orchestrator.operate(userId, text);
+        if (context != null) {
+            orchestrator.operate(context.getUserId(), context.getMessage());
         }
     }
 
     private boolean isMessageWithText(Update update) {
         return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
+    }
+
+    @AllArgsConstructor
+    @Getter
+    static class MessageContext {
+        private final Long userId;
+        private final String message;
+
+        static MessageContext fromMessage(Update update) {
+            var msg = update.getMessage();
+            Long userId = msg.getFrom().getId();
+            String text = msg.getText();
+            return new MessageContext(userId, text);
+        }
+
+        static MessageContext fromCallBackQuery(Update update) {
+            var msg = update.getCallbackQuery();
+            Long userId = msg.getFrom().getId();
+            String text = msg.getData();
+            return new MessageContext(userId, text);
+        }
     }
 }

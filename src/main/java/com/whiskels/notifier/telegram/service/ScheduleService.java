@@ -26,13 +26,13 @@ public class ScheduleService {
         return scheduleRepository.delete(userId);
     }
 
-    public List<Schedule> getSchedule(int chatId) {
+    public List<Schedule> getSchedule(Long chatId) {
         return scheduleRepository.getAll(chatId);
     }
 
     @Transactional
     public Schedule addSchedule(Schedule schedule, int userId) {
-        schedule.setUser(userRepository.getOne(userId));
+        schedule.setUser(userRepository.getById(userId));
         return scheduleRepository.save(schedule);
     }
 }

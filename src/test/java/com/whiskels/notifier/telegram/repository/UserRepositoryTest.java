@@ -22,7 +22,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
     @Sql(scripts = {"classpath:db/clear.sql", "classpath:db/add_users.sql"}, config = @SqlConfig(encoding = "UTF-8"))
     void testGetByChatId() {
         //when
-        Optional<User> actual = userRepository.getByChatId(1);
+        Optional<User> actual = userRepository.getByChatId(1L);
 
         //then
         assertTrue(actual.isPresent());
@@ -43,7 +43,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
     @Test
     void testSaveUser() {
         //given
-        User expected  = new User(-100);
+        User expected  = new User(-100L);
 
         //when
         userRepository.save(expected);
@@ -58,7 +58,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
     @Sql(scripts = {"classpath:db/clear.sql", "classpath:db/add_users.sql"}, config = @SqlConfig(encoding = "UTF-8"))
     void testUpdateUser() {
         //given
-        User expected = new User(1, 1, "Updated name", null, null);
+        User expected = new User(1, 1L, "Updated name", null, null);
 
         //when
         userRepository.save(expected);

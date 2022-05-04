@@ -42,9 +42,9 @@ class ScheduleServiceTest {
 
     @Test
     void getSchedule() {
-        when(scheduleRepository.getAll(1)).thenReturn(List.of(SCHEDULE_USER_1_1, SCHEDULE_USER_1_2));
+        when(scheduleRepository.getAll(1L)).thenReturn(List.of(SCHEDULE_USER_1_1, SCHEDULE_USER_1_2));
 
-        List<Schedule> actual = scheduleService.getSchedule(1);
+        List<Schedule> actual = scheduleService.getSchedule(1L);
 
         Assertions.assertThat(actual).containsExactlyInAnyOrder(SCHEDULE_USER_1_1, SCHEDULE_USER_1_2);
     }
@@ -52,7 +52,7 @@ class ScheduleServiceTest {
     @Test
     void addSchedule() {
         Schedule input = new Schedule(4, 10, 0, null);
-        when(userRepository.getOne(1)).thenReturn(USER_1);
+        when(userRepository.getById(1)).thenReturn(USER_1);
         when(scheduleRepository.save(SCHEDULE_USER_1_1)).thenReturn(SCHEDULE_USER_1_1);
 
         assertEquals(SCHEDULE_USER_1_1, scheduleService.addSchedule(input, 1));

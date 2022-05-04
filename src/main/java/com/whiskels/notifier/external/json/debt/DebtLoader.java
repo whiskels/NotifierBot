@@ -19,16 +19,16 @@ import static com.whiskels.notifier.external.moex.Currency.USD_RUB;
 @Component
 @ConditionalOnProperty("external.customer.debt.url")
 public class DebtLoader extends JsonLoader<Debt> {
-    @Value("${external.customer.debt.minRubValue:500}")
-    private int minRubValue;
-
-    private final Supplier<MoexRate> moexSupplier;
+    private final int minRubValue;
+    private final Supplier<MoexRate> rateSupplier;
 
     public DebtLoader(@Value("${external.customer.debt.url}") String jsonUrl,
                       @Value("${external.customer.debt.json-node:content}") String jsonNode,
-                      Supplier<MoexRate> moexSupplier) {
+                      @Value("${external.customer.debt.minRubValue:500}") int minRubValue,
+                      Supplier<MoexRate> rateSupplier) {
         super(jsonUrl, jsonNode);
-        this.moexSupplier = moexSupplier;
+        this.minRubValue = minRubValue;
+        this.rateSupplier = rateSupplier;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DebtLoader extends JsonLoader<Debt> {
     }
 
     private List<Debt> calculateTotalDebtFor(List<Debt> debtList) {
-        List<MoexRate> moexRates = moexSupplier.getData();
+        List<MoexRate> moexRates = rateSupplier.getData();
         debtList.forEach(debt -> {
             debt.setTotalDebt(calculateTotalDebt(debt));
             debt.setTotalDebtRouble(calculateTotalDebtRouble(debt, getRate(moexRates, USD_RUB), getRate(moexRates, EUR_RUB)));

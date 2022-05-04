@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,11 +22,9 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 public class Schedule extends AbstractBaseEntity {
 
     @Column(name = "hour", nullable = false)
-    @Range(min = 0, max = 23)
     private int hour;
 
     @Column(name = "minutes", nullable = false, columnDefinition = "integer default 0")
-    @Range(min = 0, max = 59)
     private int minutes;
 
     @ManyToOne(fetch = LAZY)

@@ -78,11 +78,9 @@ public class FinOperationLoader extends JsonLoader<FinancialOperation> {
     }
 
     private void save(List<FinancialOperation> operations) {
-        if (!operations.isEmpty()) {
-            List<FinancialOperation> savedOperations =  finOperationRepository.saveAll(operations);
-            log.info("Saved {} financial operations", savedOperations);
-        }
+        List<FinancialOperation> savedOperations = finOperationRepository.saveAll(operations);
         auditor.saveLoadAuditResults(operations);
+        log.info("Saved {} financial operations", savedOperations);
     }
 
 

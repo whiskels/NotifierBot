@@ -27,7 +27,7 @@ import static javax.persistence.FetchType.LAZY;
 public class User extends AbstractBaseEntity {
     @Column(name = "chat_id", unique = true, nullable = false)
     @NotNull
-    private int chatId;
+    private Long chatId;
 
     @Column(name = "name", unique = true, nullable = false)
     @NotBlank
@@ -45,13 +45,13 @@ public class User extends AbstractBaseEntity {
     @OrderBy("hour DESC")
     private List<Schedule> scheduleList;
 
-    public User(int chatId) {
+    public User(Long chatId) {
         this.chatId = chatId;
         this.name = String.valueOf(chatId);
         this.roles = Set.of(Role.UNAUTHORIZED);
     }
 
-    public User(Integer id, @NotNull int chatId, @NotBlank String name, Set<Role> roles, List<Schedule> scheduleList) {
+    public User(Integer id, @NotNull Long chatId, @NotBlank String name, Set<Role> roles, List<Schedule> scheduleList) {
         super(id);
         this.chatId = chatId;
         this.name = name;

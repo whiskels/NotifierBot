@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.List;
+import java.util.Collection;
 
 import static java.lang.String.format;
 import static javax.persistence.EnumType.STRING;
@@ -35,7 +35,7 @@ public class LoadAudit extends AbstractAuditedEntity {
     @NotNull
     private int count;
 
-    public static <T> LoadAudit audit(List<T> objects, Loader loader) {
+    public static LoadAudit audit(Collection<?> objects, Loader loader) {
         return LoadAudit.builder()
                 .count(objects.size())
                 .loader(loader)

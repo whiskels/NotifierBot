@@ -6,17 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
 @Transactional(readOnly = true)
 @Profile("telegram-common")
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.user.chatId=:chatId ORDER BY s.hour ASC")
-    List<Schedule> getAll(@Param("chatId") int chatId);
+    List<Schedule> getAll(@Param("chatId") Long chatId);
 
     @Transactional
     @Modifying
