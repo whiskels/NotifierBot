@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.whiskels.notifier.external.moex.Currency.EUR_RUB;
@@ -27,6 +26,8 @@ import static com.whiskels.notifier.external.moex.Currency.USD_RUB;
 @Setter
 @RequiredArgsConstructor
 public class MoexLoader implements Loader<MoexRate>, TelegramLabeled {
+    private static final Integer DATA_OFFSET = 14;
+
     private String url;
     private String usd;
     private String eur;
@@ -46,16 +47,14 @@ public class MoexLoader implements Loader<MoexRate>, TelegramLabeled {
             String[] moexArray = moexContent.split("\n");
 
             // Mapping data
-            final int moexDataLength = (moexArray.length - 1) / 2;
-            HashMap<String, String> ratesMap = new HashMap<>(moexDataLength);
-            for (int i = 0; i < moexDataLength; i++) {
-                ratesMap.put(moexArray[i + 1], moexArray[i + 1 + moexDataLength]);
+            MoexRate usdRate = null, eurRate = null;
+            int i = 0;
+            while (usdRate == null || eurRate == null){
+                if (moexArray[i].equals(usd)) usdRate = new MoexRate(USD_RUB, Double.parseDouble(moexArray[i +DATA_OFFSET]));
+                if (moexArray[i].equals(eur)) eurRate = new MoexRate(EUR_RUB, Double.parseDouble(moexArray[i + DATA_OFFSET]));
+                i++;
             }
-
-            if (!ratesMap.isEmpty()) {
-                return List.of(new MoexRate(USD_RUB, Double.parseDouble(ratesMap.get(usd))),
-                        new MoexRate(EUR_RUB, Double.parseDouble(ratesMap.get(eur))));
-            }
+            return List.of(usdRate, eurRate);
         } catch (IOException e) {
             log.error("Exception while trying to get MOEX data: {}", e.toString());
         } catch (NumberFormatException e) {

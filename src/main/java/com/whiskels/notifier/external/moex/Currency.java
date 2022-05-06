@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum Currency {
-    USD_RUB(78.19d), EUR_RUB(87.17d);
+    USD_RUB(70.19d), EUR_RUB(71.17d);
 
     private final Double defaultValue;
 }

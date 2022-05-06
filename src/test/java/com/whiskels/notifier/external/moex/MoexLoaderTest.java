@@ -1,7 +1,6 @@
 package com.whiskels.notifier.external.moex;
 
 import com.whiskels.notifier.MockedClockConfiguration;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,7 +25,6 @@ class MoexLoaderTest {
 
     @Test
     @Retryable
-    @Disabled
     void testMoexUpdate() {
         assertEquals(2, moexLoader.load().size());
     }
