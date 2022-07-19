@@ -15,5 +15,4 @@ external:
       email: ${GOOGLE_APP_EMAIL}
     customer.birthday:
       spreadsheet: ${CUSTOMER_BIRTHDAY_SPREADSHEET}
-      cell:
-        range: ${CUSTOMER_BIRTHDAY_CELL_RANGE}
+      cell-range: ${CUSTOMER_BIRTHDAY_CELL_RANGE}

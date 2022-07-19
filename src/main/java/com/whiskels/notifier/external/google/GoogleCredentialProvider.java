@@ -16,9 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,9 +35,10 @@ class GoogleCredentialProvider {
     private final String credentialsJson;
     private final String userEmail;
 
+    @SneakyThrows
     GoogleCredentialProvider(@Value("${external.google.credentials.app.name}") String appName,
                              @Value("${external.google.credentials.json}") String credentialsJson,
-                             @Value("${external.google.credentials.email}") String userEmail) throws GeneralSecurityException, IOException {
+                             @Value("${external.google.credentials.email}") String userEmail) {
         this.appName = appName;
         this.credentialsJson = credentialsJson;
         this.userEmail = userEmail;
