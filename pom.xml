@@ -28,7 +28,7 @@
         <google-oauth-client-jetty.version>1.33.2</google-oauth-client-jetty.version>
         <google-sheets.version>v4-rev20220308-1.32.1</google-sheets.version>
 
-        <jackson-json.version>2.13.2</jackson-json.version>
+        <jackson-json.version>2.13.4.1</jackson-json.version>
     </properties>
 
     <dependencies>
