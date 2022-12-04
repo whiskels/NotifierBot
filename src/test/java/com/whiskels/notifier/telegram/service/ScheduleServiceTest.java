@@ -25,7 +25,7 @@ class ScheduleServiceTest {
     void isAnyScheduled() {
         when(scheduleRepository.getAllByHourAndMinute(10,0)).thenReturn(List.of(SCHEDULE_USER_1_1));
 
-        List<Schedule> actual = scheduleService.isAnyScheduled(LocalTime.of(10,0));
+        List<Schedule> actual = scheduleService.findScheduled(LocalTime.of(10,0));
 
         Assertions.assertThat(actual).containsOnly(SCHEDULE_USER_1_1);
     }

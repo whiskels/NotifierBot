@@ -1,6 +1,6 @@
 package com.whiskels.notifier.common.util;
 
-import com.whiskels.notifier.external.Supplier;
+import com.whiskels.notifier.external.ReportSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,21 +17,11 @@ import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StreamUtil {
-    public static <T> Predicate<T> alwaysTruePredicate() {
-        return x -> true;
-    }
 
     @SafeVarargs
     public static <T extends Comparable<T>> List<T> filterAndSort(List<T> list, Predicate<T>... predicates) {
         return list.stream()
                 .filter(Stream.of(predicates).reduce(x -> true, Predicate::and))
-                .sorted()
-                .collect(toList());
-    }
-
-    public static <T extends Comparable<T>> List<T> filterAndSort(List<T> list, List<Predicate<T>> predicates) {
-        return list.stream()
-                .filter(predicates.stream().reduce(x -> true, Predicate::and))
                 .sorted()
                 .collect(toList());
     }
@@ -44,21 +34,17 @@ public final class StreamUtil {
                 .collect(toList());
     }
 
-    public static <T> List<T> filterAndSort(List<T> list, Comparator<T> comparator, List<Predicate<T>> predicates) {
-        return list.stream()
+
+    public static <T> List<T> filterAndSort(ReportSupplier<T> provider, Comparator<T> comparator, List<Predicate<T>> predicates) {
+        return provider.get().getContent().stream()
                 .filter(predicates.stream().reduce(x -> true, Predicate::and))
                 .sorted(comparator)
                 .collect(toList());
     }
 
     @SafeVarargs
-    public static <T extends Comparable<T>> List<T> filterAndSort(Supplier<T> provider, Predicate<T>... predicates) {
-        return filterAndSort(provider.getData(), predicates);
-    }
-
-    @SafeVarargs
-    public static <T> List<T> filterAndSort(Supplier<T> provider, Comparator<T> comparator, Predicate<T>... predicates) {
-        return filterAndSort(provider.getData(), comparator, predicates);
+    public static <T> List<T> filterAndSort(ReportSupplier<T> provider, Comparator<T> comparator, Predicate<T>... predicates) {
+        return filterAndSort(provider.get().getContent(), comparator, predicates);
     }
 
     @SafeVarargs
@@ -69,7 +55,7 @@ public final class StreamUtil {
     }
 
 
-    public static <T,R> List<R> map(List<T> list, Function<? super T, ? extends R> func) {
+    public static <T, R> List<R> map(List<T> list, Function<? super T, ? extends R> func) {
         return list.stream().map(func).collect(toList());
     }
 

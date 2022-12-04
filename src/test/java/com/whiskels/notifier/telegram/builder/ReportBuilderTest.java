@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.*;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;

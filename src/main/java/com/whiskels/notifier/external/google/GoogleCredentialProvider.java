@@ -8,46 +8,46 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
-@Slf4j
-@Component
+import static com.whiskels.notifier.external.google.GoogleCredentialProvider.GOOGLE_CREDENTIALS_PREFIX;
+
 @Lazy
-@ConditionalOnProperty("external.google.credentials.json")
+@Slf4j
+@Getter
+@Component
+@ConditionalOnProperty(prefix = GOOGLE_CREDENTIALS_PREFIX, name = {"app.name", "json", "email"})
+@EnableConfigurationProperties(GoogleCredentialProvider.GoogleCredentialConfigurationProperties.class)
 class GoogleCredentialProvider {
-    public static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+    private static final Collection<String> SCOPES = Collections.singleton(SheetsScopes.SPREADSHEETS_READONLY);
+    static final String GOOGLE_CREDENTIALS_PREFIX = "external.google.credentials";
+    static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
-    @Getter
-    private final String appName;
-    @Getter
+    private final GoogleCredentialConfigurationProperties properties;
     private final NetHttpTransport httpTransport;
-    private final String credentialsJson;
-    private final String userEmail;
 
-    @SneakyThrows
-    GoogleCredentialProvider(@Value("${external.google.credentials.app.name}") String appName,
-                             @Value("${external.google.credentials.json}") String credentialsJson,
-                             @Value("${external.google.credentials.email}") String userEmail) {
-        this.appName = appName;
-        this.credentialsJson = credentialsJson;
-        this.userEmail = userEmail;
+    GoogleCredentialProvider(GoogleCredentialConfigurationProperties properties) throws GeneralSecurityException, IOException {
+        this.properties = properties;
         this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     }
 
     @SneakyThrows
     public Credential getCredentials() {
-        InputStream credentialsJSON = new ByteArrayInputStream(credentialsJson.getBytes());
+        InputStream credentialsJSON = new ByteArrayInputStream(properties.getJson().getBytes());
         GoogleCredential gcFromJson = GoogleCredential.fromStream(credentialsJSON, httpTransport, JSON_FACTORY)
                 .createScoped(SCOPES);
 
@@ -55,9 +55,18 @@ class GoogleCredentialProvider {
                 .setTransport(gcFromJson.getTransport())
                 .setJsonFactory(gcFromJson.getJsonFactory())
                 .setServiceAccountId(gcFromJson.getServiceAccountId())
-                .setServiceAccountUser(userEmail)
+                .setServiceAccountUser(properties.getEmail())
                 .setServiceAccountPrivateKey(gcFromJson.getServiceAccountPrivateKey())
                 .setServiceAccountScopes(gcFromJson.getServiceAccountScopes())
                 .build();
+    }
+
+    @Getter
+    @Setter
+    @ConfigurationProperties(prefix = GOOGLE_CREDENTIALS_PREFIX)
+    static class GoogleCredentialConfigurationProperties {
+        private String appName;
+        private String json;
+        private String email;
     }
 }

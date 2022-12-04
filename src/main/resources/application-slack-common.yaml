@@ -2,18 +2,18 @@ slack:
   customer:
     payment:
       pics:
-        0d:
+        0:
           - https://i.imgur.com/Os451Qo.jpeg
           - https://i.imgur.com/unzfnaD.jpg
           - https://i.imgur.com/0gf5s.jpg
           - https://media.giphy.com/media/ND6xkVPaj8tHO/giphy.gif
           - https://media.giphy.com/media/DLxaEcISD5TaM/giphy.gif
-        100000d:
+        100000:
           - https://i.imgur.com/bDiTy7t.jpeg
           - https://i.imgur.com/3rYHhEu.jpg
           - https://i.imgur.com/gckZshj.jpg
           - https://media.giphy.com/media/G4qAZYIFr1Cww/giphy.gif
-        1000000d:
+        1000000:
           - https://i.imgur.com/fj138M6.jpeg
           - https://i.imgur.com/ObVSUb6.jpg
           - https://i.imgur.com/EAFSXYp.png

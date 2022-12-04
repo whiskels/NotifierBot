@@ -20,11 +20,10 @@ public class DemoUserService extends UserService {
 
     @Override
     public User getOrCreate(Long chatId) {
-        return get(chatId)
-                .orElseGet(() -> {
-                    User user = new User(chatId);
-                    user.setRoles(Set.of(ADMIN));
-                return userRepository.save(user);
-                });
+        return get(chatId).orElseGet(() -> {
+            User user = new User(chatId);
+            user.setRoles(Set.of(ADMIN));
+            return userRepository.save(user);
+        });
     }
 }

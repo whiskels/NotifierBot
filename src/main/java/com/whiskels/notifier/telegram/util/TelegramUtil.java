@@ -14,23 +14,17 @@ import static com.whiskels.notifier.telegram.domain.Role.UNAUTHORIZED;
 @UtilityClass
 public class TelegramUtil {
     public static <T> String getTelegramLabel(T object) {
-        Class<?> clazz = object.getClass();
-        if (TelegramLabeled.class.isAssignableFrom(clazz)) {
+        Class<?> clazz = AopProxyUtils.ultimateTargetClass(object);
+        if (TelegramLabeled.class.isAssignableFrom(clazz) || TelegramLabeled.class.isAssignableFrom(object.getClass())) {
             TelegramLabeled converted = (TelegramLabeled) object;
             return converted.getLabel();
         }
         return clazz.getSimpleName();
     }
 
-    public static <T> boolean isCalledInCallback(T classInstance, String callbackQuery) {
-        return getTelegramLabel(classInstance).equals(callbackQuery);
-    }
-
-    public static <T extends CommandHandler> Map<Role, Set<T>> toRoleMap(Collection<T> handlers) {
+    public static <T extends CommandHandler> Map<Role, Set<T>> groupByAllowedRoles(Collection<T> handlers) {
         Map<Role, Set<T>> map = new HashMap<>();
-        for (Role role : EnumSet.allOf(Role.class)) {
-            map.put(role, new HashSet<>());
-        }
+        EnumSet.allOf(Role.class).forEach(r -> map.put(r, new HashSet<>()));
         for (T handler : handlers) {
             Optional<Role[]> requiredRoles = Arrays.stream(AopProxyUtils.ultimateTargetClass(handler)
                             .getMethods())

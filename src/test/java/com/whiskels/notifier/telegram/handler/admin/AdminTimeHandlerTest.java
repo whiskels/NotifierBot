@@ -14,7 +14,6 @@ import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
 
 @Import(MockedClockConfiguration.class)
 @SpringBootTest(classes = AdminTimeHandler.class)
@@ -31,10 +30,8 @@ class AdminTimeHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testAdminTimeHandler_Authorized() {
-        adminTimeHandler.handle(USER_1, null);
+        SendMessage actual =  adminTimeHandler.handle(USER_1, null);
 
-        verify(publisher).publishEvent(captor.capture());
-        SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
         assertTrue(actual.getText().contains(EXPECTED_BOT_TIME_FORMATTED));
     }

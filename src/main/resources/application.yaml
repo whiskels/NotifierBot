@@ -7,18 +7,10 @@ spring:
       hibernate:
         ddl-auto: update
     url: ${JDBC_DATABASE_URL}
-  sql:
-    init:
-      mode: never
+  sql.init.mode: never
 # TODO fix profiles to remove this property
-  config:
-    use-legacy-processing: true
-common:
-  timezone: Europe/Moscow
-moex:
-  url: https://iss.moex.com/iss/statistics/engines/currency/markets/selt/rates
-  usd: CBRF_USD_LAST (double)
-  eur: CBRF_EUR_LAST (double)
+  config.use-legacy-processing: true
+common.timezone: Europe/Moscow
 ---
 spring:
   profiles: demo

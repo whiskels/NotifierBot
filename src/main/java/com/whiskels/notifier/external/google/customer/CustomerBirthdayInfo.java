@@ -7,13 +7,13 @@ import lombok.Value;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.BIRTHDAY_FORMATTER;
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.parseDate;
+import static com.whiskels.notifier.common.util.DateTimeUtil.BIRTHDAY_FORMATTER;
+import static com.whiskels.notifier.common.util.DateTimeUtil.parseDate;
 import static java.lang.String.format;
 
 @Value
 @Builder
-public class CustomerBirthdayInfo implements HasBirthday {
+class CustomerBirthdayInfo implements HasBirthday {
     String responsible;
     String responsibleEmail;
     String clientId;
@@ -26,11 +26,11 @@ public class CustomerBirthdayInfo implements HasBirthday {
     LocalDate birthday;
     String position;
 
-
     //TODO search for a better way of excel parsing - maybe query?
     public static CustomerBirthdayInfo fromExcelData(List<Object> data) {
         if (data.size() < 11) return null;
         try {
+            int i = 0;
             return CustomerBirthdayInfo.builder()
                     .responsible((String) data.get(0))
                     .responsibleEmail((String) data.get(1))

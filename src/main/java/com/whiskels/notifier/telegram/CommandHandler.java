@@ -1,9 +1,10 @@
 package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.domain.User;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public interface CommandHandler {
-    void handle(User user, String message);
+    SendMessage handle(User user, String message);
 
     Command getCommand();
 }

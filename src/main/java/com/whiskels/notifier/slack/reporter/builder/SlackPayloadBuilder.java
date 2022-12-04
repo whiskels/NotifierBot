@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class SlackPayloadBuilder {
-    private List<LayoutBlock> blocks = new ArrayList<>();
+    private final List<LayoutBlock> blocks = new ArrayList<>();
     private String webhook;
     private String notificationMessage;
     private String noData = "Nothing";

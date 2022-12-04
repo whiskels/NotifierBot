@@ -1,37 +1,32 @@
 package com.whiskels.notifier.external.google.customer;
 
 import com.whiskels.notifier.external.Loader;
+import com.whiskels.notifier.external.audit.Audit;
 import com.whiskels.notifier.external.google.GoogleSheetsReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.birthdayComparator;
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.isSameMonth;
+import static com.whiskels.notifier.common.util.DateTimeUtil.birthdayComparator;
+import static com.whiskels.notifier.common.util.DateTimeUtil.isSameMonth;
+import static com.whiskels.notifier.external.LoaderType.CUSTOMER_BIRTHDAY;
 import static java.time.LocalDate.now;
+import static java.util.Objects.nonNull;
 
-@Component
-@ConditionalOnProperty("external.google.customer.birthday.spreadsheet")
 @RequiredArgsConstructor
-public class CustomerBirthdayInfoLoader implements Loader<CustomerBirthdayInfo> {
+class CustomerBirthdayInfoLoader implements Loader<CustomerBirthdayInfo> {
     private final Clock clock;
     private final GoogleSheetsReader spreadsheetLoader;
-
-    @Value("${external.google.customer.birthday.spreadsheet}")
-    private String spreadsheetId;
-    @Value("${external.google.customer.birthday.cell-range}")
-    private String range;
+    private final CustomerBirthdaySpreadsheetProperties properties;
 
     @Override
+    @Audit(loader = CUSTOMER_BIRTHDAY)
     public List<CustomerBirthdayInfo> load() {
-       return spreadsheetLoader.read(spreadsheetId, range).stream()
+       return spreadsheetLoader.read(properties.getSpreadsheet(), properties.getCellRange()).stream()
                .map(CustomerBirthdayInfo::fromExcelData)
-               .filter(customerBirthdayInfo -> customerBirthdayInfo != null && isSameMonth(customerBirthdayInfo.getBirthday(), now(clock)))
+               .filter(customerBirthdayInfo -> nonNull(customerBirthdayInfo) && isSameMonth(customerBirthdayInfo.getBirthday(), now(clock)))
                .sorted(birthdayComparator())
                .collect(Collectors.toList());
     }

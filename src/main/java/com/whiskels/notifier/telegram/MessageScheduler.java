@@ -2,7 +2,6 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.domain.Schedule;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.orchestrator.ScheduledHandlerOrchestrator;
 import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +12,15 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
 @Profile("telegram-common")
 @ConditionalOnBean(ScheduledCommandHandler.class)
-public class MessageScheduler {
+class MessageScheduler {
     private final ScheduleService scheduleService;
     private final Clock clock;
     private final ScheduledHandlerOrchestrator orchestrator;
@@ -29,12 +29,9 @@ public class MessageScheduler {
     public void processScheduledTasks() {
         final LocalDateTime ldt = LocalDateTime.now(clock);
         log.debug("Checking for scheduled messages: {}", ldt);
-        List<Schedule> scheduledUsers = scheduleService.isAnyScheduled(ldt.toLocalTime());
-        if (!scheduledUsers.isEmpty()) {
-            scheduledUsers.forEach(schedule -> {
-                final User user = schedule.getUser();
-                orchestrator.operate(user);
-            });
-        }
+        Set<User> scheduledUsers = scheduleService.findScheduled(ldt.toLocalTime()).stream()
+                .map(Schedule::getUser)
+                .collect(Collectors.toSet());
+        orchestrator.operate(scheduledUsers);
     }
 }

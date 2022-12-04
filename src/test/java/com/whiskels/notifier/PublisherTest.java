@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.GenericApplicationContext;
 
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 
 @Import(PublisherTest.PublisherTestConfig.class)
 public class PublisherTest<T> {
@@ -25,11 +24,6 @@ public class PublisherTest<T> {
     @BeforeEach
     public void resetPublisher() {
         reset(publisher);
-    }
-
-    public final T getPublishedObject() {
-        verify(publisher).publishEvent(captor.capture());
-        return captor.getValue();
     }
 
     static class PublisherTestConfig {

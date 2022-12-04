@@ -3,8 +3,6 @@ package com.whiskels.notifier.telegram.util;
 import com.whiskels.notifier.telegram.Command;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.whiskels.notifier.telegram.util.ParsingUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,35 +14,37 @@ class ParsingUtilTest {
 
     @Test
     void oneArgument() {
-        List<Integer> time = getTime("1");
-        assertEquals(1, time.get(0));
+        var time = getTime("1");
+        assertEquals(1, time.getHours());
+        assertEquals(0, time.getMinutes());
     }
 
     @Test
     void twoArguments() {
-        List<Integer> time = getTime("12");
-        assertEquals(12, time.get(0));
+        var time = getTime("12");
+        assertEquals(12, time.getHours());
+        assertEquals(0, time.getMinutes());
     }
 
     @Test
     void threeArguments() {
-        List<Integer> time = getTime("123");
-        assertEquals(1, time.get(0));
-        assertEquals(23, time.get(1));
+        var time = getTime("123");
+        assertEquals(1, time.getHours());
+        assertEquals(23, time.getMinutes());
     }
 
     @Test
     void fourArguments() {
-        List<Integer> time = getTime("1234");
-        assertEquals(12, time.get(0));
-        assertEquals(34, time.get(1));
+        var time = getTime("1234");
+        assertEquals(12, time.getHours());
+        assertEquals(34, time.getMinutes());
     }
 
     @Test
     void delimiter() {
-        List<Integer> time = getTime("12:34");
-        assertEquals(12, time.get(0));
-        assertEquals(34, time.get(1));
+        var time = getTime("12:34");
+        assertEquals(12, time.getHours());
+        assertEquals(34, time.getMinutes());
     }
 
     @Test

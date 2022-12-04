@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.parseDate;
+import static com.whiskels.notifier.common.util.DateTimeUtil.parseDate;
 
 
-public class BirthdayDeserializer extends JsonDeserializer<LocalDate> {
+class BirthdayDeserializer extends JsonDeserializer<LocalDate> {
     @Override
     public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         return parseDate(jsonParser.getText());

@@ -3,13 +3,15 @@ package com.whiskels.notifier.external.json.debt;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.whiskels.notifier.external.json.currency.CurrencyRate;
 import lombok.Data;
-import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Comparator;
 
-import static com.whiskels.notifier.common.util.FormatUtil.formatDouble;
-import static com.whiskels.notifier.external.json.debt.DebtUtil.TOTAL_DEBT_COMPARATOR;
+import static java.math.RoundingMode.HALF_UP;
 
 /**
  * Customer debt data is received from JSON of the following syntax:
@@ -36,7 +38,11 @@ import static com.whiskels.notifier.external.json.debt.DebtUtil.TOTAL_DEBT_COMPA
 @Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Debt implements Comparable<Debt> {
+class Debt implements Comparable<Debt> {
+    private static final Comparator<Debt> TOTAL_DEBT_COMPARATOR = Comparator.comparing(Debt::getTotalRouble)
+            .thenComparing(Debt::getContractor)
+            .reversed();
+
     private String contractor;
     @JsonProperty("finance_subject")
     private String financeSubject;
@@ -46,36 +52,32 @@ public class Debt implements Comparable<Debt> {
     private String accountManager;
     private String currency;
     @JsonProperty("debt_comment")
-    private String debtComment;
+    private String comment;
     @JsonProperty("debtor_delay_180")
-    private double delay180;
+    private BigDecimal delay180;
     @JsonProperty("debtor_delay_90")
-    private double delay90;
+    private BigDecimal delay90;
     @JsonProperty("debtor_delay_60")
-    private double delay60;
+    private BigDecimal delay60;
     @JsonProperty("debtor_delay_30")
-    private double delay30;
+    private BigDecimal delay30;
     @JsonProperty("debtor_delay_0")
-    private double delay0;
+    private BigDecimal delay0;
     @JsonProperty("debtor_delay_current")
-    private String debtorDelayCurrent;
+    private String delayCurrent;
+    private BigDecimal total;
+    private BigDecimal totalRouble;
 
-    private double totalDebt;
+    public void calculateTotal() {
+        total = delay0.add(delay30).add(delay60).add(delay90).add(delay180);
+    }
 
-    @Setter
-    private double totalDebtRouble = Double.NaN;
-
-    @Override
-    public String toString() {
-        return String.format("*%s*%n   %s%n   %s%n   %s%n   *%s %s*%n%s"
-                , contractor
-                , financeSubject
-                , wayOfPayment
-                , accountManager
-                , formatDouble(totalDebt)
-                , currency
-                , debtComment != null ? debtComment : "No comment"
-        );
+    public void calculateTotalRouble(@Nullable CurrencyRate rate) {
+        if (rate == null) {
+            totalRouble = total;
+            return;
+        }
+        totalRouble = total.divide(rate.getRate(currency), HALF_UP);
     }
 
     @Override

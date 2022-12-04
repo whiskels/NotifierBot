@@ -1,7 +1,9 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.json.operation.PaymentDto;
+import com.whiskels.notifier.slack.SlackPayload;
+import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
 import lombok.Setter;
@@ -10,68 +12,69 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.function.ToDoubleFunction;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_NEW_LINE;
+import static java.math.BigDecimal.ZERO;
 
 @Slf4j
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.customer.payment.webhook")
-@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = Supplier.class)
+@ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = ReportSupplier.class)
 @ConfigurationProperties("slack.customer.payment")
-public class PaymentDailyReporter extends SlackReporter<PaymentDto> {
-    private static final ToDoubleFunction<List<PaymentDto>> RECEIVABLE_SUM = x -> x.stream()
-            .collect(Collectors.summarizingDouble(PaymentDto::getAmountRub))
-            .getSum();
-
+class PaymentDailyReporter extends SlackReporter<PaymentDto> {
     @Value("${slack.customer.payment.header:Payment report on}")
     private String header;
 
     @Setter
-    private Map<String, List<String>> pics;
+    private Map<Integer, List<String>> pics;
 
     private final Random rnd = new Random();
 
     public PaymentDailyReporter(@Value("${slack.customer.payment.webhook}") String webHook,
-                                Supplier<PaymentDto> provider,
-                                ApplicationEventPublisher publisher) {
-        super(webHook, publisher, provider);
+                                ReportSupplier<PaymentDto> provider,
+                                SlackWebHookExecutor executor) {
+        super(webHook, executor, provider);
     }
 
     @Scheduled(cron = "${slack.customer.payment.cron:0 1 13 * * MON-FRI}", zone = "${common.timezone}")
-    public void report() {
-        log.debug("Creating employee event payload");
-        List<PaymentDto> data = provider.getData();
+    public void executeScheduled() {
+        executor.execute(prepare());
+    }
 
-        publish(SlackPayloadBuilder.builder()
+    public SlackPayload prepare() {
+        log.debug("Creating employee event payload");
+        var data = provider.get();
+
+        return SlackPayloadBuilder.builder()
                 .hook(webHook)
                 .notifyChannel()
-                .header(header + reportDate(provider.lastUpdate()))
+                .header(header + reportDate(data.getReportDate()))
                 .collector(COLLECTOR_NEW_LINE)
-                .block(data, reportPic(data))
-                .build());
+                .block(data.getContent(), reportPic(data.getContent()))
+                .build();
     }
 
     private String reportPic(List<PaymentDto> data) {
-        if (data.isEmpty()) {
-            return randomElementFromList(pics.get(Collections.min(pics.keySet())));
-        } else {
-            double conditionResult = RECEIVABLE_SUM.applyAsDouble(data);
-            return randomElementFromList(pics.entrySet().stream()
-                    .min(Comparator.comparingDouble(entry -> Math.abs(Double.parseDouble(entry.getKey()) - conditionResult)))
-                    .orElseThrow(() ->
-                            new IllegalArgumentException("Exception while trying to find match for condition " + RECEIVABLE_SUM))
-                    .getValue());
-        }
+        int cumulativeAmount = data.stream()
+                .map(PaymentDto::getAmountRub)
+                .reduce(BigDecimal::add)
+                .orElse(ZERO).intValue();
+        return randomElementFromList(pics.entrySet().stream()
+                .min(Comparator.comparingInt(entry -> Math.abs(entry.getKey()) - cumulativeAmount))
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Exception while trying to find match for condition"))
+                .getValue());
     }
 
     private String randomElementFromList(List<String> list) {

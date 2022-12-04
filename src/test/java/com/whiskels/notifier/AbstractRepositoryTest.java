@@ -11,6 +11,5 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 @EnableJpaRepositories(basePackages = {"com.whiskels.*"})
 @EntityScan("com.whiskels.*")
-//@TestPropertySource(properties = {"spring.jpa.defer-datasource-initialization true")
 public abstract class AbstractRepositoryTest {
 }

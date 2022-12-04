@@ -1,12 +1,14 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.employee.Employee;
+import com.whiskels.notifier.common.util.Util;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.json.employee.EmployeeDto;
+import com.whiskels.notifier.slack.SlackPayload;
+import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,37 +18,46 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
+import static com.whiskels.notifier.common.util.DateTimeUtil.isSameDay;
+import static com.whiskels.notifier.common.util.DateTimeUtil.reportDate;
 
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.employee.webhook")
-@ConditionalOnBean(value = Employee.class, parameterizedContainer = Supplier.class)
-public class EmployeeEventReporterOnEvent extends AbstractEmployeeEventReporter {
-    @Value("${slack.employee.header.daily:Employee events on}")
-    private String header;
+@ConditionalOnBean(value = EmployeeDto.class, parameterizedContainer = ReportSupplier.class)
+class EmployeeEventReporterOnEvent extends AbstractEmployeeEventReporter {
+    private final String header;
 
     public EmployeeEventReporterOnEvent(@Value("${slack.employee.webhook}") String webHook,
-                                        Supplier<Employee> provider,
-                                        ApplicationEventPublisher publisher) {
-        super(webHook, provider, publisher);
+                                        @Value("${slack.employee.daily.header:Employee events on}") String header,
+                                        ReportSupplier<EmployeeDto> provider,
+                                        SlackWebHookExecutor executor) {
+        super(webHook, provider, executor);
+        this.header = header;
     }
 
-    @Scheduled(cron = "${slack.employee.cron.daily:0 0 9 * * *}", zone = "${common.timezone}")
-    public void report() {
-        createPayload(header + reportDate(provider.lastUpdate()), true);
+    @Scheduled(cron = "${slack.employee.daily.cron:0 0 9 * * *}", zone = "${common.timezone}")
+    public void sendScheduled() {
+        executor.execute(prepare());
     }
 
-    protected List<Predicate<Employee>> birthdayPredicates() {
-        return generalPredicates(Employee::getBirthday);
+    public SlackPayload prepare() {
+
+        var data = provider.get();
+        return prepare(header + reportDate(data.getReportDate()), true);
     }
 
-    protected List<Predicate<Employee>> anniversaryPredicates() {
-        return generalPredicates(Employee::getAppointmentDate);
+    protected List<Predicate<EmployeeDto>> birthdayPredicates() {
+        return generalPredicates(EmployeeDto::getBirthday);
     }
 
-    private List<Predicate<Employee>> generalPredicates(Function<Employee, LocalDate> func) {
-        return List.of(notNull(func),
-                isSameDay(func, provider.lastUpdate()));
+    protected List<Predicate<EmployeeDto>> anniversaryPredicates() {
+        return generalPredicates(EmployeeDto::getAppointmentDate);
+    }
+
+    private List<Predicate<EmployeeDto>> generalPredicates(Function<EmployeeDto, LocalDate> func) {
+        var data = provider.get();
+        return List.of(Util.notNull(func),
+                isSameDay(func, data.getReportDate()));
     }
 }

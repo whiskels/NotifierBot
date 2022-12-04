@@ -10,9 +10,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.BIRTHDAY_FORMATTER;
-import static java.lang.String.format;
-import static java.time.YearMonth.now;
+import static com.whiskels.notifier.common.util.DateTimeUtil.BIRTHDAY_FORMAT;
 
 /**
  * Employee data is received from JSON of the following syntax:
@@ -37,9 +35,10 @@ import static java.time.YearMonth.now;
 @Data
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Employee implements HasBirthday {
+class Employee implements HasBirthday {
     private String name;
     @JsonDeserialize(using = BirthdayDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = BIRTHDAY_FORMAT)
     private LocalDate birthday;
     @JsonProperty("appointment_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -47,23 +46,4 @@ public class Employee implements HasBirthday {
     private String status;
     @JsonProperty("status_system")
     private String statusSystem;
-
-    @Override
-    public String toString() {
-       return toBirthdayString();
-    }
-
-    public String toWorkAnniversaryString() {
-        if (appointmentDate == null) {
-            return (name + " (appointment date not set)");
-        }
-        final int totalWorkingYears = now().getYear() - appointmentDate.getYear();
-        return format("%s %s (%s)", name, BIRTHDAY_FORMATTER.format(appointmentDate), totalWorkingYears);
-    }
-
-    public String toBirthdayString() {
-        return birthday == null
-                ? (name + " birthday is unknown")
-                : format("%s %s", name, BIRTHDAY_FORMATTER.format(birthday));
-    }
 }
