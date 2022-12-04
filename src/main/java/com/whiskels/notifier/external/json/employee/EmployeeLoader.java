@@ -1,30 +1,32 @@
 package com.whiskels.notifier.external.json.employee;
 
-import com.whiskels.notifier.external.json.JsonLoader;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+import com.whiskels.notifier.external.Loader;
+import com.whiskels.notifier.external.audit.Audit;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.birthdayComparator;
+import static com.whiskels.notifier.common.util.DateTimeUtil.birthdayComparator;
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.external.LoaderType.EMPLOYEE;
 import static com.whiskels.notifier.external.json.employee.EmployeeUtil.NOT_DECREE;
 import static com.whiskels.notifier.external.json.employee.EmployeeUtil.NOT_FIRED;
+import static java.util.Collections.emptyList;
 
-@Component
-@ConditionalOnProperty("external.employee.url")
-public class EmployeeLoader extends JsonLoader<Employee> {
+@RequiredArgsConstructor
+class EmployeeLoader implements Loader<Employee> {
+    private final EmployeeFeignClient employeeClient;
+
     @SuppressWarnings("unchecked")
     private static final Predicate<Employee>[] EMPLOYEE_FILTERS = new Predicate[]{NOT_DECREE, NOT_FIRED};
 
-    public EmployeeLoader(@Value("${external.employee.url}") String jsonUrl) {
-        super(jsonUrl);
-    }
-
     @Override
+    @Audit(loader = EMPLOYEE)
     public List<Employee> load() {
-        return filterAndSort(loadFromJson(), birthdayComparator(), EMPLOYEE_FILTERS);
+        return Optional.ofNullable(employeeClient.get())
+                .map(loaded -> filterAndSort(loaded, birthdayComparator(), EMPLOYEE_FILTERS))
+                .orElse(emptyList());
     }
 }

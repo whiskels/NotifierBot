@@ -1,12 +1,14 @@
 package com.whiskels.notifier.slack.reporter.impl;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.google.customer.CustomerBirthdayInfo;
+import com.whiskels.notifier.common.util.Util;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.google.customer.CustomerBirthdayInfoDto;
+import com.whiskels.notifier.slack.SlackPayload;
+import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.AbstractCustomerEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,31 +16,37 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.*;
+import static com.whiskels.notifier.common.util.DateTimeUtil.isLaterThan;
+import static com.whiskels.notifier.common.util.DateTimeUtil.isSameMonth;
 
 @Component
 @Profile("slack-common")
 @ConditionalOnProperty("slack.customer.birthday.webhook")
-@ConditionalOnBean(value = CustomerBirthdayInfo.class, parameterizedContainer = Supplier.class)
-public class CustomerEventReporterAtMonthMiddle extends AbstractCustomerEventReporter {
-    @Value("${slack.customer.birthday.header.monthMiddle:Upcoming customer birthdays till the end of the month}")
-    private String header;
+@ConditionalOnBean(value = CustomerBirthdayInfoDto.class, parameterizedContainer = ReportSupplier.class)
+class CustomerEventReporterAtMonthMiddle extends AbstractCustomerEventReporter {
+    private final String header;
 
     public CustomerEventReporterAtMonthMiddle(@Value("${slack.customer.birthday.webhook}") String webHook,
-                                              Supplier<CustomerBirthdayInfo> provider,
-                                              ApplicationEventPublisher publisher) {
-        super(webHook, provider, publisher);
+                                              @Value("${slack.customer.birthday.month-middle.header:Upcoming customer birthdays till the end of the month}") String header,
+                                              ReportSupplier<CustomerBirthdayInfoDto> provider,
+                                              SlackWebHookExecutor executor) {
+        super(webHook, provider, executor);
+        this.header = header;
     }
 
-    @Scheduled(cron = "${slack.customer.birthday.cron.monthMiddle:0 0 9 15 * *}", zone = "${common.timezone}")
-    public void report() {
-        createPayload(header);
+    @Scheduled(cron = "${slack.customer.birthday.month-middle.cron:0 0 9 15 * *}", zone = "${common.timezone}")
+    public void executeScheduled() {
+        executor.execute(prepare());
     }
 
-    protected List<Predicate<CustomerBirthdayInfo>> birthdayPredicates() {
-        return List.of(notNull(CustomerBirthdayInfo::getBirthday),
-                isSameMonth(CustomerBirthdayInfo::getBirthday, provider.lastUpdate()),
-                isLaterThan(CustomerBirthdayInfo::getBirthday, provider.lastUpdate()));
+    public SlackPayload prepare() {
+        return createPayload(header);
+    }
+
+    protected List<Predicate<CustomerBirthdayInfoDto>> birthdayPredicates() {
+        var data = provider.get();
+        return List.of(Util.notNull(CustomerBirthdayInfoDto::getBirthday),
+                isSameMonth(CustomerBirthdayInfoDto::getBirthday, data.getReportDate()),
+                isLaterThan(CustomerBirthdayInfoDto::getBirthday, data.getReportDate()));
     }
 }
-

@@ -22,7 +22,7 @@ public final class FormatUtil {
             "%n%s%n", EMPTY_LINE));
     public static final Collector<CharSequence, ?, String> COLLECTOR_COMMA_SEPARATED = Collectors.joining(", ");
 
-    public static String formatDouble(Number value) {
+    public static String format(Number value) {
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
         formatSymbols.setDecimalSeparator('.');
         formatSymbols.setGroupingSeparator(' ');

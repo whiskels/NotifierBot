@@ -1,6 +1,5 @@
 spring:
   profiles.include: telegram-common
-telegram:
-  bot:
+telegram.bot:
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}

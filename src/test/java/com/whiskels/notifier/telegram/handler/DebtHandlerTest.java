@@ -1,7 +1,8 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.debt.Debt;
+import com.whiskels.notifier.external.ReportData;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.json.debt.DebtDto;
 import com.whiskels.notifier.telegram.CommandHandler;
 import com.whiskels.notifier.telegram.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.json.DebtTestData.debtOne;
-import static com.whiskels.notifier.external.json.DebtTestData.debtTwo;
+import static com.whiskels.notifier.external.json.debt.DebtTestData.debtDtoOne;
+import static com.whiskels.notifier.external.json.debt.DebtTestData.debtDtoTwo;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
@@ -37,25 +38,28 @@ class DebtHandlerTest extends AbstractHandlerTest {
             "   *0 RUB*%n" +
             "No comment");
 
-
-    private static final String EXPECTED_ADMIN = format("%s%n---------------------------%n" +
-            "*Test contractor 1*%n" +
-            "   Test subj 1%n" +
-            "   Test wop 1%n" +
-            "   Jason Bourne%n" +
-            "   *0 USD*%n" +
-            "No comment", EXPECTED_MANAGER);
+    private static final String EXPECTED_ADMIN = format(
+            "*Overdue debts report on 22-01-2014*%n" +
+                    "*Test contractor 1*%n" +
+                    "   Test subj 1%n" +
+                    "   Test wop 1%n" +
+                    "   Jason Bourne%n" +
+                    "   *250 000 USD*%n" +
+                    "No comment%n" +
+                    "---------------------------%n" +
+                    "*Test contractor 2*%n" +
+                    "   Test subj 2%n" +
+                    "   Test wop 2%n" +
+                    "   James Bond%n" +
+                    "   *0 RUB*%n" +
+                    "No comment");
 
     @Autowired
     private CommandHandler debtHandler;
 
-    @Autowired
-    private Supplier<Debt> debtSupplier;
 
     @BeforeEach
     public void setHandler() {
-        when(debtSupplier.getData()).thenReturn(List.of(debtOne(), debtTwo()));
-        when(debtSupplier.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = debtHandler;
     }
 
@@ -77,8 +81,12 @@ class DebtHandlerTest extends AbstractHandlerTest {
     @TestConfiguration
     static class DebtHandlerTestConfig {
         @Bean
-        Supplier<Debt> provider() {
-            return mock(Supplier.class);
+        ReportSupplier<DebtDto> provider() {
+            var mock = mock(ReportSupplier.class);
+            var data = new ReportData<>(List.of(debtDtoOne(), debtDtoTwo()), EXPECTED_DATE);
+            when(mock.get()).thenReturn(data);
+
+            return mock;
         }
     }
 }

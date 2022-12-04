@@ -1,57 +1,47 @@
 package com.whiskels.notifier.external.json.debt;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.JsonLoader;
-import com.whiskels.notifier.external.moex.Currency;
-import com.whiskels.notifier.external.moex.MoexRate;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+import com.whiskels.notifier.external.Loader;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.audit.Audit;
+import com.whiskels.notifier.external.json.currency.CurrencyRate;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
-import static com.whiskels.notifier.external.json.debt.DebtUtil.*;
-import static com.whiskels.notifier.external.moex.Currency.EUR_RUB;
-import static com.whiskels.notifier.external.moex.Currency.USD_RUB;
+import static com.whiskels.notifier.external.LoaderType.DEBT;
+import static java.math.BigDecimal.valueOf;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 
-@Component
-@ConditionalOnProperty("external.customer.debt.url")
-public class DebtLoader extends JsonLoader<Debt> {
-    private final int minRubValue;
-    private final Supplier<MoexRate> rateSupplier;
-
-    public DebtLoader(@Value("${external.customer.debt.url}") String jsonUrl,
-                      @Value("${external.customer.debt.json-node:content}") String jsonNode,
-                      @Value("${external.customer.debt.minRubValue:500}") int minRubValue,
-                      Supplier<MoexRate> rateSupplier) {
-        super(jsonUrl, jsonNode);
-        this.minRubValue = minRubValue;
-        this.rateSupplier = rateSupplier;
-    }
+@RequiredArgsConstructor
+class DebtLoader implements Loader<Debt> {
+    private final ReportSupplier<CurrencyRate> rateReportSupplier;
+    private final DebtFeignClient debtClient;
+    private static final int MIN_RUB_VALUE = 500;
 
     @Override
+    @Audit(loader = DEBT)
     public List<Debt> load() {
-        return filterAndSort(calculateTotalDebtFor(loadFromJson()),
-                totalDebtRoubleHigherThan(minRubValue));
+        return ofNullable(debtClient.get())
+                .map(DebtData::getContent)
+                .map(this::calculateTotalDebt)
+                .map(debts -> filterAndSort(debts, totalDebtRoubleHigherThan(MIN_RUB_VALUE)))
+                .orElse(emptyList());
     }
 
-    private List<Debt> calculateTotalDebtFor(List<Debt> debtList) {
-        List<MoexRate> moexRates = rateSupplier.getData();
-        debtList.forEach(debt -> {
-            debt.setTotalDebt(calculateTotalDebt(debt));
-            debt.setTotalDebtRouble(calculateTotalDebtRouble(debt, getRate(moexRates, USD_RUB), getRate(moexRates, EUR_RUB)));
+    private List<Debt> calculateTotalDebt(List<Debt> debts) {
+        List<CurrencyRate> currencyRates = rateReportSupplier.get().getContent();
+        var currencyRate = currencyRates.isEmpty() ? null : currencyRates.get(0);
+        debts.forEach(debt -> {
+            debt.calculateTotal();
+            debt.calculateTotalRouble(currencyRate);
         });
-
-        return debtList;
+        return debts;
     }
 
-    private double getRate(Collection<MoexRate> moexRates, Currency currency) {
-        return moexRates.stream()
-                .filter(rate -> rate.getCurrency().equals(currency))
-                .map(MoexRate::getRate)
-                .findAny()
-                .orElse(currency.getDefaultValue());
+    private static Predicate<Debt> totalDebtRoubleHigherThan(int amount) {
+        return debt -> debt.getTotalRouble().compareTo(valueOf(amount)) > 0;
     }
 }

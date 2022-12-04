@@ -1,53 +1,51 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.debt.Debt;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.json.debt.DebtDto;
 import com.whiskels.notifier.telegram.Command;
 import com.whiskels.notifier.telegram.ScheduledCommandHandler;
 import com.whiskels.notifier.telegram.builder.ReportBuilder;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
-import com.whiskels.notifier.telegram.event.SendMessageCreationEventPublisher;
 import com.whiskels.notifier.telegram.security.Secured;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.common.datetime.DateTimeUtil.reportDate;
+import static com.whiskels.notifier.common.util.DateTimeUtil.reportDate;
 import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_EMPTY_LINE;
-import static com.whiskels.notifier.common.util.StreamUtil.filterAndSort;
+import static com.whiskels.notifier.common.util.StreamUtil.filter;
 import static com.whiskels.notifier.telegram.Command.GET_DEBT;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
 import static com.whiskels.notifier.telegram.domain.Role.*;
 
 
 @Service
-@ConditionalOnBean(value = Debt.class, parameterizedContainer = Supplier.class)
+@ConditionalOnBean(value = DebtDto.class, parameterizedContainer = ReportSupplier.class)
 class DebtHandler implements ScheduledCommandHandler {
     private final String header;
-    private final Supplier<Debt> provider;
-    private final SendMessageCreationEventPublisher publisher;
+    private final ReportSupplier<DebtDto> provider;
 
     public DebtHandler(@Value("${telegram.report.customer.debt.header:Overdue debts report on}") String header,
-                       Supplier<Debt> provider,
-                       SendMessageCreationEventPublisher publisher) {
+                       ReportSupplier<DebtDto> provider) {
         this.header = header;
         this.provider = provider;
-        this.publisher = publisher;
     }
 
     @Override
     @Secured({MANAGER, HEAD, ADMIN})
-    public void handle(User user, String message) {
-        publisher.publish(builder(user)
-                .line(ReportBuilder.builder(header + reportDate(provider.lastUpdate()))
+    public SendMessage handle(User user, String message) {
+        var data = provider.get();
+        return builder(user)
+                .line(ReportBuilder.builder(header + reportDate(data.getReportDate()))
                         .setActiveCollector(COLLECTOR_EMPTY_LINE)
-                        .list(filterAndSort(provider.getData(), isValid(user)))
+                        .list(filter(data.getContent(), isValid(user)))
                         .build())
-                .build());
+                .build();
     }
 
     @Override
@@ -55,12 +53,7 @@ class DebtHandler implements ScheduledCommandHandler {
         return GET_DEBT;
     }
 
-    @Override
-    public Set<Role> getRoles() {
-        return Set.of(MANAGER, HEAD, ADMIN);
-    }
-
-    private static Predicate<Debt> isValid(User user) {
+    private static Predicate<DebtDto> isValid(User user) {
         return debt -> {
             final Set<Role> roles = user.getRoles();
             return roles.contains(ADMIN)

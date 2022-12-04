@@ -7,7 +7,7 @@
     <groupId>com.whiskels</groupId>
     <artifactId>TelegramNotifierBot</artifactId>
 
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
 
     <properties>
         <java.version>15</java.version>
@@ -15,20 +15,20 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-aspects.version>5.3.18</spring-aspects.version>
+        <spring-aspects.version>6.0.2</spring-aspects.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.26</telegrambots-spring.version>
 
         <!-- Slack API -->
-        <slack-api.version>1.21.1</slack-api.version>
+        <slack-api.version>1.27.1</slack-api.version>
 
         <!-- Google API -->
-        <google-api-client.version>1.33.4</google-api-client.version>
-        <google-oauth-client-jetty.version>1.33.2</google-oauth-client-jetty.version>
-        <google-sheets.version>v4-rev20220308-1.32.1</google-sheets.version>
+        <google-api-client.version>2.0.1</google-api-client.version>
+        <google-oauth-client-jetty.version>1.34.1</google-oauth-client-jetty.version>
+        <google-sheets.version>v4-rev20220927-2.0.0</google-sheets.version>
 
-        <jackson-json.version>2.13.2</jackson-json.version>
+        <jackson-json.version>2.14.0</jackson-json.version>
     </properties>
 
     <dependencies>
@@ -39,14 +39,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
             <version>${spring-aspects.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- Slack API -->
@@ -54,18 +60,6 @@
             <groupId>com.slack.api</groupId>
             <artifactId>slack-api-client</artifactId>
             <version>${slack-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.9.3</version>
-        </dependency>
-
-
-        <!-- SnakeYaml -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
         </dependency>
 
         <!-- Google Api -->
@@ -115,13 +109,6 @@
             <artifactId>h2</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-
         <!--JSON-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -138,6 +125,22 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson-json.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
+            <version>2.35.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -146,6 +149,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>2.6.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

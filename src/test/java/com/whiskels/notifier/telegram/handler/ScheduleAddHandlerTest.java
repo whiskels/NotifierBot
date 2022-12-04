@@ -50,25 +50,20 @@ class ScheduleAddHandlerTest extends AbstractHandlerTest {
 
     @Test
     void testScheduleAddHandler_AuthorizedWithValidCommand() {
-        handler.handle(USER_1, "/schedule 1000");
+        SendMessage actual = handler.handle(USER_1, "/schedule 1000");
 
         verify(scheduleService).addSchedule(any(Schedule.class), any(Integer.class));
         verifyNoMoreInteractions(scheduleService);
-
-        verify(publisher).publishEvent(captor.capture());
-        SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
         assertEquals(EXPECTED_AUTH_VALID_COMMAND, actual.getText());
     }
 
     @Test
     void testScheduleAddHandler_AuthorizedWithInvalidCommand() {
-        handler.handle(USER_1, "/schedule 10000");
+        SendMessage actual = handler.handle(USER_1, "/schedule 10000");
 
         verifyNoInteractions(scheduleService);
 
-        verify(publisher).publishEvent(captor.capture());
-        SendMessage actual = getCapturedMessage();
         assertEquals(String.valueOf(USER_1.getChatId()), actual.getChatId());
         assertEquals(EXPECTED_AUTH_INVALID_COMMAND, actual.getText());
     }

@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Entity
@@ -20,14 +20,13 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Schedule extends AbstractBaseEntity {
-
     @Column(name = "hour", nullable = false)
     private int hour;
 
     @Column(name = "minutes", nullable = false, columnDefinition = "integer default 0")
     private int minutes;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = CASCADE)
     @NotNull

@@ -1,10 +1,11 @@
 package com.whiskels.notifier.telegram;
 
-import com.whiskels.notifier.external.json.JsonReader;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static com.whiskels.notifier.JsonUtils.read;
 
 @UtilityClass
 public class UpdateTestData {
@@ -13,9 +14,7 @@ public class UpdateTestData {
 
     @SneakyThrows
     public static Update update(String jsonPath) {
-        return new JsonReader().read
-                (new ClassPathResource(jsonPath).getURL().toString(),
-                        Update.class)
-                .get(0);
+        return read(new ClassPathResource(jsonPath).getURL().toString(),
+                        Update.class).get(0);
     }
 }

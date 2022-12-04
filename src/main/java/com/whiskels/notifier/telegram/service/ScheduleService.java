@@ -18,7 +18,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
 
-    public List<Schedule> isAnyScheduled(LocalTime ldt) {
+    public List<Schedule> findScheduled(LocalTime ldt) {
         return scheduleRepository.getAllByHourAndMinute(ldt.getHour(), ldt.getMinute());
     }
 

@@ -1,4 +1,1 @@
-telegram:
-  bot:
-    # Telegram chat ID of bot admin
-    admin: 87971601
+telegram.bot.admin: 87971601

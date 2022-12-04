@@ -1,8 +1,8 @@
 package com.whiskels.notifier.telegram.handler;
 
-import com.whiskels.notifier.external.Supplier;
-import com.whiskels.notifier.external.json.operation.dto.PaymentDto;
-import com.whiskels.notifier.external.json.operation.service.PaymentSupplier;
+import com.whiskels.notifier.external.ReportData;
+import com.whiskels.notifier.external.ReportSupplier;
+import com.whiskels.notifier.external.json.operation.PaymentDto;
 import com.whiskels.notifier.telegram.CommandHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
-import static com.whiskels.notifier.external.json.FinOperationTestData.operationRevenue;
-import static com.whiskels.notifier.external.json.operation.dto.PaymentDto.fromEntity;
+import static com.whiskels.notifier.external.json.operation.FinOperationTestData.operationRevenue;
+import static com.whiskels.notifier.external.json.operation.PaymentDto.from;
 import static com.whiskels.notifier.telegram.UserTestData.USER_1;
 import static com.whiskels.notifier.telegram.UserTestData.USER_2;
 import static java.lang.String.format;
@@ -31,13 +31,8 @@ class PaymentHandlerTest extends AbstractHandlerTest {
     @Autowired
     private CommandHandler paymentHandler;
 
-    @Autowired
-    private Supplier<PaymentDto> paymentSupplier;
-
     @BeforeEach
     public void setHandler() {
-        when(paymentSupplier.getData()).thenReturn(List.of(fromEntity(operationRevenue())));
-        when(paymentSupplier.lastUpdate()).thenReturn(EXPECTED_DATE);
         handler = paymentHandler;
     }
 
@@ -54,8 +49,11 @@ class PaymentHandlerTest extends AbstractHandlerTest {
     @TestConfiguration
     static class DebtHandlerTestConfig {
         @Bean
-        Supplier<PaymentDto> provider() {
-            return mock(PaymentSupplier.class);
+        ReportSupplier<PaymentDto> provider() {
+            var mock = mock(ReportSupplier.class);
+            when(mock.get()).thenReturn(new ReportData<>(List.of(from(operationRevenue())), EXPECTED_DATE));
+
+            return mock;
         }
     }
 }
