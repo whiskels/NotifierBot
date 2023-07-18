@@ -3,7 +3,6 @@ package com.whiskels.notifier.slack.reporter.impl;
 import com.whiskels.notifier.common.util.Util;
 import com.whiskels.notifier.external.ReportSupplier;
 import com.whiskels.notifier.external.google.customer.CustomerBirthdayInfoDto;
-import com.whiskels.notifier.slack.SlackPayload;
 import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.AbstractCustomerEventReporter;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,12 +33,13 @@ class CustomerEventReporterOnEvent extends AbstractCustomerEventReporter {
 
     @Scheduled(cron = "${slack.customer.birthday.daily.cron:0 0 9 * * *}", zone = "${common.timezone}")
     public void executeScheduled() {
-        executor.execute(prepare());
+        prepareAndSend();
     }
 
-    public SlackPayload prepare() {
+    public void prepareAndSend() {
         var data = provider.get();
-        return createPayload(header + reportDate(data.getReportDate()), true);
+        var payload =  createPayload(header + reportDate(data.getReportDate()), true);
+        executor.execute(payload);
     }
 
     protected List<Predicate<CustomerBirthdayInfoDto>> birthdayPredicates() {

@@ -2,7 +2,6 @@ package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.ReportSupplier;
 import com.whiskels.notifier.external.json.employee.EmployeeDto;
-import com.whiskels.notifier.slack.SlackPayload;
 import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,11 +34,12 @@ class EmployeeEventReporterAtMonthStart extends AbstractEmployeeEventReporter {
 
     @Scheduled(cron = "${slack.employee.cron.monthStart:0 0 9 1 * *}", zone = "${common.timezone}")
     public void executeScheduled() {
-        executor.execute(prepare());
+        prepareAndSend();
     }
 
-    public SlackPayload prepare() {
-        return prepare(header);
+    public void prepareAndSend() {
+        var payload =  createPayload(header);
+        executor.execute(payload);
     }
 
     protected List<Predicate<EmployeeDto>> birthdayPredicates() {
