@@ -39,11 +39,11 @@ public abstract class AbstractEmployeeEventReporter extends SlackReporter<Employ
 
     protected abstract List<Predicate<EmployeeDto>> birthdayPredicates();
 
-    protected final SlackPayload prepare(String header) {
-        return prepare(header, false);
+    protected final SlackPayload createPayload(String header) {
+        return createPayload(header, false);
     }
 
-    protected final SlackPayload prepare(String header, boolean skipEmpty) {
+    protected final SlackPayload createPayload(String header, boolean skipEmpty) {
         log.debug("Creating employee event payload");
         SlackPayloadBuilder builder = builder()
                 .hook(webHook)

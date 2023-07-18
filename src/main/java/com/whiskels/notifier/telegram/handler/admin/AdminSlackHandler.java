@@ -14,15 +14,13 @@ import static com.whiskels.notifier.telegram.util.TelegramUtil.getTelegramLabel;
 @Service
 @ConditionalOnBean(SlackReporter.class)
 class AdminSlackHandler extends BeanCallingHandler<SlackReporter<?>> {
-    private final SlackWebHookExecutor executor;
 
     public AdminSlackHandler(List<SlackReporter<?>> reporters, SlackWebHookExecutor executor) {
         super("Manual slack reporter activation", reporters,
                 reporter -> {
-                    executor.execute(reporter.prepare());
+                    reporter.prepareAndSend();
                     return "Called " + getTelegramLabel(reporter);
                 });
-        this.executor = executor;
     }
 
     @Override

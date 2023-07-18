@@ -2,7 +2,6 @@ package com.whiskels.notifier.slack.reporter.impl;
 
 import com.whiskels.notifier.external.ReportSupplier;
 import com.whiskels.notifier.external.json.operation.PaymentDto;
-import com.whiskels.notifier.slack.SlackPayload;
 import com.whiskels.notifier.slack.SlackWebHookExecutor;
 import com.whiskels.notifier.slack.reporter.SlackReporter;
 import com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder;
@@ -47,20 +46,21 @@ class PaymentDailyReporter extends SlackReporter<PaymentDto> {
 
     @Scheduled(cron = "${slack.customer.payment.cron:0 1 13 * * MON-FRI}", zone = "${common.timezone}")
     public void executeScheduled() {
-        executor.execute(prepare());
+        prepareAndSend();
     }
 
-    public SlackPayload prepare() {
+    public void prepareAndSend() {
         log.debug("Creating employee event payload");
         var data = provider.get();
 
-        return SlackPayloadBuilder.builder()
+        var payload =  SlackPayloadBuilder.builder()
                 .hook(webHook)
                 .notifyChannel()
                 .header(header + reportDate(data.getReportDate()))
                 .collector(COLLECTOR_NEW_LINE)
                 .block(data.getContent(), reportPic(data.getContent()))
                 .build();
+        executor.execute(payload);
     }
 
     private String reportPic(List<PaymentDto> data) {

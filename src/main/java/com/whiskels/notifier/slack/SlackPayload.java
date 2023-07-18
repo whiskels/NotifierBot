@@ -8,5 +8,5 @@ import lombok.Getter;
 @Getter
 public class SlackPayload {
     private final String url;
-    private final Payload payload;
+    private final Payload data;
 }
