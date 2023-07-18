@@ -8,7 +8,6 @@ import com.whiskels.notifier.slack.reporter.SlackReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,6 @@ import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_TWO_NEW_LIN
 import static com.whiskels.notifier.slack.reporter.builder.SlackPayloadBuilder.builder;
 
 @Component
-@Profile("slack-common")
 @ConditionalOnProperty("slack.customer.debt.webhook")
 @ConditionalOnBean(value = DebtDto.class, parameterizedContainer = ReportSupplier.class)
 class DebtDailyReporter extends SlackReporter<DebtDto> {

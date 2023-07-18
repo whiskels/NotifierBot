@@ -17,9 +17,10 @@ import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 class DebtLoader implements Loader<Debt> {
+    private static final int MIN_RUB_VALUE = 500;
+
     private final ReportSupplier<CurrencyRate> rateReportSupplier;
     private final DebtFeignClient debtClient;
-    private static final int MIN_RUB_VALUE = 500;
 
     @Override
     @Audit(loader = DEBT)

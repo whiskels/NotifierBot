@@ -18,7 +18,7 @@ class _FinOperationBeanConfig {
     static final String FIN_OPERATION_URL = PROPERTIES_PREFIX + ".url";
 
     @Bean
-    public Loader<FinancialOperation> financialOperationLoader(
+    Loader<FinancialOperation> financialOperationLoader(
             FinOperationRepository repository,
             Clock clock,
             FinOperationFeignClient finOperationFeignClient
@@ -27,12 +27,12 @@ class _FinOperationBeanConfig {
     }
 
     @Bean
-    public FinOperationScheduler finOperationScheduler(Loader<FinancialOperation> loader) {
+    FinOperationScheduler finOperationScheduler(Loader<FinancialOperation> loader) {
         return new FinOperationScheduler(loader);
     }
 
     @Bean
-    public ReportSupplier<PaymentDto> paymentDtoSupplier(
+    ReportSupplier<PaymentDto> paymentDtoSupplier(
             FinOperationRepository repository,
             LoadAuditRepository auditRepository
     ) {

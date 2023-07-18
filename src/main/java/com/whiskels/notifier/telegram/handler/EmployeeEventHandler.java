@@ -26,7 +26,11 @@ import static com.whiskels.notifier.external.json.employee.EmployeeUtil.EMPLOYEE
 import static com.whiskels.notifier.external.json.employee.EmployeeUtil.EMPLOYEE_BIRTHDAY_COMPARATOR;
 import static com.whiskels.notifier.telegram.Command.GET_EVENT;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
-import static com.whiskels.notifier.telegram.domain.Role.*;
+import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.domain.Role.EMPLOYEE;
+import static com.whiskels.notifier.telegram.domain.Role.HEAD;
+import static com.whiskels.notifier.telegram.domain.Role.HR;
+import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
 
 @Service
 @ConditionalOnBean(value = EmployeeDto.class, parameterizedContainer = ReportSupplier.class)

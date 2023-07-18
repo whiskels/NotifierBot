@@ -8,7 +8,6 @@ import com.whiskels.notifier.slack.reporter.AbstractEmployeeEventReporter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,6 @@ import static com.whiskels.notifier.common.util.DateTimeUtil.isSameMonth;
 import static com.whiskels.notifier.common.util.Util.notNull;
 
 @Component
-@Profile("slack-common")
 @ConditionalOnProperty("slack.employee.webhook")
 @ConditionalOnBean(value = EmployeeDto.class, parameterizedContainer = ReportSupplier.class)
 class EmployeeEventReporterAtMonthStart extends AbstractEmployeeEventReporter {

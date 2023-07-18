@@ -16,8 +16,8 @@ import static java.util.Collections.singletonList;
 @Configuration
 class _CurrencyRateBeanConfig {
     @Bean
-    public Loader<CurrencyRate> currencyRateLoader(CurrencyRateFeignClient currencyRateClient) {
-        return new Loader<CurrencyRate>() {
+    Loader<CurrencyRate> currencyRateLoader(CurrencyRateFeignClient currencyRateClient) {
+        return new Loader<>() {
             @Override
             @Audit(loader = CURRENCY_RATE)
             public List<CurrencyRate> load() {
@@ -27,7 +27,7 @@ class _CurrencyRateBeanConfig {
     }
 
     @Bean
-    public ReportSupplier<CurrencyRate> currencyRateSupplier(Clock clock, Loader<CurrencyRate> loader) {
+    ReportSupplier<CurrencyRate> currencyRateSupplier(Clock clock, Loader<CurrencyRate> loader) {
         return new MemoizingReportSupplier<>(loader, clock);
     }
 }

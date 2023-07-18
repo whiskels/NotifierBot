@@ -6,7 +6,6 @@ import com.whiskels.notifier.telegram.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("telegram-common")
 @ConditionalOnBean(ScheduledCommandHandler.class)
 class MessageScheduler {
     private final ScheduleService scheduleService;

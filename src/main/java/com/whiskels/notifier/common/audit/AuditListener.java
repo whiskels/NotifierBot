@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 class AuditListener {
     private Clock clock;
 
-    @Autowired
+    @Autowired //JPA spec requires @PrePersist classes to have no-args constructor
     public void setClock(Clock clock) {
         this.clock = clock;
     }

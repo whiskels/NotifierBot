@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,6 @@ import static java.math.BigDecimal.ZERO;
 
 @Slf4j
 @Component
-@Profile("slack-common")
 @ConditionalOnProperty("slack.customer.payment.webhook")
 @ConditionalOnBean(value = PaymentDto.class, parameterizedContainer = ReportSupplier.class)
 @ConfigurationProperties("slack.customer.payment")

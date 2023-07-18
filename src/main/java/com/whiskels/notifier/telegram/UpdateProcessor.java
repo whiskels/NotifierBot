@@ -7,7 +7,6 @@ import com.whiskels.notifier.telegram.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,7 +19,6 @@ import java.util.function.Predicate;
 
 @Component
 @RequiredArgsConstructor
-@Profile("telegram-common")
 class UpdateProcessor {
     private final HandlerOrchestrator orchestrator;
     private final UserService userService;

@@ -3,7 +3,6 @@ package com.whiskels.notifier.telegram;
 import com.whiskels.notifier.telegram.domain.Role;
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.event.SendMessageCreationEventPublisher;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,7 +12,6 @@ import java.util.Set;
 import static com.whiskels.notifier.telegram.util.TelegramUtil.groupByAllowedRoles;
 
 @Component
-@Profile("telegram-common")
 class ScheduledHandlerOrchestrator {
     private final Map<Role, Set<ScheduledCommandHandler>> handlers;
     private final SendMessageCreationEventPublisher publisher;
