@@ -20,7 +20,7 @@ class _CustomerBirthdayInfoBeanConfig {
     static final String PROPERTIES_PREFIX = "external.google.customer.birthday";
 
     @Bean
-    public Loader<CustomerBirthdayInfo> customerBirthdayInfoLoader(
+    Loader<CustomerBirthdayInfo> customerBirthdayInfoLoader(
             Clock clock,
             GoogleSheetsReader spreadsheetLoader,
             CustomerBirthdaySpreadsheetProperties properties
@@ -29,7 +29,7 @@ class _CustomerBirthdayInfoBeanConfig {
     }
 
     @Bean
-    public ReportSupplier<CustomerBirthdayInfoDto> customerBirthdayInfoDtoSupplier(Clock clock, Loader<CustomerBirthdayInfo> loader) {
+    ReportSupplier<CustomerBirthdayInfoDto> customerBirthdayInfoDtoSupplier(Clock clock, Loader<CustomerBirthdayInfo> loader) {
         ReportSupplier<CustomerBirthdayInfo> reportSupplier = new MemoizingReportSupplier<>(loader, clock);
         return () -> reportSupplier.get().remap(CustomerBirthdayInfoDto::from);
     }

@@ -17,9 +17,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.telegram.Command.*;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE_CLEAR;
+import static com.whiskels.notifier.telegram.Command.SCHEDULE_HELP;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
-import static com.whiskels.notifier.telegram.domain.Role.*;
+import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.domain.Role.HEAD;
+import static com.whiskels.notifier.telegram.domain.Role.HR;
+import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.extractArguments;
 import static com.whiskels.notifier.telegram.util.ParsingUtil.getTime;
 

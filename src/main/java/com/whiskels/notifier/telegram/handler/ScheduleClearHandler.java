@@ -13,7 +13,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static com.whiskels.notifier.telegram.Command.SCHEDULE_CLEAR;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
-import static com.whiskels.notifier.telegram.domain.Role.*;
+import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.domain.Role.HEAD;
+import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
 
 @Service
 @ConditionalOnBean(ScheduledCommandHandler.class)

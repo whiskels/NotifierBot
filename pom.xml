@@ -15,18 +15,18 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring -->
-        <spring-aspects.version>6.0.2</spring-aspects.version>
+        <spring-aspects.version>6.0.9</spring-aspects.version>
 
         <!-- TelegramBots Spring Boot Starter -->
         <telegrambots-spring.version>0.26</telegrambots-spring.version>
 
         <!-- Slack API -->
-        <slack-api.version>1.27.1</slack-api.version>
+        <slack-api.version>1.28.0</slack-api.version>
 
         <!-- Google API -->
-        <google-api-client.version>2.0.1</google-api-client.version>
+        <google-api-client.version>2.2.0</google-api-client.version>
         <google-oauth-client-jetty.version>1.34.1</google-oauth-client-jetty.version>
-        <google-sheets.version>v4-rev20220927-2.0.0</google-sheets.version>
+        <google-sheets.version>v4-rev20230227-2.0.0</google-sheets.version>
 
         <jackson-json.version>2.14.0</jackson-json.version>
     </properties>
@@ -50,6 +50,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -64,7 +69,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.3</version>
+            <version>4.10.0</version>
         </dependency>
 
         <!-- Google Api -->

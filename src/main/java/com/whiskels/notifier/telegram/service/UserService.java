@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Profile("telegram-common & !demo")
+@Profile("!demo")
 public class UserService {
     protected final UserRepository userRepository;
 

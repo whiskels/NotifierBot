@@ -1,5 +1,6 @@
 package com.whiskels.notifier.external.json.operation;
 
+import com.whiskels.notifier.external.proxy.FeignProxyConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,9 @@ import static com.whiskels.notifier.external.json.operation._FinOperationBeanCon
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
-@FeignClient(name = "finOperationClient", configuration = FinOperationRequestInterceptorConfig.class, url = "https://")
+@FeignClient(name = "finOperationClient",
+        configuration = {FinOperationRequestInterceptorConfig.class, FeignProxyConfig.class},
+        url = "https://")
 @ConditionalOnProperty(FIN_OPERATION_URL)
 interface FinOperationFeignClient {
     @RequestMapping(method = GET)

@@ -15,7 +15,7 @@ class ClockConfiguration {
     private String timeZone;
 
     @Bean
-    public Clock defaultClock() {
+    Clock defaultClock() {
         return Clock.system(ZoneId.of(timeZone));
     }
 }

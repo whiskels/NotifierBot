@@ -17,12 +17,12 @@ class _EmployeeBeanConfig {
     static final String EMPLOYEE_URL = "external.employee.url";
 
     @Bean
-    public Loader<Employee> employeeLoader(EmployeeFeignClient employeeClient) {
+    Loader<Employee> employeeLoader(EmployeeFeignClient employeeClient) {
         return new EmployeeLoader(employeeClient);
     }
 
     @Bean
-    public ReportSupplier<EmployeeDto> employeeDtoSupplier(Clock clock, Loader<Employee> loader) {
+    ReportSupplier<EmployeeDto> employeeDtoSupplier(Clock clock, Loader<Employee> loader) {
         ReportSupplier<Employee> reportSupplier = new MemoizingReportSupplier<>(loader, clock);
         return () -> reportSupplier.get().remap(EmployeeDto::from);
     }

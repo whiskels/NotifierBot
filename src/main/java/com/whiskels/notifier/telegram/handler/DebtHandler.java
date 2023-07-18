@@ -21,7 +21,9 @@ import static com.whiskels.notifier.common.util.FormatUtil.COLLECTOR_EMPTY_LINE;
 import static com.whiskels.notifier.common.util.StreamUtil.filter;
 import static com.whiskels.notifier.telegram.Command.GET_DEBT;
 import static com.whiskels.notifier.telegram.builder.MessageBuilder.builder;
-import static com.whiskels.notifier.telegram.domain.Role.*;
+import static com.whiskels.notifier.telegram.domain.Role.ADMIN;
+import static com.whiskels.notifier.telegram.domain.Role.HEAD;
+import static com.whiskels.notifier.telegram.domain.Role.MANAGER;
 
 
 @Service

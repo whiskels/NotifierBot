@@ -2,7 +2,6 @@ package com.whiskels.notifier.telegram;
 
 import com.whiskels.notifier.telegram.domain.User;
 import com.whiskels.notifier.telegram.event.SendMessageCreationEventPublisher;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -14,7 +13,6 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 
 @Component
-@Profile("telegram-common")
 class HandlerOrchestrator {
     private final Map<Command, CommandHandler> handlers;
     private final CommandHandler defaultHandler;
