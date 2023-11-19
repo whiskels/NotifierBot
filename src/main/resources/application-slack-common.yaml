@@ -1,4 +1,7 @@
 slack:
+  employee:
+    before:
+      days: 3
   customer:
     payment:
       pics:
