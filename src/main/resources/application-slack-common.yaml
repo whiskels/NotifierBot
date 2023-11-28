@@ -3,7 +3,7 @@ slack:
     before:
       days: 3
   customer:
-    birthdays:
+    birthday:
       before:
         days: 7
     payment:
