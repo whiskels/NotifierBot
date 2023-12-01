@@ -37,7 +37,6 @@ class EmployeeEventReporterBeforeEvent extends AbstractEmployeeEventReporter {
         this.daysBefore = daysBefore;
     }
 
-    @PostConstruct
     @Scheduled(cron = "${slack.employee.before.cron:0 0 9 * * *}", zone = "${common.timezone}")
     public void sendScheduled() {
         prepareAndSend();
