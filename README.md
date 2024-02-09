@@ -63,7 +63,6 @@ Schedule management:
 ![ScreenShot](https://raw.github.com/whiskels/TelegramNotifierBot/master/screenshots/schedule_managing.png)
 
 
-
 ___
 ### Deployment
 Deployment via Heroku CLI:
