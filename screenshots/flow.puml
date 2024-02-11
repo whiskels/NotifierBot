@@ -1,0 +1,61 @@
+@startuml
+skinparam actorStyle awesome
+
+participant "Cron Jobs" as CJ
+participant "Task Scheduler" as TS
+participant "Report Service" as RS
+participant "Generic Report Service" as GRP
+participant "Data Fetch Service" as DFS
+participant "Message Conversion Service" as MCS
+participant "Payload Executor" as MS
+boundary "Slack" as SL
+actor "Admin" as ADMIN
+participant "CommandHandler" as CH
+participant "LogService" as LS
+
+' ---- Scheduled Reporting Flow ----
+== Scheduled Reporting flow ==
+
+CJ -> TS: Scheduled by
+TS -> RS: Requests report
+
+group Report Processing
+    RS -> GRP: Propagates report context
+
+    GRP -> DFS: Requests report data
+    alt DataFetchService Exception ' Occurs if breaking changed occured in API, proxy failed etc.
+        DFS --> RS: Exception Occurred
+        RS --> MS: Passes exception message
+        MS --> ADMIN: Sends exception message
+    end
+
+    DFS -> GRP: Returns report data
+    GRP -> MCS: Calls
+    MCS -> GRP: Returns iterable messages
+    GRP -> RS: Returns iterable messages
+
+    RS -> MS: Passes iterable messages
+    MS -> SL: Sends to slack
+
+    alt PayloadExecutor Exception ' Can occur if Slack payload delivery failed
+        SL --> MS: Returns exception
+        MS --> ADMIN: Sends exception message
+    end
+end
+
+' ---- Admin Intervention Flow ----
+== Admin Intervention ==
+
+group Retry report
+    ADMIN -> CH: Requests report retry
+    CH -> RS: Retry report
+    ref over RS: Report Processing
+end
+
+group Request for POD logs
+    ADMIN -> CH: Requests logs
+    CH -> LS: Requests logs
+    LS -> CH: Returns logs
+    CH -> ADMIN: Sends logs message
+end
+@enduml

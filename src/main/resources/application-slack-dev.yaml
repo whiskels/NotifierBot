@@ -1,7 +1,0 @@
-spring:
-  profiles.include: slack-common
-slack:
-  customer:
-    debt.webhook:
-    payment.webhook:
-  employee.webhook:

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: NotifierBot
+    depends_on:
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=mock,telegram
+      - SLACK_WEBHOOK
+      - TELEGRAM_BOT_ADMIN
+      - TELEGRAM_BOT_TOKEN
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+
+  db:
+    image: 'postgres:16.2'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

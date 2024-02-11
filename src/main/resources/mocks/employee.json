@@ -1,0 +1,102 @@
+[
+    {
+        "name": "James T. Kirk",
+        "birthday": "01.01",
+        "appointment_date": "2022-01-01"
+    },
+    {
+        "name": "Leia Organa",
+        "birthday": "03.02",
+        "appointment_date": "2022-01-15"
+    },
+    {
+        "name": "Spock",
+        "birthday": "07.03",
+        "appointment_date": "2022-02-01"
+    },
+    {
+        "name": "Ellen Ripley",
+        "birthday": "09.04",
+        "appointment_date": "2022-02-15"
+    },
+    {
+        "name": "Luke Skywalker",
+        "birthday": "12.05",
+        "appointment_date": "2022-03-01"
+    },
+    {
+        "name": "Nyota Uhura",
+        "birthday": "15.06",
+        "appointment_date": "2022-03-15"
+    },
+    {
+        "name": "Han Solo",
+        "birthday": "18.07",
+        "appointment_date": "2022-04-01"
+    },
+    {
+        "name": "Sarah Connor",
+        "birthday": "21.08",
+        "appointment_date": "2022-04-15"
+    },
+    {
+        "name": "Jean-Luc Picard",
+        "birthday": "23.09",
+        "appointment_date": "2022-05-01"
+    },
+    {
+        "name": "Princess Amidala",
+        "birthday": "26.10",
+        "appointment_date": "2022-05-15"
+    },
+    {
+        "name": "Anakin Skywalker",
+        "birthday": "29.11",
+        "appointment_date": "2022-06-01"
+    },
+    {
+        "name": "Darth Vader",
+        "birthday": "31.12",
+        "appointment_date": "2022-06-15"
+    },
+    {
+        "name": "Malcolm Reynolds",
+        "birthday": "02.01",
+        "appointment_date": "2022-07-01"
+    },
+    {
+        "name": "River Tam",
+        "birthday": "04.02",
+        "appointment_date": "2022-07-15"
+    },
+    {
+        "name": "Boba Fett",
+        "birthday": "08.03",
+        "appointment_date": "2022-08-01"
+    },
+    {
+        "name": "Marty McFly",
+        "birthday": "10.04",
+        "appointment_date": "2022-08-15"
+    },
+    {
+        "name": "Elliot Alderson",
+        "birthday": "13.05",
+        "appointment_date": "2022-09-01"
+    },
+    {
+        "name": "Wolverine",
+        "birthday": "16.06",
+        "appointment_date": "2022-09-15"
+    },
+    {
+        "name": "T-800",
+        "birthday": "19.07",
+        "appointment_date": "2022-10-01"
+    },
+    {
+        "name": "The Doctor",
+        "birthday": "22.08",
+        "appointment_date": "2022-10-15"
+    }
+]

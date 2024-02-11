@@ -1,8 +1,0 @@
-spring:
-  datasource:
-    # PostgreSQL syntax is not recommended in general - see https://stackoverflow.com/a/24235439/13716599
-    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
-    driverClassName: org.h2.Driver
-  profiles.active: test
-  profiles:
-    include: telegram-common, slack-common

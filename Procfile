@@ -1,1 +1,1 @@
-worker: sh target/bin/TelegramNotifierBot
+worker: sh target/bin/NotifierBot
