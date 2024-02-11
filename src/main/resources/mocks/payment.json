@@ -1,0 +1,62 @@
+[
+    {
+        "currency": "USD",
+        "amount": 1500.00,
+        "contractor": "Alpha Corp",
+        "amountRub": 112500.00
+    },
+    {
+        "currency": "EUR",
+        "amount": 2000.00,
+        "contractor": "Beta Ltd",
+        "amountRub": 153000.00
+    },
+    {
+        "currency": "GBP",
+        "amount": 1200.00,
+        "contractor": "Gamma Inc",
+        "amountRub": 91800.00
+    },
+    {
+        "currency": "USD",
+        "amount": 1800.00,
+        "contractor": "Delta Enterprises",
+        "amountRub": 135000.00
+    },
+    {
+        "currency": "EUR",
+        "amount": 2500.00,
+        "contractor": "Epsilon Co",
+        "amountRub": 191250.00
+    },
+    {
+        "currency": "GBP",
+        "amount": 1700.00,
+        "contractor": "Zeta Group",
+        "amountRub": 129750.00
+    },
+    {
+        "currency": "USD",
+        "amount": 2200.00,
+        "contractor": "Eta Corporation",
+        "amountRub": 165000.00
+    },
+    {
+        "currency": "EUR",
+        "amount": 2800.00,
+        "contractor": "Theta Industries",
+        "amountRub": 214200.00
+    },
+    {
+        "currency": "GBP",
+        "amount": 1900.00,
+        "contractor": "Iota Ltd",
+        "amountRub": 145350.00
+    },
+    {
+        "currency": "USD",
+        "amount": 2400.00,
+        "contractor": "Kappa Limited",
+        "amountRub": 180000.00
+    }
+]

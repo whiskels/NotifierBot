@@ -1,0 +1,4 @@
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+    admin: ${TELEGRAM_BOT_ADMIN}

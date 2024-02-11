@@ -3,20 +3,32 @@ spring:
     driver-class-name: org.postgresql.Driver
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
-      show-sql: true
       hibernate:
         ddl-auto: update
-    url: ${JDBC_DATABASE_URL}
   sql.init.mode: never
-# TODO fix profiles to remove this property
-  config.use-legacy-processing: true
-common.timezone: Europe/Moscow
----
-spring:
-  profiles: demo
-  profiles.include: telegram-common
-  datasource:
-    # PostgreSQL syntax is not recommended in general - see https://stackoverflow.com/a/24235439/13716599
-    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
-    driverClassName: org.h2.Driver
-telegram.bot.token:
+common:
+  timezone: Europe/Moscow
+report:
+  parameters:
+    customer-payment:
+      pics:
+        0:
+          - https://i.imgur.com/Os451Qo.jpeg
+          - https://i.imgur.com/unzfnaD.jpg
+          - https://i.imgur.com/0gf5s.jpg
+          - https://media.giphy.com/media/ND6xkVPaj8tHO/giphy.gif
+        100000:
+          - https://i.imgur.com/bDiTy7t.jpeg
+          - https://i.imgur.com/3rYHhEu.jpg
+          - https://i.imgur.com/gckZshj.jpg
+          - https://media.giphy.com/media/G4qAZYIFr1Cww/giphy.gif
+        1000000:
+          - https://i.imgur.com/fj138M6.jpeg
+          - https://i.imgur.com/ObVSUb6.jpg
+          - https://i.imgur.com/EAFSXYp.png
+          - https://i.imgur.com/uCKlPXG.jpg
+          - https://i.imgur.com/zsxTYeC.jpg
+          - https://media.giphy.com/media/cLLgfNJiKppgA/giphy.gif
+          - https://media.giphy.com/media/w2JmkbOHFoq8U/giphy.gif
+          - https://media.giphy.com/media/eDdEiM0Jq8Ene/giphy.gif
+          - https://media.giphy.com/media/YBsd8wdchmxqg/giphy.gif
