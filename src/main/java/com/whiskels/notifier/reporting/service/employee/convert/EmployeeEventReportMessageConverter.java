@@ -44,7 +44,7 @@ public class EmployeeEventReportMessageConverter implements ReportMessageConvert
     }
 
     private Payload createReport(ReportData<Employee> data, ReportContext context) {
-        var skipEmpty = context.isSkipEmpty();
+        var skipEmpty = context.getSkipEmpty().test(data.requestDate());
 
         List<EmployeeDto> birthdays = data.data().stream()
                 .filter(employee -> context.getBirthdayPredicate().test(employee, data.requestDate()))

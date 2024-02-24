@@ -8,6 +8,7 @@ import java.util.function.BiPredicate;
 
 import static com.whiskels.notifier.utilities.DateTimeUtil.isLater;
 import static com.whiskels.notifier.utilities.DateTimeUtil.isSameMonth;
+import static com.whiskels.notifier.utilities.DateTimeUtil.reportDate;
 
 public class MonthMiddleReportContext extends ReportContext {
     private static final BiPredicate<Employee, LocalDate> BIRTHDAY_PREDICATE = (employee, date) -> {
@@ -21,7 +22,7 @@ public class MonthMiddleReportContext extends ReportContext {
     };
 
     public MonthMiddleReportContext(String header) {
-        super(_ignored -> header, false, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
+        super(_ignored -> header, MonthMiddleReportContext::isMiddleOfMonth, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
     }
 
     private static boolean isMiddleOfMonth(LocalDate date) {

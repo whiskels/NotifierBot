@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 @AllArgsConstructor
 public class ReportContext {
     private final Function<LocalDate, String> headerMapper;
-    private final boolean skipEmpty;
+    private final Predicate<LocalDate> skipEmpty;
     private final BiPredicate<Employee, LocalDate> birthdayPredicate;
     private final BiPredicate<Employee, LocalDate>  anniversaryPredicate;
 }

@@ -26,6 +26,6 @@ public class DailyReportContext extends ReportContext {
     };
 
     public DailyReportContext(String headerPrefix) {
-        super(date -> STR."\{headerPrefix}\{reportDate(date)}", true, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
+        super(date -> STR."\{headerPrefix}\{reportDate(date)}", _ -> true, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
     }
 }

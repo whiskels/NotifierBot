@@ -160,13 +160,13 @@ class EmployeeEventReportMessageConverterTest {
                   "metadata" : null
                 }""";
         ReportContext birthdayContext = mock(ReportContext.class);
-        when(birthdayContext.isSkipEmpty()).thenReturn(false);
+        when(birthdayContext.getSkipEmpty()).thenReturn(_ -> false);
         when(birthdayContext.getBirthdayPredicate()).thenReturn((_, _) -> true);
         when(birthdayContext.getAnniversaryPredicate()).thenReturn((_, _) -> false);
         when(birthdayContext.getHeaderMapper()).thenReturn(_ -> "Birthday Header");
 
         ReportContext anniversaryContext = mock(ReportContext.class);
-        when(anniversaryContext.isSkipEmpty()).thenReturn(true);
+        when(anniversaryContext.getSkipEmpty()).thenReturn(_ -> true);
         when(anniversaryContext.getBirthdayPredicate()).thenReturn((_, _) -> false);
         when(anniversaryContext.getAnniversaryPredicate()).thenReturn((_, _) -> true);
         when(anniversaryContext.getHeaderMapper()).thenReturn(_ -> "Anniversary Header");
@@ -192,7 +192,7 @@ class EmployeeEventReportMessageConverterTest {
     @DisplayName("Should return null if skip empty and no data")
     void shouldReturnNullIfSkipEmptyAndNoData() {
         ReportContext context = mock(ReportContext.class);
-        when(context.isSkipEmpty()).thenReturn(true);
+        when(context.getSkipEmpty()).thenReturn(_ -> true);
         when(context.getBirthdayPredicate()).thenReturn((_, _) -> false);
         when(context.getAnniversaryPredicate()).thenReturn((_, _) -> false);
 

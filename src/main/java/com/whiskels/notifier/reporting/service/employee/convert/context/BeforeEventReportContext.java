@@ -15,7 +15,7 @@ import static com.whiskels.notifier.utilities.DateTimeUtil.reportDate;
 public class BeforeEventReportContext extends ReportContext {
     public BeforeEventReportContext(String headerPrefix, int daysBefore) {
         super(date -> STR."\{headerPrefix}\{reportDate(date)}",
-                false,
+                _ -> true,
                 (employee, date) -> {
                     var birthday = employee.getBirthday();
                     return isSameDay(birthday, date.plusDays(daysBefore));
