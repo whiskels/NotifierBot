@@ -24,6 +24,6 @@ report:
 google:
   spreadsheets:
     parameters:
-      json: ${GOOGLE_CREDENTIALS_JSON}
       app.name: ${GOOGLE_APP_NAME}
       email: ${GOOGLE_APP_EMAIL}
+      credentials: ${GOOGLE_CREDENTIALS_JSON}
