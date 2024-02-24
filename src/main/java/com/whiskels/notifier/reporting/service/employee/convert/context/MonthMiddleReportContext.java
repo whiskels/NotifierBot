@@ -22,7 +22,7 @@ public class MonthMiddleReportContext extends ReportContext {
     };
 
     public MonthMiddleReportContext(String header) {
-        super(_ignored -> header, MonthMiddleReportContext::isMiddleOfMonth, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
+        super(_ignored -> header, date -> !isMiddleOfMonth(date), BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
     }
 
     private static boolean isMiddleOfMonth(LocalDate date) {

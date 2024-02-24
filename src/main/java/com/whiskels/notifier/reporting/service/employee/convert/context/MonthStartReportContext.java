@@ -23,7 +23,7 @@ public class MonthStartReportContext extends ReportContext {
     };
 
     public MonthStartReportContext(String header) {
-        super(_ignored -> header, MonthStartReportContext::isStartOfMonth, BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
+        super(_ignored -> header, date -> !isStartOfMonth(date), BIRTHDAY_PREDICATE, ANNIVERSARY_PREDICATE);
     }
 
     private static boolean isStartOfMonth(LocalDate date) {

@@ -32,12 +32,16 @@ class MonthStartReportContextTest {
         LocalDate anniversaryReportDate = LocalDate.of(2024, 1, 1);
 
         // Test case where is same month and after the report date, and the report date is the beginning of the month
+        assertFalse(context.getSkipEmpty().test(birthdayReportDate));
         assertTrue(context.getBirthdayPredicate().test(employee, birthdayReportDate));
+        assertFalse(context.getSkipEmpty().test(anniversaryReportDate));
         assertTrue(context.getAnniversaryPredicate().test(employee, anniversaryReportDate));
 
         // Test case where is before the report date
-        assertFalse(context.getBirthdayPredicate().test(employee, LocalDate.of(2024, 2, 21)));
-        assertFalse(context.getAnniversaryPredicate().test(employee, LocalDate.of(2024, 1, 21)));
+        var invalidDate =  LocalDate.of(2024, 2, 21);
+        assertTrue(context.getSkipEmpty().test(invalidDate));
+        assertFalse(context.getBirthdayPredicate().test(employee, invalidDate));
+        assertFalse(context.getAnniversaryPredicate().test(employee, invalidDate));
 
         // Test case where is not the middle of the month
         assertFalse(context.getBirthdayPredicate().test(employee, LocalDate.of(2024, 2, 10)));
