@@ -47,9 +47,7 @@ class SlackPayloadExecutorTest {
     void shouldThrowExceptionWhenTypeDoesNotExist() throws IOException {
         slackPayloadExecutor = new SlackPayloadExecutor(slackClient, emptyMap());
 
-        assertThrows(IllegalStateException.class, () -> {
-            slackPayloadExecutor.send(CUSTOMER_BIRTHDAY, DUMMY_PAYLOAD);
-        });
+        assertThrows(IllegalStateException.class, () -> slackPayloadExecutor.send(CUSTOMER_BIRTHDAY, DUMMY_PAYLOAD));
 
         verify(slackClient, never()).send(anyString(), any(Payload.class));
     }

@@ -1,10 +1,6 @@
 package com.whiskels.notifier.reporting.service.customer.birthday.fetch;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.whiskels.notifier.JsonUtils;
 import com.whiskels.notifier.infrastructure.googlesheets.GoogleSheetsReader;
-import com.whiskels.notifier.reporting.service.customer.birthday.fetch.CustomerBirthdayInfoFetchService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

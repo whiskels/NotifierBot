@@ -1,10 +1,8 @@
 package com.whiskels.notifier.reporting.service.customer.payment.messaging;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.CustomerPaymentDto;
-import com.whiskels.notifier.reporting.service.customer.payment.messaging.PaymentReportMessageConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

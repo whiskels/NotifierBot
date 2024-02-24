@@ -23,7 +23,6 @@ import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramU
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.createMarkup;
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.extractArguments;
 import static com.whiskels.notifier.utilities.formatters.StringFormatter.COLLECTOR_NEW_LINE;
-import static java.util.Collections.singleton;
 
 @Service
 @Profile("telegram")

@@ -2,7 +2,6 @@ package com.whiskels.notifier.reporting.service.audit;
 
 import com.whiskels.notifier.reporting.ReportType;
 import com.whiskels.notifier.reporting.domain.AbstractTimeStampedEntity;
-import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,13 +9,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
-import static java.lang.String.format;
 import static javax.persistence.EnumType.STRING;
 
 @Entity
@@ -48,10 +47,5 @@ public class LoadAudit extends AbstractTimeStampedEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         LoadAudit loadAudit = (LoadAudit) o;
         return id != null && Objects.equals(id, loadAudit.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

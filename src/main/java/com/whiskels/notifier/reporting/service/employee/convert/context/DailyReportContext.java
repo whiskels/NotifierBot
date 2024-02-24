@@ -2,13 +2,8 @@ package com.whiskels.notifier.reporting.service.employee.convert.context;
 
 import com.whiskels.notifier.reporting.service.employee.convert.ReportContext;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
-import lombok.Builder;
-import lombok.experimental.SuperBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.function.BiPredicate;
 
 import static com.whiskels.notifier.utilities.DateTimeUtil.isSameDay;

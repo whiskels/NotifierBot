@@ -1,6 +1,5 @@
 package com.whiskels.notifier.infrastructure.admin.telegram.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.notifier.infrastructure.admin.telegram.Command;
 import com.whiskels.notifier.infrastructure.admin.telegram.CommandHandler;
 import com.whiskels.notifier.infrastructure.admin.telegram.TextBotMessage;
@@ -10,15 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
 
 import static com.whiskels.notifier.JsonUtils.assertEqualsWithJson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

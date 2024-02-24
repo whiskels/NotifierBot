@@ -1,8 +1,8 @@
 package com.whiskels.notifier.reporting.service.customer.payment.fetch;
 
+import com.whiskels.notifier.reporting.ReportType;
 import com.whiskels.notifier.reporting.service.DataFetchService;
 import com.whiskels.notifier.reporting.service.ReportData;
-import com.whiskels.notifier.reporting.ReportType;
 import com.whiskels.notifier.reporting.service.audit.LoadAuditRepository;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.CustomerPaymentDto;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.FinancialOperation;
@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;

@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Locale;
@@ -41,7 +40,7 @@ public final class DateTimeUtil {
     }
 
     public static String reportDate(LocalDate reportDate) {
-        return " " + DAY_MONTH_YEAR_FORMATTER.format(reportDate);
+        return STR." \{DAY_MONTH_YEAR_FORMATTER.format(reportDate)}";
     }
 
     public static LocalDate parseDate(String text) {

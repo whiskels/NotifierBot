@@ -2,7 +2,6 @@ package com.whiskels.notifier.reporting;
 
 import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.infrastructure.slack.SlackClient;
-import com.whiskels.notifier.reporting.ReportType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +16,7 @@ public class SlackPayloadExecutor {
 
     public void send(ReportType type, Payload payload) throws IOException {
         if (!webhookMappings.containsKey(type)) {
-            throw new IllegalStateException("No url found for report type=" + type);
+            throw new IllegalStateException(STR."No url found for report type=\{type}");
         }
         slackClient.send(webhookMappings.get(type), payload);
     }

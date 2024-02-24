@@ -3,7 +3,6 @@ package com.whiskels.notifier.reporting.service.customer.debt.mock;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.whiskels.notifier.reporting.service.DataFetchService;
 import com.whiskels.notifier.reporting.service.ReportData;
-import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CustomerDebt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

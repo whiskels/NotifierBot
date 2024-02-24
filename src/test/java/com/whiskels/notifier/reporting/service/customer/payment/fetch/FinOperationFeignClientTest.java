@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.whiskels.notifier.MockedClockConfiguration;
 import com.whiskels.notifier.reporting.WireMockTestConfig;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.FinancialOperation;
-import com.whiskels.notifier.reporting.service.customer.payment.fetch.FinOperationFeignClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @DirtiesContext
-@SpringBootTest(properties = "report.parameters.customer-payment.url: http://localhost:9561/operations/startDate/endDate")
+@SpringBootTest(properties = "report.parameters.customer-payment.url= http://localhost:9561/operations/startDate/endDate")
 @EnableFeignClients(clients = FinOperationFeignClient.class)
 @Import({WireMockTestConfig.class, MockedClockConfiguration.class})
 class FinOperationFeignClientTest {

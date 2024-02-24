@@ -1,16 +1,11 @@
 package com.whiskels.notifier.reporting.service.customer.debt.fetch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.whiskels.notifier.MockedClockConfiguration;
 import com.whiskels.notifier.reporting.service.DataFetchService;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CurrencyRate;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CustomerDebt;
-import com.whiskels.notifier.reporting.service.customer.debt.fetch.CustomerDebtData;
-import com.whiskels.notifier.reporting.service.customer.debt.fetch.CustomerDebtDebtDataFetchService;
-import com.whiskels.notifier.reporting.service.customer.debt.fetch.CustomerDebtFeignClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

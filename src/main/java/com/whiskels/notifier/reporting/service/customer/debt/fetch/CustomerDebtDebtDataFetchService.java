@@ -51,7 +51,7 @@ public class CustomerDebtDebtDataFetchService implements DataFetchService<Custom
     private CurrencyRate getCurrencyRate() {
         return Optional.of(rateReportSupplier.fetch())
                 .map(ReportData::data)
-                .map(list -> list.get(0))
+                .map(list -> list.getFirst())
                 .orElse(null);
     }
 

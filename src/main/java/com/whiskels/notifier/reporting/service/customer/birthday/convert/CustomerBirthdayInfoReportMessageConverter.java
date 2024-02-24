@@ -1,27 +1,23 @@
 package com.whiskels.notifier.reporting.service.customer.birthday.convert;
 
 import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.reporting.domain.HasBirthday;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
 import com.whiskels.notifier.reporting.service.SimpleReport;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
-import com.whiskels.notifier.reporting.domain.HasBirthday;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.utilities.DateTimeUtil.isSameDay;
-import static com.whiskels.notifier.utilities.DateTimeUtil.isSameMonth;
 import static com.whiskels.notifier.utilities.collections.StreamUtil.collectToBulletListString;
 import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.BIRTHDAY_FORMATTER;
-import static java.lang.String.format;
 
 @Slf4j
 @AllArgsConstructor

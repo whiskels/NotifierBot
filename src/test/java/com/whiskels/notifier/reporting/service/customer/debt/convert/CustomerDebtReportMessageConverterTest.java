@@ -6,9 +6,6 @@ import com.whiskels.notifier.reporting.service.customer.debt.domain.CurrencyRate
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CustomerDebt;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -16,12 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 import static com.whiskels.notifier.JsonUtils.MAPPER;
-import static com.whiskels.notifier.JsonUtils.assertEqualsWithJson;
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CustomerDebtReportMessageConverterTest {
     private final String header = "Debt Report on";

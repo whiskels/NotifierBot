@@ -3,11 +3,8 @@ package com.whiskels.notifier.reporting.service.customer.birthday.convert;
 import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
-import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 import com.whiskels.notifier.utilities.collections.StreamUtil;
 import lombok.SneakyThrows;
-import org.glassfish.jersey.internal.inject.Custom;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +16,8 @@ import static com.whiskels.notifier.MockedClockConfiguration.CLOCK;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

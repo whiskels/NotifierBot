@@ -4,12 +4,9 @@ import com.whiskels.notifier.reporting.service.employee.convert.ReportContext;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.function.BiPredicate;
 
-import static com.whiskels.notifier.utilities.DateTimeUtil.isSameDay;
 import static com.whiskels.notifier.utilities.DateTimeUtil.isSameMonth;
-import static com.whiskels.notifier.utilities.DateTimeUtil.reportDate;
 
 public class MonthStartReportContext extends ReportContext {
     private static final BiPredicate<Employee, LocalDate> BIRTHDAY_PREDICATE = (employee, date) -> {

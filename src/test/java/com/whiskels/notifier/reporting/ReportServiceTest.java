@@ -66,9 +66,7 @@ class ReportServiceTest {
     @Test
     @DisplayName("Should throw exception when no processor found")
     void shouldThrowExceptionWhenNoProcessorFound() {
-        ReportType type = CUSTOMER_BIRTHDAY;
-
-        assertThrows(RuntimeException.class, () -> reportService.executeReport(type));
+        assertThrows(RuntimeException.class, () -> reportService.executeReport(CUSTOMER_BIRTHDAY));
         verify(publisher).publishEvent(any(ExceptionEvent.class));
     }
 

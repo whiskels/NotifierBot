@@ -1,14 +1,12 @@
 package com.whiskels.notifier.infrastructure.admin.telegram.handler.retry;
 
-import com.whiskels.notifier.infrastructure.admin.telegram.Bot;
 import com.whiskels.notifier.infrastructure.admin.telegram.BotMessage;
 import com.whiskels.notifier.infrastructure.admin.telegram.Command;
 import com.whiskels.notifier.infrastructure.admin.telegram.CommandHandler;
 import com.whiskels.notifier.infrastructure.admin.telegram.TextBotMessage;
-import com.whiskels.notifier.reporting.service.ReportServiceImpl;
 import com.whiskels.notifier.reporting.ReportType;
+import com.whiskels.notifier.reporting.service.ReportServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,7 +19,6 @@ import static com.whiskels.notifier.infrastructure.admin.telegram.Command.RETRY_
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.button;
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.createMarkup;
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.extractArguments;
-import static java.util.Collections.singleton;
 
 @Service
 @RequiredArgsConstructor

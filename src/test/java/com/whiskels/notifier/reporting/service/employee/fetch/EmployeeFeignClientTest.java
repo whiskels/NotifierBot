@@ -3,7 +3,6 @@ package com.whiskels.notifier.reporting.service.employee.fetch;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.whiskels.notifier.reporting.WireMockTestConfig;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
-import com.whiskels.notifier.reporting.service.employee.fetch.EmployeeFeignClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @DirtiesContext
-@SpringBootTest(properties = "report.parameters.employee-event.url: http://localhost:9561/employees")
+@SpringBootTest(properties = "report.parameters.employee-event.url= http://localhost:9561/employees")
 @EnableFeignClients(clients = EmployeeFeignClient.class)
 @Import({WireMockTestConfig.class})
 class EmployeeFeignClientTest {
@@ -51,7 +50,7 @@ class EmployeeFeignClientTest {
         List<Employee> employees = employeeFeignClient.get();
 
         assertEquals(1, employees.size());
-        Employee employee = employees.get(0);
+        Employee employee = employees.getFirst();
         assertEquals("John Doe", employee.getName());
         assertEquals(LocalDate.of(2020, 1, 1), employee.getBirthday());
         assertEquals(LocalDate.of(2022, 1, 1), employee.getAppointmentDate());

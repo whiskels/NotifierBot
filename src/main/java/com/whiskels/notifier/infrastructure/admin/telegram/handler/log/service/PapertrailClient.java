@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @ConditionalOnProperty(PapertrailClient.PAPERTRAIL_API_TOKEN)
 @FeignClient(name = "papertrailClient",

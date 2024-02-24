@@ -1,6 +1,5 @@
 package com.whiskels.notifier.infrastructure.slack.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slack.api.webhook.Payload;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

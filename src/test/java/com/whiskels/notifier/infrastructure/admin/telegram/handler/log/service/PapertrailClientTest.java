@@ -1,7 +1,5 @@
 package com.whiskels.notifier.infrastructure.admin.telegram.handler.log.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.whiskels.notifier.infrastructure.admin.telegram.handler.log.domain.PaperTrailEventLog;
@@ -26,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 @DirtiesContext
 @SpringBootTest(properties = {
-        "PAPERTRAIL_API_TOKEN:123 ",
-        "papertrail.url: http://localhost:9561/logs"
+        "PAPERTRAIL_API_TOKEN=123 ",
+        "papertrail.url= http://localhost:9561/logs"
 })
 @EnableFeignClients(clients = PapertrailClient.class)
 @Import({WireMockTestConfig.class})

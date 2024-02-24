@@ -1,6 +1,5 @@
 package com.whiskels.notifier.reporting.service.employee.convert.context;
 
-import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ class MonthStartReportContextTest {
         assertTrue(context.getAnniversaryPredicate().test(employee, anniversaryReportDate));
 
         // Test case where is before the report date
-        var invalidDate =  LocalDate.of(2024, 2, 21);
+        var invalidDate = LocalDate.of(2024, 2, 21);
         assertTrue(context.getSkipEmpty().test(invalidDate));
         assertFalse(context.getBirthdayPredicate().test(employee, invalidDate));
         assertFalse(context.getAnniversaryPredicate().test(employee, invalidDate));

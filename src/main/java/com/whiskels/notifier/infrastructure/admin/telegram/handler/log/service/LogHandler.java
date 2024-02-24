@@ -3,10 +3,8 @@ package com.whiskels.notifier.infrastructure.admin.telegram.handler.log.service;
 import com.whiskels.notifier.infrastructure.admin.telegram.BotMessage;
 import com.whiskels.notifier.infrastructure.admin.telegram.Command;
 import com.whiskels.notifier.infrastructure.admin.telegram.CommandHandler;
-
 import com.whiskels.notifier.infrastructure.admin.telegram.DocumentBotMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 

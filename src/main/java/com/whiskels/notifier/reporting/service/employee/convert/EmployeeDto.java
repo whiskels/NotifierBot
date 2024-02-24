@@ -8,7 +8,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.BIRTHDAY_FORMATTER;
-import static java.lang.String.format;
 
 @Builder
 record EmployeeDto(String name, LocalDate birthday, LocalDate appointmentDate) implements HasBirthday {

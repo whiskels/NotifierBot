@@ -2,7 +2,6 @@ package com.whiskels.notifier.reporting.service.customer.birthday.convert.contex
 
 import com.whiskels.notifier.reporting.service.customer.birthday.convert.ReportContext;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
-import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 
 import java.time.LocalDate;
 import java.util.function.BiPredicate;

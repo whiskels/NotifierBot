@@ -2,11 +2,6 @@ package com.whiskels.notifier.reporting.service.audit;
 
 import com.whiskels.notifier.MockedClockConfiguration;
 import com.whiskels.notifier.reporting.service.ReportData;
-import com.whiskels.notifier.reporting.ReportType;
-import com.whiskels.notifier.reporting.service.audit.AuditDataFetchResult;
-import com.whiskels.notifier.reporting.service.audit.AuditDataFetchResultAspect;
-import com.whiskels.notifier.reporting.service.audit.LoadAudit;
-import com.whiskels.notifier.reporting.service.audit.LoadAuditRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -25,7 +19,6 @@ import java.util.stream.Stream;
 
 import static com.whiskels.notifier.reporting.ReportType.EMPLOYEE_EVENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

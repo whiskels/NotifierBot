@@ -2,10 +2,7 @@
 package com.whiskels.notifier.reporting.service.customer.birthday.config;
 
 import com.whiskels.notifier.infrastructure.googlesheets.GoogleSheetsReader;
-import com.whiskels.notifier.reporting.ReportType;
 import com.whiskels.notifier.reporting.service.DataFetchService;
-import com.whiskels.notifier.reporting.service.GenericReportService;
-import com.whiskels.notifier.reporting.service.ReportMessageConverter;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import com.whiskels.notifier.reporting.service.customer.birthday.fetch.CustomerBirthdayInfoFetchService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

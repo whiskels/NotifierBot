@@ -1,6 +1,5 @@
 package com.whiskels.notifier.reporting.service.employee.convert.context;
 
-import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

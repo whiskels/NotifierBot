@@ -1,25 +1,16 @@
 package com.whiskels.notifier.infrastructure.admin.telegram.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whiskels.notifier.infrastructure.admin.telegram.Bot;
 import com.whiskels.notifier.infrastructure.admin.telegram.Command;
 import com.whiskels.notifier.infrastructure.admin.telegram.handler.log.service.LogHandler;
 import com.whiskels.notifier.infrastructure.admin.telegram.handler.retry.RetryHandler;
-import com.whiskels.notifier.reporting.ReportType;
 import com.whiskels.notifier.reporting.exception.ExceptionEvent;
-import feign.Param;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.stream.Stream;
 
 import static com.whiskels.notifier.JsonUtils.MAPPER;
 import static com.whiskels.notifier.reporting.ReportType.EMPLOYEE_EVENT;

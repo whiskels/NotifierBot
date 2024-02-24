@@ -5,7 +5,6 @@ import com.whiskels.notifier.infrastructure.admin.telegram.Command;
 import com.whiskels.notifier.infrastructure.admin.telegram.CommandHandler;
 import com.whiskels.notifier.infrastructure.admin.telegram.TextBotMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,7 +16,6 @@ import java.util.List;
 import static com.whiskels.notifier.infrastructure.admin.telegram.Command.DEFAULT;
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.button;
 import static com.whiskels.notifier.infrastructure.admin.telegram.util.TelegramUtil.createMarkup;
-import static java.util.Collections.singleton;
 
 @Primary
 @Service
