@@ -44,8 +44,16 @@ class DateTimeUtilTest {
     @Test
     @DisplayName("Should parse date from text")
     void parseDateTest() {
-        assertEquals(LocalDate.of(2020,1,1), parseDate("01.01"));
+        LocalDate expected = LocalDate.of(LocalDate.now().getYear(), 1, 31);
+        assertEquals(expected, parseDate("31.01"));
+        assertEquals(expected, parseDate("31.01."));
+        assertEquals(expected, parseDate("31/01/"));
+        assertEquals(expected, parseDate("31/01"));
+        assertEquals(expected.withYear(2020), parseDate("31.01.2020"));
+        assertEquals(expected.withYear(2020), parseDate("31.1.2020"));
+        assertEquals(expected.withYear(2020), parseDate("31/01/2020"));
         assertNull(parseDate(""));
+        assertNull(parseDate("-"));
         assertNull(parseDate(null));
         assertNull(parseDate("ILLEGAL"));
     }

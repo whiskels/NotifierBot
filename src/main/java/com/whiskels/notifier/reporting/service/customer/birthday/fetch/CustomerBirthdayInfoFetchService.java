@@ -1,14 +1,15 @@
 package com.whiskels.notifier.reporting.service.customer.birthday.fetch;
 
 import com.whiskels.notifier.infrastructure.googlesheets.GoogleSheetsReader;
+import com.whiskels.notifier.reporting.domain.HasBirthday;
 import com.whiskels.notifier.reporting.service.DataFetchService;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.audit.AuditDataFetchResult;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
-import com.whiskels.notifier.reporting.domain.HasBirthday;
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class CustomerBirthdayInfoFetchService implements DataFetchService<Custom
     @Nonnull
     @AuditDataFetchResult(reportType = CUSTOMER_BIRTHDAY)
     @Override
+    @PostConstruct
     public ReportData<CustomerBirthdayInfo> fetch() {
         return new ReportData<>(load(), now(clock));
     }

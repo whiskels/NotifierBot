@@ -50,7 +50,7 @@ class EmployeeTest {
         Employee deserializedEmployee = MAPPER.readValue(json, Employee.class);
 
         assertEquals("John Doe", deserializedEmployee.getName());
-        assertEquals(LocalDate.of(2020, 1, 1), deserializedEmployee.getBirthday());
+        assertEquals(LocalDate.of(LocalDate.now().getYear(), 1, 1), deserializedEmployee.getBirthday());
         assertEquals(LocalDate.of(2022, 1, 1), deserializedEmployee.getAppointmentDate());
         assertEquals("Active", deserializedEmployee.getStatus());
         assertEquals("SystemX", deserializedEmployee.getStatusSystem());

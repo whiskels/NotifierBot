@@ -5,6 +5,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 
+import static com.whiskels.notifier.utilities.Util.defaultIfNull;
 import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.BIRTHDAY_FORMATTER;
 import static java.lang.String.format;
 
@@ -15,6 +16,6 @@ public record CustomerBirthdayInfo(String responsible, String responsibleEmail,
                                    String phone, LocalDate birthday,
                                    String position) implements HasBirthday {
     public String toString() {
-        return format("%s %s %s (%s)", name, surname, BIRTHDAY_FORMATTER.format(birthday), company);
+        return format("%s %s %s (%s)", name, surname, defaultIfNull(BIRTHDAY_FORMATTER.format(birthday), "unknown"), company);
     }
 }

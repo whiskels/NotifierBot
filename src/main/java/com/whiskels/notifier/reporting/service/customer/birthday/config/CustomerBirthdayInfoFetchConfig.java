@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Primary;
 
 import java.time.Clock;
 
-import static com.whiskels.notifier.reporting.service.customer.birthday.config.CustomerBirthdayInfoFetchConfig.PROPERTIES_PREFIX;
+import static com.whiskels.notifier.reporting.service.customer.birthday.config.CustomerBirthdayInfoFetchConfig.CUSTOMER_BIRTHDAY_PROPERTIES_PREFIX;
 
 @Configuration
-@ConditionalOnProperty(prefix = PROPERTIES_PREFIX, name = {"spreadsheet", "cell-range"})
+@ConditionalOnProperty(prefix = CUSTOMER_BIRTHDAY_PROPERTIES_PREFIX, name = {"spreadsheet", "cell-range"})
 class CustomerBirthdayInfoFetchConfig {
-    static final String PROPERTIES_PREFIX = "report.parameters.customer-birthday";
+    public static final String CUSTOMER_BIRTHDAY_PROPERTIES_PREFIX = "report.parameters.customer-birthday";
 
     @Bean
     @Primary

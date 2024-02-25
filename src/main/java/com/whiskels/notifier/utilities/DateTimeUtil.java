@@ -2,19 +2,22 @@ package com.whiskels.notifier.utilities;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.Locale;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.BIRTHDAY_FORMAT;
 import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.DAY_MONTH_YEAR_FORMATTER;
+import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.FORMATTER_WITHOUT_YEAR;
+import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.FORMATTER_WITH_YEAR;
+import static java.util.Objects.isNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public final class DateTimeUtil {
     // https://stackoverflow.com/a/33943576/13716599
     public static LocalDate subtractWorkingDays(LocalDate date, int workdays) {
@@ -44,17 +47,24 @@ public final class DateTimeUtil {
     }
 
     public static LocalDate parseDate(String text) {
-        if (text == null || text.isEmpty()) {
+        LocalDate result = null;
+        if (text == null || text.isEmpty() || text.equals("-")) {
+            log.debug("Date is empty - skipping parsing");
             return null;
         }
-        try {
-            return LocalDate.parse(text, new DateTimeFormatterBuilder()
-                    .appendPattern(BIRTHDAY_FORMAT)
-                    .parseDefaulting(ChronoField.YEAR, 2020)
-                    .toFormatter(Locale.ENGLISH));
-        } catch (Exception e) {
-            return null;
+        List<DateTimeFormatter> formatterList = List.of(FORMATTER_WITH_YEAR, FORMATTER_WITHOUT_YEAR);
+        for (DateTimeFormatter formatter : formatterList) {
+            try {
+                result = LocalDate.parse(text, formatter);
+                log.debug("Parsed {} to date: {}", text, result);
+                break;
+            } catch (Exception _) {
+            }
         }
+        if (isNull(result)) {
+            log.warn("Unable to deserialize date: {}", text);
+        }
+        return result;
     }
 
     public static boolean isSameMonth(LocalDate date, LocalDate checkDate) {

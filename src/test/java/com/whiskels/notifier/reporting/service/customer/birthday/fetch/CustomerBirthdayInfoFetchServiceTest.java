@@ -30,7 +30,7 @@ class CustomerBirthdayInfoFetchServiceTest {
 
         when(spreadsheetLoader.read(SPREADSHEET, CELL_RANGE))
                 .thenReturn(List.of(
-                                List.of("Responsible", "ResponsibleEmail", "ClientId", "Company", "Name", "Surname", "Email", "Telegram", "Phone", "10.02", "Position"),
+                                List.of("Responsible", "ResponsibleEmail", "ClientId", "Company", "Name", "Surname", "Email", "Telegram", "Phone", "10.02.2024", "Position"),
                                 List.of("Filtered", "Filtered", "Filtered", "Filtered", "Filtered", "Filtered", "Filtered", "Filtered", "Filtered", "10.03", "Filtered"),
                                 List.of("Exception", "Exception", "Exception", "Exception", "Exception", "Exception", "Exception", "Exception", "Exception", "Exception", "Exception"),
                                 List.of("Invalid")
@@ -51,7 +51,7 @@ class CustomerBirthdayInfoFetchServiceTest {
                     "email" : "Email",
                     "telegram" : "Telegram",
                     "phone" : "Phone",
-                    "birthday" : [ 2020, 2, 10 ],
+                    "birthday" : [ 2024, 2, 10 ],
                     "position" : "Position"
                   } ],
                   "requestDate" : [ 2024, 2, 23 ]

@@ -2,7 +2,6 @@ package com.whiskels.notifier.reporting.service.employee.domain;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.whiskels.notifier.reporting.service.employee.domain.BirthdayDeserializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +29,7 @@ class BirthdayDeserializerTest {
     @DisplayName("Should deserialize using deserializer")
     void testDeserialize() throws IOException {
         String birthdayStr = "20.12";
-        LocalDate expectedDate = LocalDate.of(2020, 12, 20);
+        LocalDate expectedDate = LocalDate.of(LocalDate.now().getYear(), 12, 20);
 
         when(jsonParser.getText()).thenReturn(birthdayStr);
 
