@@ -9,7 +9,6 @@ import com.whiskels.notifier.reporting.service.customer.birthday.domain.Customer
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,6 @@ public class CustomerBirthdayInfoFetchService implements DataFetchService<Custom
     @Nonnull
     @AuditDataFetchResult(reportType = CUSTOMER_BIRTHDAY)
     @Override
-    @PostConstruct
     public ReportData<CustomerBirthdayInfo> fetch() {
         return new ReportData<>(load(), now(clock));
     }
