@@ -7,6 +7,13 @@ on:
         description: "Branch to deploy"
         required: true
         type: string
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        type: string
+        default: master
 
 jobs:
   deploy:
