@@ -2,7 +2,7 @@
 #### ...with Telegram Admin panel
 
 ![CI](https://github.com/whiskels/NotifierBot/actions/workflows/ci.yml/badge.svg)
-![Deploy to Heroku](https://github.com/whiskels/NotifierBot/actions/workflows/deploy.yml/badge.svg)
+![Deploy to Heroku](https://github.com/whiskels/NotifierBot/actions/workflows/CD.yml/badge.svg)
 [![codecov](https://codecov.io/gh/whiskels/NotifierBot/graph/badge.svg?token=F51GAFZ63Q)](https://codecov.io/gh/whiskels/NotifierBot)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/307f26a176cd4488b19db004f6705254)](https://www.codacy.com/gh/whiskels/TelegramNotifierBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiskels/TelegramNotifierBot&amp;utm_campaign=Badge_Grade)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fwhiskels%2FTelegramNotifierBot&count_bg=%2379C83D&title_bg=%23555555&icon=telegram.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)

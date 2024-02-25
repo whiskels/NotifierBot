@@ -1,19 +1,20 @@
 name: Deploy to Heroku
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: [ "CI" ]
-    branches: [ master ]
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        type: string
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -23,7 +24,7 @@ jobs:
       - name: Deploy
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: mvn -B clean heroku:deploy -DskipTests
+        run: mvn -B clean heroku:deploy
   scale:
     needs: deploy
     runs-on: ubuntu-latest

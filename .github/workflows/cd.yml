@@ -1,0 +1,16 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ master ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      branch: ${{ github.event.inputs.branch }}
+    secrets: inherit
