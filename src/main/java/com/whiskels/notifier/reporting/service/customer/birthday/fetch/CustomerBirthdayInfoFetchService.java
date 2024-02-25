@@ -7,6 +7,7 @@ import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.audit.AuditDataFetchResult;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
 import java.time.Clock;
@@ -20,6 +21,7 @@ import static java.time.LocalDate.now;
 import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerBirthdayInfoFetchService implements DataFetchService<CustomerBirthdayInfo> {
     private final Clock clock;
     private final GoogleSheetsReader spreadsheetLoader;
@@ -34,6 +36,7 @@ public class CustomerBirthdayInfoFetchService implements DataFetchService<Custom
     }
 
     private List<CustomerBirthdayInfo> load() {
+        log.info("Reading {}", cellRange);
         return spreadsheetLoader.read(spreadSheet, cellRange).stream()
                 .map(CustomerBirthdayInfoFetchService::mapFromExcelData)
                 .filter(customerBirthdayInfo -> nonNull(customerBirthdayInfo) && isSameMonth(customerBirthdayInfo.birthday(), now(clock)))

@@ -5,7 +5,7 @@ report:
   parameters:
     customer-birthday:
       spreadsheet: ${CUSTOMER_BIRTHDAY_SPREADSHEET}
-      cell-range: ${CUSTOMER_BIRTHDAY_CELL_RANGE}
+      cell-range: Контакты!A2:L
     customer-debt:
       url: ${CUSTOMER_DEBT_JSON_URL}
     customer-payment:
