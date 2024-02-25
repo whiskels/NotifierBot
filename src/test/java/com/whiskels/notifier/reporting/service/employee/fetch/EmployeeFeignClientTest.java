@@ -52,7 +52,7 @@ class EmployeeFeignClientTest {
         assertEquals(1, employees.size());
         Employee employee = employees.getFirst();
         assertEquals("John Doe", employee.getName());
-        assertEquals(LocalDate.of(2020, 1, 1), employee.getBirthday());
+        assertEquals(LocalDate.of(LocalDate.now().getYear(), 1, 1), employee.getBirthday());
         assertEquals(LocalDate.of(2022, 1, 1), employee.getAppointmentDate());
     }
 }
