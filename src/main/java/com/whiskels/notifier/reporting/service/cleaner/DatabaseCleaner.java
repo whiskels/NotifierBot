@@ -2,6 +2,7 @@ package com.whiskels.notifier.reporting.service.cleaner;
 
 import com.whiskels.notifier.infrastructure.repository.AbstractRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ class DatabaseCleaner {
         repositories.forEach(repository -> {
             int deletedCount = repository.deleteByDateBefore(deleteBeforeDate);
             log.info("{} Deleted {} old entries loaded before {}",
-                    repository.getClass().getSimpleName(), deletedCount, deleteBeforeDate);
+                    AopProxyUtils.proxiedUserInterfaces(repository)[0].getSimpleName(), deletedCount, deleteBeforeDate);
         });
     }
 }

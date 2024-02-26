@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
-
 import java.time.Clock;
 import java.util.Comparator;
 import java.util.List;
@@ -59,7 +58,7 @@ public class EmployeeEventReportMessageConverter implements ReportMessageConvert
                 .collect(Collectors.toList());
 
         if (skipEmpty && birthdays.isEmpty() && anniversaries.isEmpty()) {
-            log.debug("Employee payload creation aborted: empty event lists and skipEmpty flag is true: {}", context.getClass().getSimpleName());
+            log.warn("Employee payload creation aborted: empty event lists and skipEmpty flag is true: {}", context.getClass().getSimpleName());
             return null;
         }
 
