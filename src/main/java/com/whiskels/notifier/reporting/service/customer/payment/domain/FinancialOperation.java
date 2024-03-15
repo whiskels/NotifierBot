@@ -3,6 +3,8 @@ package com.whiskels.notifier.reporting.service.customer.payment.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.whiskels.notifier.reporting.domain.AbstractTimeStampedEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +33,13 @@ public class FinancialOperation extends AbstractTimeStampedEntity implements Com
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String currency;
+    @JsonSetter(nulls = Nulls.SKIP)
     private BigDecimal amount = BigDecimal.ZERO;
     @JsonProperty("amount_usd")
+    @JsonSetter(nulls = Nulls.SKIP)
     private BigDecimal amountUsd = BigDecimal.ZERO;
     @JsonProperty("amount_rub")
+    @JsonSetter(nulls = Nulls.SKIP)
     private BigDecimal amountRub = BigDecimal.ZERO;
     private String bank;
     @JsonProperty("bank_account")
