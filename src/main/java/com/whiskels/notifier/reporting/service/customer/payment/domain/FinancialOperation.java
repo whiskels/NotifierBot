@@ -31,11 +31,11 @@ public class FinancialOperation extends AbstractTimeStampedEntity implements Com
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String currency;
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO;
     @JsonProperty("amount_usd")
-    private BigDecimal amountUsd;
+    private BigDecimal amountUsd = BigDecimal.ZERO;
     @JsonProperty("amount_rub")
-    private BigDecimal amountRub;
+    private BigDecimal amountRub = BigDecimal.ZERO;
     private String bank;
     @JsonProperty("bank_account")
     private String bankAccount;
