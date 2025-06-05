@@ -1,8 +1,9 @@
 package com.whiskels.notifier.reporting;
 
-import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.infrastructure.report.slack.SlackReportExecutor;
 import com.whiskels.notifier.reporting.exception.ExceptionEvent;
 import com.whiskels.notifier.reporting.service.GenericReportService;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.io.IOException;
 import java.util.List;
 
 import static com.whiskels.notifier.reporting.ReportType.CUSTOMER_BIRTHDAY;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
-    private static final Payload MOCKED_REPORT = Payload.builder().build();
+    private static final Report MOCKED_REPORT = Report.builder().build();
 
     @Mock
     private GenericReportService<?> genericReportServiceOne;
@@ -36,7 +36,7 @@ class ReportServiceTest {
     private GenericReportService<?> genericReportServiceTwo;
 
     @Mock
-    private SlackPayloadExecutor payloadExecutor;
+    private SlackReportExecutor payloadExecutor;
 
     @Mock
     private ApplicationEventPublisher publisher;
@@ -49,12 +49,12 @@ class ReportServiceTest {
         lenient().when(genericReportServiceOne.prepareReports()).thenReturn(List.of(MOCKED_REPORT));
         lenient().when(genericReportServiceTwo.getType()).thenReturn(CUSTOMER_DEBT);
         lenient().when(genericReportServiceTwo.prepareReports()).thenThrow(new RuntimeException("Test exception"));
-        reportService = new ReportServiceImpl(List.of(genericReportServiceOne, genericReportServiceTwo), payloadExecutor, publisher);
+        reportService = new ReportServiceImpl(List.of(genericReportServiceOne, genericReportServiceTwo), List.of(payloadExecutor), publisher);
     }
 
     @Test
     @DisplayName("Should execute report successfully")
-    void shouldExecuteReportSuccessfully() throws IOException {
+    void shouldExecuteReportSuccessfully() {
         ReportType type = EMPLOYEE_EVENT;
 
         reportService.executeReport(type);

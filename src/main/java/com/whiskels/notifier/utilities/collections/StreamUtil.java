@@ -18,7 +18,7 @@ public final class StreamUtil {
     @SafeVarargs
     public static <T extends Comparable<T>> List<T> filterAndSort(List<T> list, Predicate<T>... predicates) {
         return list.stream()
-                .filter(Stream.of(predicates).reduce(x -> true, Predicate::and))
+                .filter(Stream.of(predicates).reduce(_ -> true, Predicate::and))
                 .sorted()
                 .collect(toList());
     }
@@ -26,13 +26,13 @@ public final class StreamUtil {
     @SafeVarargs
     public static <T> List<T> filterAndSort(List<T> list, Comparator<T> comparator, Predicate<T>... predicates) {
         return list.stream()
-                .filter(Stream.of(predicates).reduce(x -> true, Predicate::and))
+                .filter(Stream.of(predicates).reduce(_ -> true, Predicate::and))
                 .sorted(comparator)
                 .collect(toList());
     }
 
-    public static <T, R> List<R> map(List<T> list, Function<? super T, ? extends R> func) {
-        return list.stream().map(func).collect(toList());
+    public static <T, R> List<R> map(Collection<T> coll, Function<? super T, ? extends R> func) {
+        return coll.stream().map(func).collect(toList());
     }
 
     public static <T> String collectToBulletListString(Collection<T> collection, Function<T, String> toStringFunc) {

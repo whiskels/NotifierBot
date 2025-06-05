@@ -1,6 +1,6 @@
 package com.whiskels.notifier.reporting.service.customer.payment.messaging;
 
-import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.CustomerPaymentDto;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static com.whiskels.notifier.JsonUtils.MAPPER;
-import static com.whiskels.notifier.TestUtil.assertEqualsIgnoringCR;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PaymentReportMessageConverterTest {
@@ -26,67 +25,25 @@ class PaymentReportMessageConverterTest {
 
     @Test
     @DisplayName("Should prepare empty report")
-    void shouldPrepareEmptyReport() throws Exception {
+    void shouldPrepareEmptyReport() {
         LocalDate regularDate = LocalDate.of(2023, 6, 10);
         ReportData<CustomerPaymentDto> data = new ReportData<>(emptyList(), regularDate);
 
-        Iterable<Payload> iterable = converter.convert(data);
+        var iterable = converter.convert(data);
 
         var iterator = iterable.iterator();
         assertTrue(iterator.hasNext());
-        var payload = iterator.next();
-        assertEqualsIgnoringCR(
-                """
-                        {
-                          "threadTs" : null,
-                          "text" : "Payment report on 10-06-2023",
-                          "channel" : null,
-                          "username" : null,
-                          "iconUrl" : null,
-                          "iconEmoji" : null,
-                          "blocks" : [ {
-                            "type" : "header",
-                            "blockId" : "0",
-                            "text" : {
-                              "type" : "plain_text",
-                              "text" : "Payment report on 10-06-2023",
-                              "emoji" : false
-                            }
-                          }, {
-                            "type" : "section",
-                            "text" : {
-                              "type" : "mrkdwn",
-                              "text" : "@channel",
-                              "verbatim" : null
-                            },
-                            "blockId" : "1",
-                            "fields" : null,
-                            "accessory" : null
-                          }, {
-                            "type" : "section",
-                            "text" : {
-                              "type" : "mrkdwn",
-                              "text" : "Nothing",
-                              "verbatim" : null
-                            },
-                            "blockId" : "2",
-                            "fields" : null,
-                            "accessory" : {
-                              "type" : "image",
-                              "image_url" : "Test",
-                              "alt_text" : "Funny pic"
-                            }
-                          } ],
-                          "attachments" : null,
-                          "unfurlLinks" : null,
-                          "unfurlMedia" : null,
-                          "metadata" : null
-                        }""", MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(payload));
+        var report = iterator.next();
+        assertEquals(Report.builder()
+                .header("Payment report on 10-06-2023")
+                .notifyChannel(true)
+                .build()
+                .addBody("Nothing", "Test"), report);
     }
 
     @Test
     @DisplayName("Should prepare report")
-    void shouldPrepareReport() throws Exception {
+    void shouldPrepareReport() {
         LocalDate regularDate = LocalDate.of(2023, 6, 10);
         CustomerPaymentDto dtoOne = CustomerPaymentDto.builder()
                 .amount(new BigDecimal("100000"))
@@ -102,56 +59,16 @@ class PaymentReportMessageConverterTest {
                 .build();
         ReportData<CustomerPaymentDto> data = new ReportData<>(List.of(dtoOne, dtoTwo), regularDate);
 
-        Iterable<Payload> iterable = converter.convert(data);
+        var iterable = converter.convert(data);
 
         var iterator = iterable.iterator();
         assertTrue(iterator.hasNext());
-        var payload = iterator.next();
-        assertEqualsIgnoringCR("""
-                {
-                  "threadTs" : null,
-                  "text" : "Payment report on 10-06-2023",
-                  "channel" : null,
-                  "username" : null,
-                  "iconUrl" : null,
-                  "iconEmoji" : null,
-                  "blocks" : [ {
-                    "type" : "header",
-                    "blockId" : "0",
-                    "text" : {
-                      "type" : "plain_text",
-                      "text" : "Payment report on 10-06-2023",
-                      "emoji" : false
-                    }
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "@channel",
-                      "verbatim" : null
-                    },
-                    "blockId" : "1",
-                    "fields" : null,
-                    "accessory" : null
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "Second Entry entry — 100 000 000 RUB\\nFirst entry — 100 000 EUR",
-                      "verbatim" : null
-                    },
-                    "blockId" : "2",
-                    "fields" : null,
-                    "accessory" : {
-                      "type" : "image",
-                      "image_url" : "Test2",
-                      "alt_text" : "Funny pic"
-                    }
-                  } ],
-                  "attachments" : null,
-                  "unfurlLinks" : null,
-                  "unfurlMedia" : null,
-                  "metadata" : null
-                }""", MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(payload));
+        var report = iterator.next();
+        assertEquals(Report.builder()
+                        .header("Payment report on 10-06-2023")
+                        .notifyChannel(true)
+                        .build()
+                        .addBody("Second Entry entry — 100 000 000 RUB\nFirst entry — 100 000 EUR", "Test2"),
+                report);
     }
 }

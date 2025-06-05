@@ -2,8 +2,6 @@ package com.whiskels.notifier.reporting.service.employee.fetch;
 
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
-import com.whiskels.notifier.reporting.service.employee.fetch.EmployeeDataFetchService;
-import com.whiskels.notifier.reporting.service.employee.fetch.EmployeeFeignClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

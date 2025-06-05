@@ -1,9 +1,8 @@
 package com.whiskels.notifier.reporting.service.customer.debt.convert;
 
-import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
-import com.whiskels.notifier.reporting.service.SimpleReport;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CustomerDebt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,30 +28,31 @@ public class CustomerDebtReportMessageConverter implements ReportMessageConverte
 
     @Override
     @Nonnull
-    public Iterable<Payload> convert(@Nonnull ReportData<CustomerDebt> data) {
+    public Iterable<Report> convert(@Nonnull ReportData<CustomerDebt> data) {
         return data.data().size() < SINGLE_REPORT_CUTOFF
                 ? singleReport(data)
                 : multiReport(data);
     }
 
-    private List<Payload> singleReport(ReportData<CustomerDebt> reportData) {
-        return singletonList(new SimpleReport(
-                STR."\{header}\{reportDate(reportData.requestDate())}",
-                        mapToReportText(reportData.data())
-                ).toSlackPayload()
+    private List<Report> singleReport(ReportData<CustomerDebt> reportData) {
+        return singletonList(
+                Report.builder()
+                        .header(STR."\{header}\{reportDate(reportData.requestDate())}")
+                        .build()
+                        .addBody(mapToReportText(reportData.data()))
         );
     }
 
-    private List<Payload> multiReport(ReportData<CustomerDebt> reportData) {
-        List<Payload> reports = new ArrayList<>();
+    private List<Report> multiReport(ReportData<CustomerDebt> reportData) {
+        List<Report> reports = new ArrayList<>();
         var content = reportData.data();
         int reportNum = 1;
         for (int i = 0; i < content.size(); i += SINGLE_REPORT_CUTOFF) {
             var subList = content.subList(i, Math.min(content.size(), i + SINGLE_REPORT_CUTOFF));
-            reports.add(new SimpleReport(
-                    STR."\{header}\{reportDate(reportData.requestDate())} #\{reportNum++}",
-                    mapToReportText(subList)).toSlackPayload()
-            );
+            reports.add(Report.builder()
+                    .header(STR."\{header}\{reportDate(reportData.requestDate())} #\{reportNum++}")
+                    .build()
+                    .addBody(mapToReportText(subList)));
         }
         return reports;
     }

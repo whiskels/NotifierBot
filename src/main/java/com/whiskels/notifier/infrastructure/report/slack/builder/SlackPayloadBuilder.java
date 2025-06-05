@@ -1,4 +1,4 @@
-package com.whiskels.notifier.infrastructure.slack.builder;
+package com.whiskels.notifier.infrastructure.report.slack.builder;
 
 import com.slack.api.model.block.HeaderBlock;
 import com.slack.api.model.block.LayoutBlock;
@@ -54,7 +54,7 @@ public final class SlackPayloadBuilder {
         return this;
     }
 
-    public <T> SlackPayloadBuilder block(String text, String picUrl) {
+    public SlackPayloadBuilder block(String text, String picUrl) {
         MarkdownTextObject content = new MarkdownTextObject();
         content.setText(text);
 

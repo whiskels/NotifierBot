@@ -1,7 +1,6 @@
 package com.whiskels.notifier.reporting.service.employee.convert;
 
-import com.slack.api.webhook.Payload;
-import com.whiskels.notifier.infrastructure.slack.builder.SlackPayloadBuilder;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
@@ -16,7 +15,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.whiskels.notifier.infrastructure.slack.builder.SlackPayloadBuilder.builder;
 import static com.whiskels.notifier.utilities.collections.StreamUtil.collectToBulletListString;
 
 @Slf4j
@@ -35,14 +33,14 @@ public class EmployeeEventReportMessageConverter implements ReportMessageConvert
 
     @Nonnull
     @Override
-    public Iterable<Payload> convert(@Nonnull ReportData<Employee> data) {
+    public Iterable<Report> convert(@Nonnull ReportData<Employee> data) {
         return contexts.stream()
                 .map(context -> createReport(data, context))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private Payload createReport(ReportData<Employee> data, ReportContext context) {
+    private Report createReport(ReportData<Employee> data, ReportContext context) {
         var skipEmpty = context.getSkipEmpty().test(data.requestDate());
 
         List<EmployeeDto> birthdays = data.data().stream()
@@ -62,25 +60,26 @@ public class EmployeeEventReportMessageConverter implements ReportMessageConvert
             return null;
         }
 
-        SlackPayloadBuilder builder = builder()
+        var report = Report.builder()
                 .header(context.getHeaderMapper().apply(data.requestDate()))
-                .notifyChannel();
+                .notifyChannel(true)
+                .build();
 
         if (!birthdays.isEmpty() || !skipEmpty) {
             log.debug("Added birthday block to payload: empty = {}, skipEmpty = {}", birthdays.isEmpty(), skipEmpty);
-            addBlock(builder, birthdaySubheader, birthdays, EmployeeDto::toBirthdayString);
+            addBlock(report, birthdaySubheader, birthdays, EmployeeDto::toBirthdayString);
         }
 
         if (!anniversaries.isEmpty() || !skipEmpty) {
             log.debug("Added anniversary block to payload: empty = {}, skipEmpty = {}", anniversaries.isEmpty(), skipEmpty);
-            addBlock(builder, anniversarySubheader, anniversaries, e -> e.toWorkAnniversaryString(clock));
+            addBlock(report, anniversarySubheader, anniversaries, e -> e.toWorkAnniversaryString(clock));
         }
 
-        return builder.build();
+        return report;
     }
 
-    private void addBlock(SlackPayloadBuilder builder, String header, List<EmployeeDto> data, Function<EmployeeDto, String> mappingFunction) {
-        builder.block(header)
-                .block(data.isEmpty() ? noData : collectToBulletListString(data, mappingFunction));
+    private void addBlock(Report report, String header, List<EmployeeDto> data, Function<EmployeeDto, String> mappingFunction) {
+        report.addBody(header)
+                .addBody(data.isEmpty() ? noData : collectToBulletListString(data, mappingFunction));
     }
 }

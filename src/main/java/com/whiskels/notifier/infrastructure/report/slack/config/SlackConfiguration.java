@@ -1,4 +1,4 @@
-package com.whiskels.notifier.infrastructure.slack.config;
+package com.whiskels.notifier.infrastructure.report.slack.config;
 
 import com.slack.api.Slack;
 import org.springframework.context.annotation.Bean;

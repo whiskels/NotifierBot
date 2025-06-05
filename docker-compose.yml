@@ -10,7 +10,7 @@ services:
       - db
     environment:
       - SPRING_PROFILES_ACTIVE=mock,telegram
-      - SLACK_WEBHOOK
+      - WEBHOOK_URL
       - TELEGRAM_BOT_ADMIN
       - TELEGRAM_BOT_TOKEN
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
@@ -20,6 +20,8 @@ services:
   db:
     image: 'postgres:16.2'
     container_name: db
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

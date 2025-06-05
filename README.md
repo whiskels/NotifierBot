@@ -41,7 +41,7 @@ Then run docker-compose with environment variables
 ```console
 TELEGRAM_BOT_TOKEN=${YOUR_TOKEN} \                                     
 TELEGRAM_BOT_ADMIN=${YOUR_TELEGRAM_ID}  \
-SLACK_WEBHOOK=${SLACK_WEBHOOK} \
+WEBHOOK_URL=${WEBHOOK_URL} \
 docker-compose up
 ```
 
@@ -51,7 +51,7 @@ Adjust application-mock with report.parameters.schedule to send reports to slack
 Adjust SPRING_PROFILES_ACTIVE in docker-compose to "mock" and run docker-compose with your webhook
 
 ```console
-SLACK_WEBHOOK=${SLACK_WEBHOOK} \
+WEBHOOK_URL=${WEBHOOK_URL} \
 docker-compose up
 ```
 

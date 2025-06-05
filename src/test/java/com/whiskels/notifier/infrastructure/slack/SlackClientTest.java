@@ -3,6 +3,7 @@ package com.whiskels.notifier.infrastructure.slack;
 import com.slack.api.Slack;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
+import com.whiskels.notifier.infrastructure.report.slack.SlackClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = ReportPropertiesTest.TestConfig.class)
 @TestPropertySource(properties = {
         "report.schedule.EMPLOYEE_EVENT=0 0 12 * * MON-FRI",
-        "report.webhooks.EMPLOYEE_EVENT=https://webhook.example.com/report1"
+        "report.webhooks.SLACK.EMPLOYEE_EVENT=https://webhook.example.com/report1"
 })
 public class ReportPropertiesTest {
 
@@ -27,10 +27,10 @@ public class ReportPropertiesTest {
     @DisplayName("Should bind properties")
     void shouldBingProperties() {
         Map<ReportType, String> schedule = reportProperties.getSchedule();
-        Map<ReportType, String> webhooks = reportProperties.getWebhooks();
+        Map<_ReportConfig.WebhookType, Map<ReportType, String>> webhooks = reportProperties.getWebhooks();
 
         assertEquals("0 0 12 * * MON-FRI", schedule.get(EMPLOYEE_EVENT));
-        assertEquals("https://webhook.example.com/report1", webhooks.get(EMPLOYEE_EVENT));
+        assertEquals("https://webhook.example.com/report1", webhooks.get(_ReportConfig.WebhookType.SLACK).get(EMPLOYEE_EVENT));
     }
 
     @Configuration

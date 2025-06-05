@@ -1,7 +1,6 @@
 package com.whiskels.notifier.reporting.service.customer.payment.messaging;
 
-import com.slack.api.webhook.Payload;
-import com.whiskels.notifier.infrastructure.slack.builder.SlackPayloadBuilder;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.CustomerPaymentDto;
@@ -33,14 +32,14 @@ public class PaymentReportMessageConverter implements ReportMessageConverter<Cus
 
     @Nonnull
     @Override
-    public Iterable<Payload> convert(@Nonnull ReportData<CustomerPaymentDto> reportData) {
+    public Iterable<Report> convert(@Nonnull ReportData<CustomerPaymentDto> reportData) {
         var data = reportData.data();
-        var payload =  SlackPayloadBuilder.builder()
+        var report = Report.builder()
                 .header(header + reportDate(reportData.requestDate()))
-                .notifyChannel()
-                .block(mapToReportText(data), reportPic(data))
-                .build();
-        return singleton(payload);
+                .notifyChannel(true)
+                .build()
+                .addBody(mapToReportText(data), reportPic(data));
+        return singleton(report);
     }
 
     private String mapToReportText(List<CustomerPaymentDto> data) {

@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static com.whiskels.notifier.utilities.formatters.StringFormatter.COLLECTOR_NEW_LINE;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @RequiredArgsConstructor
@@ -32,11 +33,16 @@ public class ScheduledReportTaskSubmitter implements ApplicationListener<Applica
             log.error("No cron triggers found for reports");
             return;
         }
+        log.info("Scheduling reports: \n{}",
+                reportCronMap.entrySet().stream()
+                        .map(entry -> String.format("  %-8s -> %s", entry.getKey(), entry.getValue()))
+                        .collect(COLLECTOR_NEW_LINE));
+
         reportCronMap.forEach((type, cron) ->
-                        executor.schedule(() -> service.executeReport(type),
-                                new CronTrigger(cron, TimeZone.getTimeZone(ZoneId.of(timeZone))
-                                )
+                executor.schedule(() -> service.executeReport(type),
+                        new CronTrigger(cron, TimeZone.getTimeZone(ZoneId.of(timeZone))
                         )
-                );
+                )
+        );
     }
 }

@@ -1,6 +1,6 @@
 package com.whiskels.notifier.reporting.service.customer.debt.convert;
 
-import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CurrencyRate;
 import com.whiskels.notifier.reporting.service.customer.debt.domain.CustomerDebt;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.whiskels.notifier.JsonUtils.MAPPER;
 import static com.whiskels.notifier.MockedClockConfiguration.EXPECTED_DATE;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -27,218 +26,104 @@ class CustomerDebtReportMessageConverterTest {
 
     @Test
     @DisplayName("Should convert to single report")
-    void shouldConvertToSingleReport() throws Exception {
+    void shouldConvertToSingleReport() {
         // Given
-        String expected = """
-                {
-                  "threadTs" : null,
-                  "text" : "Debt Report on 23-02-2024",
-                  "channel" : null,
-                  "username" : null,
-                  "iconUrl" : null,
-                  "iconEmoji" : null,
-                  "blocks" : [ {
-                    "type" : "header",
-                    "blockId" : "0",
-                    "text" : {
-                      "type" : "plain_text",
-                      "text" : "Debt Report on 23-02-2024",
-                      "emoji" : false
-                    }
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "@channel",
-                      "verbatim" : null
-                    },
-                    "blockId" : "1",
-                    "fields" : null,
-                    "accessory" : null
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment",
-                      "verbatim" : null
-                    },
-                    "blockId" : "2",
-                    "fields" : null,
-                    "accessory" : null
-                  } ],
-                  "attachments" : null,
-                  "unfurlLinks" : null,
-                  "unfurlMedia" : null,
-                  "metadata" : null
-                }""";
+        var expected = Report.builder()
+                .header("Debt Report on 23-02-2024")
+                .build()
+                .addBody("*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment");
         CustomerDebt customerDebt = createCustomerDebt();
         ReportData<CustomerDebt> reportData = new ReportData<>(singletonList(customerDebt), EXPECTED_DATE);
 
         // When
-        var result = (List<Payload>) converter.convert(reportData);
+        var result = (List<Report>) converter.convert(reportData);
 
         // Then
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(expected, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(result.getFirst()));
+        assertEquals(expected, result.getFirst());
     }
 
     @Test
     @DisplayName("Should convert to multiple report")
-    void shouldConvertToMultipleReports() throws Exception{
+    void shouldConvertToMultipleReports() {
         // Given
-        String expectedOne = """
-                {
-                  "threadTs" : null,
-                  "text" : "Debt Report on 23-02-2024 #1",
-                  "channel" : null,
-                  "username" : null,
-                  "iconUrl" : null,
-                  "iconEmoji" : null,
-                  "blocks" : [ {
-                    "type" : "header",
-                    "blockId" : "0",
-                    "text" : {
-                      "type" : "plain_text",
-                      "text" : "Debt Report on 23-02-2024 #1",
-                      "emoji" : false
-                    }
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "@channel",
-                      "verbatim" : null
-                    },
-                    "blockId" : "1",
-                    "fields" : null,
-                    "accessory" : null
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment",
-                      "verbatim" : null
-                    },
-                    "blockId" : "2",
-                    "fields" : null,
-                    "accessory" : null
-                  } ],
-                  "attachments" : null,
-                  "unfurlLinks" : null,
-                  "unfurlMedia" : null,
-                  "metadata" : null
-                }""";
-        String expectedTwo = """
-                {
-                  "threadTs" : null,
-                  "text" : "Debt Report on 23-02-2024 #2",
-                  "channel" : null,
-                  "username" : null,
-                  "iconUrl" : null,
-                  "iconEmoji" : null,
-                  "blocks" : [ {
-                    "type" : "header",
-                    "blockId" : "0",
-                    "text" : {
-                      "type" : "plain_text",
-                      "text" : "Debt Report on 23-02-2024 #2",
-                      "emoji" : false
-                    }
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "@channel",
-                      "verbatim" : null
-                    },
-                    "blockId" : "1",
-                    "fields" : null,
-                    "accessory" : null
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment\\n\\n*Test Contractor*\\n   Test Finance Subject\\n   Test Payment Method\\n   Test Manager\\n   *1 500 USD*\\nTest Comment",
-                      "verbatim" : null
-                    },
-                    "blockId" : "2",
-                    "fields" : null,
-                    "accessory" : null
-                  } ],
-                  "attachments" : null,
-                  "unfurlLinks" : null,
-                  "unfurlMedia" : null,
-                  "metadata" : null
-                }""";
+        var expectedOne = Report.builder()
+                .header("Debt Report on 23-02-2024 #1")
+                .build()
+                .addBody("*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment\n\n*Test Contractor*\n   Test Finance Subject\n   Test Payment Method\n   Test Manager\n   *1 500 USD*\nTest Comment");
+
+
+        var expectedTwo = Report.builder()
+                .header("Debt Report on 23-02-2024 #2")
+                .build()
+                .addBody("""
+                        *Test Contractor*
+                           Test Finance Subject
+                           Test Payment Method
+                           Test Manager
+                           *1 500 USD*
+                        Test Comment
+                        
+                        *Test Contractor*
+                           Test Finance Subject
+                           Test Payment Method
+                           Test Manager
+                           *1 500 USD*
+                        Test Comment
+                        
+                        *Test Contractor*
+                           Test Finance Subject
+                           Test Payment Method
+                           Test Manager
+                           *1 500 USD*
+                        Test Comment
+                        
+                        *Test Contractor*
+                           Test Finance Subject
+                           Test Payment Method
+                           Test Manager
+                           *1 500 USD*
+                        Test Comment
+                        
+                        *Test Contractor*
+                           Test Finance Subject
+                           Test Payment Method
+                           Test Manager
+                           *1 500 USD*
+                        Test Comment""");
+
         List<CustomerDebt> customerDebts = Collections.nCopies(25, createCustomerDebt());
         ReportData<CustomerDebt> reportData = new ReportData<>(customerDebts, EXPECTED_DATE);
 
         // When
-        var result = (List<Payload>) converter.convert(reportData);
+        var result = (List<Report>) converter.convert(reportData);
 
         // Then
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(expectedOne, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(result.getFirst()));
-        assertEquals(expectedTwo, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(result.get(1)));
+        assertEquals(expectedOne, result.getFirst());
+        assertEquals(expectedTwo, result.get(1));
     }
 
     @Test
     @DisplayName("Should convert when data is empty")
-    void shouldConvertWhenDataIsEmpty() throws Exception {
+    void shouldConvertWhenDataIsEmpty() {
         // Given
-        String expected = """
-                {
-                  "threadTs" : null,
-                  "text" : "Debt Report on 23-02-2024",
-                  "channel" : null,
-                  "username" : null,
-                  "iconUrl" : null,
-                  "iconEmoji" : null,
-                  "blocks" : [ {
-                    "type" : "header",
-                    "blockId" : "0",
-                    "text" : {
-                      "type" : "plain_text",
-                      "text" : "Debt Report on 23-02-2024",
-                      "emoji" : false
-                    }
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "@channel",
-                      "verbatim" : null
-                    },
-                    "blockId" : "1",
-                    "fields" : null,
-                    "accessory" : null
-                  }, {
-                    "type" : "section",
-                    "text" : {
-                      "type" : "mrkdwn",
-                      "text" : "No data available",
-                      "verbatim" : null
-                    },
-                    "blockId" : "2",
-                    "fields" : null,
-                    "accessory" : null
-                  } ],
-                  "attachments" : null,
-                  "unfurlLinks" : null,
-                  "unfurlMedia" : null,
-                  "metadata" : null
-                }""";
+        var expected = Report.builder()
+                .header("Debt Report on 23-02-2024")
+                .build()
+                .addBody("No data available");
+
         ReportData<CustomerDebt> reportData = new ReportData<>(emptyList(), EXPECTED_DATE);
 
         // When
-        var result = (List<Payload>) converter.convert(reportData);
+        var result = (List<Report>) converter.convert(reportData);
 
         // Then
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(expected, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(result.getFirst()));
+        assertEquals(expected, result.getFirst());
     }
 
     private CustomerDebt createCustomerDebt() {
