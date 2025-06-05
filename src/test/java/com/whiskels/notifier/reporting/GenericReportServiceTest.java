@@ -1,8 +1,8 @@
 package com.whiskels.notifier.reporting;
 
-import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.reporting.service.DataFetchService;
 import com.whiskels.notifier.reporting.service.GenericReportService;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
 import org.junit.jupiter.api.DisplayName;
@@ -34,12 +34,12 @@ class GenericReportServiceTest {
     @Test
     @DisplayName("Should prepare reports")
     void shouldPrepareReports() {
-        var payload = Payload.builder().build();
+        var payload = Report.builder().build();
         when(dataFetchService.fetch()).thenReturn(new ReportData<>(List.of("Data1", "Data2"), LocalDate.now()));
         when(messageCreator.convert(any())).thenReturn(List.of(payload));
 
-        Iterable<Payload> payloads = genericReportService.prepareReports();
-        List<Payload> payloadList = (List<Payload>) payloads;
+        Iterable<Report> payloads = genericReportService.prepareReports();
+        List<Report> payloadList = (List<Report>) payloads;
 
         assertEquals(1, payloadList.size());
         assertEquals(payloadList.getFirst(), payload);

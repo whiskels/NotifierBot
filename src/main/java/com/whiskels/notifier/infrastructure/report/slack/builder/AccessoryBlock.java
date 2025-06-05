@@ -1,4 +1,4 @@
-package com.whiskels.notifier.infrastructure.slack.builder;
+package com.whiskels.notifier.infrastructure.report.slack.builder;
 
 import com.slack.api.model.block.element.BlockElement;
 import lombok.Data;

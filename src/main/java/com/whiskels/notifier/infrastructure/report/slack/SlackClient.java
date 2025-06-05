@@ -1,4 +1,4 @@
-package com.whiskels.notifier.infrastructure.slack;
+package com.whiskels.notifier.infrastructure.report.slack;
 
 import com.slack.api.Slack;
 import com.slack.api.webhook.Payload;

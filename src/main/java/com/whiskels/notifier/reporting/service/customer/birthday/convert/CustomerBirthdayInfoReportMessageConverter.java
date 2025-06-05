@@ -1,10 +1,9 @@
 package com.whiskels.notifier.reporting.service.customer.birthday.convert;
 
-import com.slack.api.webhook.Payload;
 import com.whiskels.notifier.reporting.domain.HasBirthday;
+import com.whiskels.notifier.reporting.service.Report;
 import com.whiskels.notifier.reporting.service.ReportData;
 import com.whiskels.notifier.reporting.service.ReportMessageConverter;
-import com.whiskels.notifier.reporting.service.SimpleReport;
 import com.whiskels.notifier.reporting.service.customer.birthday.domain.CustomerBirthdayInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,19 +21,19 @@ import static com.whiskels.notifier.utilities.formatters.DateTimeFormatter.BIRTH
 @Slf4j
 @AllArgsConstructor
 public class CustomerBirthdayInfoReportMessageConverter implements ReportMessageConverter<CustomerBirthdayInfo> {
-    private final List<ReportContext> contexts;
+    private final List<com.whiskels.notifier.reporting.service.customer.birthday.convert.ReportContext> contexts;
     private final String noData;
 
     @Nonnull
     @Override
-    public Iterable<Payload> convert(@Nonnull ReportData<CustomerBirthdayInfo> data) {
+    public Iterable<Report> convert(@Nonnull ReportData<CustomerBirthdayInfo> data) {
         return contexts.stream()
                 .map(context -> createReport(data, context))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private Payload createReport(ReportData<CustomerBirthdayInfo> data, ReportContext context) {
+    private Report createReport(ReportData<CustomerBirthdayInfo> data, com.whiskels.notifier.reporting.service.customer.birthday.convert.ReportContext context) {
         log.debug("Creating customer birthday event payload");
         List<CustomerBirthdayInfoDto> birthdays = data.data().stream()
                 .filter(dto -> context.getPredicate().test(dto, data.requestDate()))
@@ -47,7 +46,10 @@ public class CustomerBirthdayInfoReportMessageConverter implements ReportMessage
             return null;
         }
         var message = birthdays.isEmpty() ? noData : collectToBulletListString(birthdays, CustomerBirthdayInfoDto::toReportString);
-        return new SimpleReport(context.getHeaderMapper().apply(data.requestDate()), message).toSlackPayload();
+        return Report.builder()
+                .header(context.getHeaderMapper().apply(data.requestDate()))
+                .build()
+                .addBody(message);
     }
 
     @Builder

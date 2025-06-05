@@ -10,27 +10,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MonthMiddleReportContextTest {
+class MonthStartReportDataTest {
 
     @Test
     @DisplayName("Should initialize header")
-    void testHeaderMapper() {
-        String expectedHeader = "Monthly Report";
-        MonthMiddleReportContext context = new MonthMiddleReportContext(expectedHeader);
+    void testHeaderInitialization() {
+        String expectedHeader = "Monthly Start Report";
+        MonthStartReportContext context = new MonthStartReportContext(expectedHeader);
         assertEquals(expectedHeader, context.getHeaderMapper().apply(LocalDate.now()));
     }
 
     @Test
     @DisplayName("Should execute predicates")
     void testPredicates() {
-        MonthMiddleReportContext context = new MonthMiddleReportContext("Header");
+        MonthStartReportContext context = new MonthStartReportContext("Header");
         Employee employee = new Employee();
         employee.setBirthday(LocalDate.of(2000, 2, 25));
         employee.setAppointmentDate(LocalDate.of(2022, 1, 26));
-        LocalDate birthdayReportDate = LocalDate.of(2024, 2, 15);
-        LocalDate anniversaryReportDate = LocalDate.of(2024, 1, 15);
+        LocalDate birthdayReportDate = LocalDate.of(2024, 2, 1);
+        LocalDate anniversaryReportDate = LocalDate.of(2024, 1, 1);
 
-        // Test case where is same month and after the report date, and the report date is the middle of the month
+        // Test case where is same month and after the report date, and the report date is the beginning of the month
         assertFalse(context.getSkipEmpty().test(birthdayReportDate));
         assertTrue(context.getBirthdayPredicate().test(employee, birthdayReportDate));
         assertFalse(context.getSkipEmpty().test(anniversaryReportDate));

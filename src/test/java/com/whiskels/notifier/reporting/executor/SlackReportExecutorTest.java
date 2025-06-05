@@ -1,9 +1,11 @@
 package com.whiskels.notifier.reporting.executor;
 
 import com.slack.api.webhook.Payload;
-import com.whiskels.notifier.infrastructure.slack.SlackClient;
+import com.whiskels.notifier.infrastructure.report.slack.SlackClient;
+import com.whiskels.notifier.infrastructure.report.slack.SlackPayloadMapper;
+import com.whiskels.notifier.infrastructure.report.slack.SlackReportExecutor;
 import com.whiskels.notifier.reporting.ReportType;
-import com.whiskels.notifier.reporting.SlackPayloadExecutor;
+import com.whiskels.notifier.reporting.service.Report;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,39 +18,43 @@ import java.util.Map;
 import static com.whiskels.notifier.reporting.ReportType.CUSTOMER_BIRTHDAY;
 import static com.whiskels.notifier.reporting.ReportType.EMPLOYEE_EVENT;
 import static java.util.Collections.emptyMap;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class SlackPayloadExecutorTest {
+class SlackReportExecutorTest {
     private static final Payload DUMMY_PAYLOAD = Payload.builder().build();
 
     @Mock
-    private SlackClient slackClient;
+    private SlackClient client;
+    @Mock
+    private SlackPayloadMapper mapper;
 
-    private SlackPayloadExecutor slackPayloadExecutor;
+    private SlackReportExecutor executor;
 
     @Test
     @DisplayName("Should send when type exists")
     void shouldSentWhenTypeExists() throws IOException {
         Map<ReportType, String> webhookMappings = Map.of(EMPLOYEE_EVENT, "https://example.com/some-webhook");
-        slackPayloadExecutor = new SlackPayloadExecutor(slackClient, webhookMappings);
+        executor = new SlackReportExecutor(client, mapper, webhookMappings);
+        given(mapper.map(any())).willReturn(DUMMY_PAYLOAD);
 
-        slackPayloadExecutor.send(EMPLOYEE_EVENT, DUMMY_PAYLOAD);
+        executor.send(EMPLOYEE_EVENT, Report.builder().build());
 
-        verify(slackClient).send(webhookMappings.get(EMPLOYEE_EVENT), DUMMY_PAYLOAD);
+        verify(client).send(webhookMappings.get(EMPLOYEE_EVENT), DUMMY_PAYLOAD);
     }
 
     @Test
     @DisplayName("Should throw exception when type does not exist")
-    void shouldThrowExceptionWhenTypeDoesNotExist() throws IOException {
-        slackPayloadExecutor = new SlackPayloadExecutor(slackClient, emptyMap());
+    void shouldTNothrowExceptionWhenTypeDoesNotExist() throws IOException {
+        executor = new SlackReportExecutor(client, mapper, emptyMap());
 
-        assertThrows(IllegalStateException.class, () -> slackPayloadExecutor.send(CUSTOMER_BIRTHDAY, DUMMY_PAYLOAD));
+        assertDoesNotThrow(() -> executor.send(CUSTOMER_BIRTHDAY, Report.builder().build()));
 
-        verify(slackClient, never()).send(anyString(), any(Payload.class));
+        verify(client, never()).send(anyString(), any(Payload.class));
     }
 }

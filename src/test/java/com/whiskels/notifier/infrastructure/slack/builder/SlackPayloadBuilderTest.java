@@ -1,6 +1,7 @@
 package com.whiskels.notifier.infrastructure.slack.builder;
 
 import com.slack.api.webhook.Payload;
+import com.whiskels.notifier.infrastructure.report.slack.builder.SlackPayloadBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

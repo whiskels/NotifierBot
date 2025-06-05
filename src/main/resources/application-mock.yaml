@@ -1,18 +1,12 @@
-spring:
-  datasource:
-    url: ${DATABASE_URL}
-    jpa:
-      show-sql: true
-    username: ${MOCK_DATABASE_USER}
-    password: ${MOCK_DATABASE_PASSWORD}
 report:
-#  schedule:
-#    CUSTOMER_BIRTHDAY: 0 * * * * *
-#    CUSTOMER_DEBT: 0 * * * * *
-#    CUSTOMER_PAYMENT: 0 * * * * *
-#    EMPLOYEE_EVENT: 0 * * * * *
+  schedule:
+    CUSTOMER_BIRTHDAY: 0 * * * * *
+    CUSTOMER_DEBT: 0 * * * * *
+    CUSTOMER_PAYMENT: 0 * * * * *
+    EMPLOYEE_EVENT: 0 * * * * *
   webhooks:
-    CUSTOMER_BIRTHDAY: ${SLACK_WEBHOOK}
-    CUSTOMER_DEBT: ${SLACK_WEBHOOK}
-    CUSTOMER_PAYMENT: ${SLACK_WEBHOOK}
-    EMPLOYEE_EVENT: ${SLACK_WEBHOOK}
+    PLAIN:
+      CUSTOMER_BIRTHDAY: ${WEBHOOK_URL}
+      CUSTOMER_DEBT: ${WEBHOOK_URL}
+      CUSTOMER_PAYMENT: ${WEBHOOK_URL}
+      EMPLOYEE_EVENT: ${WEBHOOK_URL}

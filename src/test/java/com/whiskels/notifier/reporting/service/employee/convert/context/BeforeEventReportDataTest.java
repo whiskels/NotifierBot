@@ -1,6 +1,5 @@
 package com.whiskels.notifier.reporting.service.employee.convert.context;
 
-import com.whiskels.notifier.reporting.service.employee.convert.context.BeforeEventReportContext;
 import com.whiskels.notifier.reporting.service.employee.domain.Employee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class BeforeEventReportContextTest {
+class BeforeEventReportDataTest {
 
     @Test
     @DisplayName("Should initialize header")
