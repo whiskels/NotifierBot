@@ -22,13 +22,19 @@ public class FixieProxyPropertiesProviderTest {
     void testConstructorSuccess() {
         when(environment.getProperty(FixieProxyPropertiesProvider.FIXIE_ENV_VAR))
                 .thenReturn("http://user:password@host:8080");
+        when(environment.getProperty(FixieProxyPropertiesProvider.USER_ENV_VAR))
+                .thenReturn("admin");
+        when(environment.getProperty(FixieProxyPropertiesProvider.PASSWORD_ENV_VAR))
+                .thenReturn("pw");
         
         FixieProxyPropertiesProvider fixieProxyPropertiesProvider = new FixieProxyPropertiesProvider(environment);
 
-        assertEquals("user", fixieProxyPropertiesProvider.getUser());
-        assertEquals("password", fixieProxyPropertiesProvider.getPassword());
-        assertEquals("host", fixieProxyPropertiesProvider.getHost());
-        assertEquals(8080, fixieProxyPropertiesProvider.getPort());
+        assertEquals("user", fixieProxyPropertiesProvider.getProxyUser());
+        assertEquals("password", fixieProxyPropertiesProvider.getProxyPassword());
+        assertEquals("host", fixieProxyPropertiesProvider.getProxyHost());
+        assertEquals(8080, fixieProxyPropertiesProvider.getProxyPort());
+        assertEquals("admin", fixieProxyPropertiesProvider.getUser());
+        assertEquals("pw", fixieProxyPropertiesProvider.getPassword());
     }
 
     @Test

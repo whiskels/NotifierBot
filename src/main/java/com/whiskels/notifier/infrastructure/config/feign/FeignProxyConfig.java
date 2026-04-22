@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 public class FeignProxyConfig {
@@ -32,10 +33,12 @@ public class FeignProxyConfig {
                                                   final int maxIdleConnections,
                                                   final int keepAliveDurationMinutes
     ) {
+        String auth = STR."\{propertiesProvider.getProxyUser()}:\{propertiesProvider.getProxyPassword()}";
         Authenticator proxyAuthenticator = (_, response) -> {
-            String credential = Credentials.basic(propertiesProvider.getUser(), propertiesProvider.getPassword());
+            String credential = Credentials.basic(propertiesProvider.getProxyUser(), propertiesProvider.getProxyPassword());
             return response.request().newBuilder()
                     .header(HttpHeaders.PROXY_AUTHORIZATION, credential)
+                    .header(HttpHeaders.AUTHORIZATION, STR."Basic \{Base64.getEncoder().encodeToString(auth.getBytes())}")
                     .build();
         };
 
@@ -47,6 +50,6 @@ public class FeignProxyConfig {
     }
 
     private static Proxy createProxy(ProxyPropertiesProvider propertiesProvider) {
-        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(propertiesProvider.getHost(), propertiesProvider.getPort()));
+        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(propertiesProvider.getProxyHost(), propertiesProvider.getProxyPort()));
     }
 }
