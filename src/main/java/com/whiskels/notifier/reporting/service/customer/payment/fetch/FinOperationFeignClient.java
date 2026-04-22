@@ -1,6 +1,6 @@
 package com.whiskels.notifier.reporting.service.customer.payment.fetch;
 
-import com.whiskels.notifier.infrastructure.config.feign.FeignProxyConfig;
+import com.whiskels.notifier.infrastructure.config.feign.FeignCrmConfig;
 import com.whiskels.notifier.reporting.service.customer.payment.domain.FinancialOperation;
 import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ public interface FinOperationFeignClient {
     @RequestMapping(method = GET)
     List<FinancialOperation> get();
 
-    @Import(FeignProxyConfig.class)
+    @Import(FeignCrmConfig.class)
     class FinOperationRequestInterceptorConfig {
         private static final DateTimeFormatter YEAR_MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
